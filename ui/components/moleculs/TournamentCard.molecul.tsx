@@ -1,7 +1,8 @@
+import Button from "@/ui/components/atoms/Button.atom";
+
 import { TournamentType } from "@/interfaces/tournaments";
 
 import "@/ui/styles/moleculs/tourtnament.molecul.scss";
-import Button from "../atoms/Button.atom";
 
 import { IoTrashOutline, IoPencilOutline } from "react-icons/io5";
 

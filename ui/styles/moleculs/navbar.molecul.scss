@@ -1,0 +1,31 @@
+@import "variables.scss";
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  background: rgb($white-clr, 0.8);
+  backdrop-filter: blur(10px);
+
+  &__user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .picture {
+      font-size: 2rem;
+      border-radius: 100rem;
+    }
+
+    .user {
+      font-weight: 800;
+    }
+  }
+
+  &__ctas {
+    & > .button {
+      padding: 0.5rem 1rem;
+    }
+  }
+}

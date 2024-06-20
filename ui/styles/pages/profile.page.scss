@@ -1,11 +1,9 @@
 @import "variables.scss";
 
 .profile {
-  //   background: red;
   display: flex;
   align-items: center;
   gap: 1rem;
-  //   justify-content: center;
 
   &__picture {
     display: flex;
@@ -22,4 +20,11 @@
   p {
     font-weight: 800;
   }
+}
+
+.wrapper {
+  background: red;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
 }

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import QueryProvider from "@/ui/components/providers/QueryProvider.provider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
@@ -23,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={plusJakartaSans.className}>
-        <Toaster />
-        {children}
+        <QueryProvider>
+          <Toaster />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

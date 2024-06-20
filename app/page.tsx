@@ -1,54 +1,109 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { TeamType } from "@/interfaces/tournaments";
+import InputField from "@/ui/components/atoms/InputField.atom";
+import Navbar from "@/ui/components/moleculs/Navbar.molecul";
 
-import { useAuthState } from "react-firebase-hooks/auth";
+import Tournamets from "@/ui/components/organism/Tournaments.organism";
 
-import { auth, db, database } from "@/lib/firebaseConfig";
-
-import { IoPersonCircleOutline } from "react-icons/io5";
-
+import { Calendar } from "@/components/ui/calendar";
 import "@/ui/styles/pages/profile.page.scss";
-import { getDatabase, onValue, ref, set } from "firebase/database";
-import Button from "@/ui/components/atoms/Button.atom";
-import { collection, getDoc, onSnapshot } from "firebase/firestore";
-import { get } from "http";
-import useTournaments from "@/ui/hooks/useTournaments";
-import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
+import dayjs from "dayjs";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@radix-ui/react-select";
 
 export default function Profile() {
-  const [user] = useAuthState(auth);
-  const router = useRouter();
-  const userSession = JSON.parse(sessionStorage.getItem("user")!);
-  const { tournaments } = useTournaments();
-  console.log(tournaments);
-
-  if (!user && !userSession) {
-    router.push("/login");
-  }
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("user");
-    router.replace("/login");
-  };
-
   return (
     <>
-      <div className="profile">
-        <div className="profile__picture">
-          <IoPersonCircleOutline />
-        </div>
-
-        <p>{user?.email}</p>
+      <Navbar />
+      <div className="wrapper">
+        <Tournamets />
+        <TournamentForm />
       </div>
-      <Button onClick={handleLogout} type="primary">
-        log out
-      </Button>
-
-      {tournaments?.map((n) => (
-        <TournamentCard {...n} />
-      ))}
     </>
+  );
+}
+
+type TournamentType = {
+  title?: string;
+  startTime?: string;
+  status?: string;
+  host?: TeamType;
+  guest?: TeamType;
+};
+
+function TournamentForm() {
+  const [data, setData] = useState<TournamentType>({
+    title: "",
+    startTime: dayjs().format("DD.MM.YYYY HH:mm").toString(),
+    status: "",
+    host: {
+      players: [],
+    },
+    guest: {
+      players: [],
+    },
+  });
+
+  console.log(data.startTime);
+
+  const handleOnChange = (e: any) => {
+    console.log(e.target.name);
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
+  // TODO:ADD TIME PICKER
+  return (
+    <div className="tournament-form">
+      <h2>Dodaj turnir</h2>
+      <div className="tournament-form__form">
+        <InputField
+          onChange={handleOnChange}
+          title="Naziv turnira"
+          value={data?.title || ""}
+          placeholder="Naziv turnira"
+        />
+        <InputField
+          onChange={handleOnChange}
+          title="email"
+          value={data?.title || ""}
+          placeholder="Email address"
+        />
+        <InputField
+          onChange={handleOnChange}
+          title="Datum"
+          type="date"
+          value={data?.startTime?.split(" ")[0] || ""}
+          placeholder="Datum"
+        />
+        <div className="time-picker">
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+          {/* <InputField
+            onChange={handleOnChange}
+            title="Sat"
+            type="date"
+            value={data?.startTime?.split(" ")[1].split(":")[0] || ""}
+            placeholder="Datum"
+          /> */}
+        </div>
+      </div>
+    </div>
   );
 }

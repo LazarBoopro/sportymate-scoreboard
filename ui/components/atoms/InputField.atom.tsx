@@ -6,7 +6,7 @@ type InputType = {
   title: string;
   placeholder: string;
   value: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "date" | "number";
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -30,6 +30,7 @@ export default function InputField({
       </label>
       <div className="input-field__input">
         <input
+          data-date-format="DD MMMM YYYY"
           onChange={onChange}
           value={value}
           name={title}
