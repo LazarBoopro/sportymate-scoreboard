@@ -1,0 +1,34 @@
+@import "variables.scss";
+
+.button {
+  padding: 1rem 2rem;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: 0.2s ease-in-out background;
+
+  &.primary {
+    background-color: $purple-100;
+    color: $white-clr;
+
+    &:hover {
+      background-color: $purple-200;
+    }
+  }
+
+  &.transparent {
+    background: transparent;
+
+    &:hover {
+      background-color: $gray-clr;
+    }
+  }
+
+  &.danger {
+    background: $red-100;
+    color: $red-500;
+
+    &:hover {
+      background-color: $red-300;
+    }
+  }
+}

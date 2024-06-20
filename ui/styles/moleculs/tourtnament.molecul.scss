@@ -1,0 +1,58 @@
+@import "variables.scss";
+
+.tournament {
+  background: $gray-clr;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    // gap: 0.25rem;
+
+    .title {
+      font-weight: 800;
+      font-size: clamp(1.5rem, 5vw, 1.5rem);
+    }
+
+    .subtitle {
+      font-size: clamp(0.85rem, 5vw, 1.15rem);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      //   justify-content: center;
+
+      .status {
+        &.idle {
+          background-color: $yellow-100;
+          color: $yellow-200;
+          padding: 0.15rem 1rem;
+          border-radius: 0.5rem;
+        }
+      }
+    }
+  }
+
+  &__ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+
+    .button {
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      //   width: 1rem;
+      //   max-width: 2rem;
+      //   aspect-ratio: 1;
+    }
+
+    // & > .button {
+    //   max-width: 2rem;
+    //   aspect-ratio: 1;
+    // }
+  }
+}

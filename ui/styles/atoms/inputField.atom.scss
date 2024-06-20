@@ -1,0 +1,51 @@
+@import "variables.scss";
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  // max-width: 15rem;
+  // padding: 0.5rem 1rem;
+
+  &__title {
+    color: $black-clr;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &__input {
+    position: relative;
+    // height: 3.5rem;
+    & > input {
+      padding: 1rem 0.5rem;
+      background: $gray-clr;
+      border: none;
+      outline: none;
+      border-radius: $border-radius-sm;
+      color: $black-clr;
+      width: 100%;
+      overflow: hidden;
+
+      &:not(:valid) {
+        color: $gray-clr-2;
+      }
+    }
+
+    .show-password {
+      // background: $white-clr;
+      cursor: pointer;
+      top: 0;
+      background: transparent;
+      right: 0;
+      border-radius: 0.25rem;
+      aspect-ratio: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      font-size: 1.25rem;
+    }
+  }
+}
