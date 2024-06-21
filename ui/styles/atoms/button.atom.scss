@@ -35,4 +35,14 @@
       background-color: $red-300;
     }
   }
+
+  &.action {
+    background: $green-clr;
+    color: $green-clr-2;
+
+    &:hover {
+      background: $green-clr-1;
+    }
+    // color: $green-clr-100;
+  }
 }

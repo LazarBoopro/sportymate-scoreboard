@@ -9,9 +9,13 @@ import {
   IoPencilOutline,
   IoPlayOutline,
   IoChevronBackOutline,
+  IoEyeOutline,
+  IoOptions,
 } from "react-icons/io5";
 import dayjs from "dayjs";
 import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
+import Link from "next/link";
+import { query } from "firebase/firestore";
 
 export default function TournamentCard({
   title,
@@ -31,12 +35,27 @@ export default function TournamentCard({
         </p>
       </div>
       <div className="tournament__ctas">
-        <Button>
-          <IoPlayOutline />
-        </Button>
-        <Button type="primary">
-          <IoPencilOutline />
-        </Button>
+        <Link
+          href={{
+            pathname: `/match/${id}`,
+            query: { watch: "true" },
+          }}
+        >
+          <Button>
+            <IoPlayOutline />
+          </Button>
+        </Link>
+
+        <Link
+          href={{
+            pathname: `/match/${id}`,
+          }}
+        >
+          <Button type="action">
+            <IoOptions />
+          </Button>
+        </Link>
+
         <Button type="danger" onClick={() => deleteTournament(id)}>
           <IoTrashOutline />
         </Button>
