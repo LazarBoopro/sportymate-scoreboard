@@ -27,7 +27,11 @@ export default function Match({ params }: { params: { id: string } }) {
   }, [isSuccess]);
 
   if (isWatchMode) {
-    return <h1> I am watching this game with id {params.id}!</h1>;
+    return (
+      <section>
+        <h1> I am watching this game with id {params.id}!</h1>;
+      </section>
+    );
   }
 
   return (
