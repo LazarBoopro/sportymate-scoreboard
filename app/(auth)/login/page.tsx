@@ -12,7 +12,7 @@ import Button from "@/ui/components/atoms/Button.atom";
 import InputField from "@/ui/components/atoms/InputField.atom";
 import { useToast } from "@/components/ui/use-toast";
 
-import { useUserSignIn } from "@/infrastructure/queries/user";
+import { useUserSignIn } from "@/infrastructure/mutations/user";
 
 import "@/ui/styles/pages/login.page.scss";
 

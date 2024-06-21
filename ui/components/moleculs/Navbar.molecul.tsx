@@ -8,7 +8,7 @@ import Button from "@/ui/components/atoms/Button.atom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebaseConfig";
 
-import { useSignOutUser } from "@/infrastructure/queries/user";
+import { useSignOutUser } from "@/infrastructure/mutations/user";
 
 import { IoLogOutOutline, IoPersonCircleOutline } from "react-icons/io5";
 import logo from "@/public/img/logo.svg";

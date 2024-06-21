@@ -11,13 +11,13 @@ export type TournamentType = {
 export type PlayerType = {
   firstName: string;
   lastName: string;
-  isServing: boolean;
+  isServing?: boolean;
 };
 
 export type TeamType = {
   // gems: number;
   // sets: number;
-  players: PlayerType[];
+  [key: string]: PlayerType[];
 };
 
 type GameSetType = {

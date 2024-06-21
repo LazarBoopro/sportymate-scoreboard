@@ -4,28 +4,41 @@ import { TournamentType } from "@/interfaces/tournaments";
 
 import "@/ui/styles/moleculs/tourtnament.molecul.scss";
 
-import { IoTrashOutline, IoPencilOutline } from "react-icons/io5";
+import {
+  IoTrashOutline,
+  IoPencilOutline,
+  IoPlayOutline,
+  IoChevronBackOutline,
+} from "react-icons/io5";
+import dayjs from "dayjs";
+import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
 
 export default function TournamentCard({
   title,
   startTime,
   status,
+  id,
 }: TournamentType) {
+  const { mutate: deleteTournament } = useDeleteTournament();
+
   return (
     <div className="tournament">
       <div className="tournament__heading">
         <p className="title">{title}</p>
         <p className="subtitle">
           <span className={`status ${status}`}>{status}</span>
-          {startTime}
+          {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
       </div>
       <div className="tournament__ctas">
-        <Button type="danger">
-          <IoTrashOutline />
+        <Button>
+          <IoPlayOutline />
         </Button>
         <Button type="primary">
           <IoPencilOutline />
+        </Button>
+        <Button type="danger" onClick={() => deleteTournament(id)}>
+          <IoTrashOutline />
         </Button>
       </div>
     </div>
