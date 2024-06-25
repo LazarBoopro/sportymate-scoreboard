@@ -45,8 +45,17 @@ export default function Login() {
     });
   };
 
-  const checkFailureMessage = (message?: string | undefined) => {
-    switch (message) {
+  const checkFailureMessage = (message?: string | undefined): string => {
+    let tempString;
+
+    if (message !== undefined) {
+      const s = message?.indexOf("(") + 1;
+      const e = message?.indexOf(")");
+
+      tempString = message?.substring(s, e);
+    }
+
+    switch (tempString) {
       case "auth/wrong-password":
         return "Pogrešna lozinka";
 
@@ -60,6 +69,7 @@ export default function Login() {
         return "Unesi lozinku";
 
       case "auth/invalid-credential":
+      case "auth/invalid-email":
         return "Email ili šifra nisu tačni";
 
       default:
@@ -71,8 +81,7 @@ export default function Login() {
     isError &&
       toast({
         title: "Greska!",
-        // @ts-ignore
-        description: checkFailureMessage(failureReason?.code),
+        description: checkFailureMessage(failureReason?.message),
         variant: "destructive",
       });
   }, [isError]);
