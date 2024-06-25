@@ -3,7 +3,7 @@ import { MouseEventHandler } from "react";
 
 type ButtonType = {
   children: React.ReactNode;
-  type?: "primary" | "secondary" | "transparent" | "danger";
+  type?: "primary" | "secondary" | "transparent" | "danger" | "action";
   onClick?: (() => void) | (() => Promise<void>);
 };
 

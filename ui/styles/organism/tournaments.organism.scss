@@ -1,0 +1,28 @@
+@import "variables.scss";
+
+.tournaments {
+  padding: 1rem;
+  background: $gray-clr-1;
+  border-radius: 1rem;
+  flex: 1;
+}
+
+.no-record {
+  &__title {
+    font-weight: 800;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    & > img {
+      height: 3rem;
+      width: 3rem;
+      // aspect-ratio: 1;
+    }
+  }
+
+  &__desc {
+    font-size: clamp(1rem, 5vw, 1.25rem);
+  }
+}

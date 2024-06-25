@@ -1,19 +1,31 @@
 export type TournamentType = {
   id: string;
-  startTime: string;
-  status: string;
+  userId: string;
   title: string;
-  host: TeamType;
-  guest: TeamType;
+  status: string;
+  startTime: string;
+  players: {
+    host: PlayerType[];
+    guest: PlayerType[];
+  };
+  result?: GameSetType | null;
 };
 
 export type PlayerType = {
-  name: string;
+  firstName: string;
   lastName: string;
+  isServing?: boolean;
 };
 
-export type TeamType = {
-  gems: number;
-  sets: number;
-  players: PlayerType[];
+// export type TeamType = {
+//   // gems: number;
+//   // sets: number;
+//    PlayerType[];
+// };
+
+type GameSetType = {
+  [key: number]: {
+    host: number;
+    guest: number;
+  };
 };
