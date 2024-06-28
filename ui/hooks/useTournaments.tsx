@@ -2,18 +2,32 @@
 
 import { useEffect, useState } from "react";
 
-import { database } from "@/lib/firebaseConfig";
+import { auth, database } from "@/lib/firebaseConfig";
 
-import { onValue, ref } from "firebase/database";
+import { equalTo, onValue, orderByChild, query, ref } from "firebase/database";
 import { TournamentType } from "@/interfaces/tournaments";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 
 export default function useTournaments() {
+  const router = useRouter();
   const [tournaments, setTournaments] = useState<TournamentType[] | null>(null);
 
-  useEffect(() => {
-    const tournamentsRef = ref(database, "tournaments");
+  const [user] = useAuthState(auth);
 
-    const unsubscribe = onValue(tournamentsRef, (snapshot) => {
+  useEffect(() => {
+    if (!user?.uid) {
+      return router.replace("/login");
+    }
+
+    const tournamentsRef = ref(database, "tournaments");
+    const tournamentQuery = query(
+      tournamentsRef,
+      orderByChild("userId"),
+      equalTo(user?.uid)
+    );
+
+    const unsubscribe = onValue(tournamentQuery, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {

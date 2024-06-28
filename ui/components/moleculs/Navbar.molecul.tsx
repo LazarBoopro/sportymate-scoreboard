@@ -15,6 +15,7 @@ import logo from "@/public/img/logo.svg";
 
 import "@/ui/styles/moleculs/navbar.molecul.scss";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -37,14 +38,15 @@ export default function Navbar() {
     <nav className="navigation">
       <div className="navigation__user">
         <div className="picture">
-          {/* <IoPersonCircleOutline /> */}
-          <Image src={logo} alt="sportyMate" />
+          <Link href={"/"}>
+            <Image src={logo} alt="sportyMate" />
+          </Link>
         </div>
         |<p className="user">{user?.email}</p>
       </div>
       <div className="navigation__ctas">
         <Button onClick={signOut} type="danger">
-          log out
+          Odjavi se
           <IoLogOutOutline />
         </Button>
       </div>

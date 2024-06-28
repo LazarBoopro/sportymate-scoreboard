@@ -6,6 +6,7 @@
   padding: 1rem 1rem;
   background: rgb($white-clr, 0.8);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgb($gray-clr-2, 0.15);
 
   &__user {
     display: flex;

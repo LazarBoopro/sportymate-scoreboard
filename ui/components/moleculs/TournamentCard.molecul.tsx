@@ -15,7 +15,6 @@ import {
 import dayjs from "dayjs";
 import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
 import Link from "next/link";
-import { query } from "firebase/firestore";
 
 export default function TournamentCard({
   title,
@@ -30,7 +29,7 @@ export default function TournamentCard({
       <div className="tournament__heading">
         <p className="title">{title}</p>
         <p className="subtitle">
-          <span className={`status ${status}`}>{status}</span>
+          <span className={`status ${status.status}`}>{status.status}</span>
           {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
       </div>

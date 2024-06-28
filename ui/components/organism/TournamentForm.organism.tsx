@@ -34,6 +34,13 @@ type TournamentType = {
     host?: PlayerType[];
     guest?: PlayerType[];
   };
+  score: {
+    currentSet: number[];
+    sets: {
+      host: number;
+      guest: number;
+    }[];
+  };
 };
 
 export default function TournamentForm() {
@@ -56,6 +63,23 @@ export default function TournamentForm() {
       guest: [
         { firstName: "", lastName: "" },
         { firstName: "", lastName: "" },
+      ],
+    },
+    score: {
+      currentSet: [0, 0],
+      sets: [
+        {
+          host: 0,
+          guest: 0,
+        },
+        {
+          host: 0,
+          guest: 0,
+        },
+        {
+          host: 0,
+          guest: 0,
+        },
       ],
     },
   });
@@ -102,8 +126,10 @@ export default function TournamentForm() {
       startTime: `${data.date} ${data.startTime?.hour}:${data.startTime?.minute}`,
       status: data.status,
       players: data.players,
+      score: data.score,
     };
 
+    // @ts-ignore
     addTournament(payload);
   };
 
@@ -124,6 +150,23 @@ export default function TournamentForm() {
         guest: [
           { firstName: "", lastName: "" },
           { firstName: "", lastName: "" },
+        ],
+      },
+      score: {
+        currentSet: [0, 0],
+        sets: [
+          {
+            host: 0,
+            guest: 0,
+          },
+          {
+            host: 0,
+            guest: 0,
+          },
+          {
+            host: 0,
+            guest: 0,
+          },
         ],
       },
     });
