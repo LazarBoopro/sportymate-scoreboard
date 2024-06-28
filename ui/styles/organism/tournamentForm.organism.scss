@@ -1,0 +1,93 @@
+@import "variables.scss";
+
+.tournament-form {
+  position: relative;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      display: flex;
+      font-size: clamp(1.25rem, 5vw, 1.5rem);
+      font-weight: 800;
+    }
+
+    .button {
+      border-radius: 100rem;
+      padding: 0.5rem 1rem;
+
+      @media (min-width: 768px) {
+        display: none;
+      }
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .submit {
+      overflow: hidden;
+      position: sticky;
+      width: 100%;
+      bottom: 0.5rem;
+    }
+
+    .inline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .time-picker {
+      flex: 1;
+      padding-right: 1rem;
+      border-right: 1px dashed $gray-clr-500;
+
+      .selects {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .select {
+          padding: 1rem;
+          background: $gray-clr-100;
+          border: none;
+          outline: none;
+          border-radius: 0.5rem;
+          color: $black-clr;
+          width: 100%;
+          text-align: center;
+          overflow: hidden;
+        }
+      }
+    }
+
+    .team {
+      &__title {
+        font-weight: 800;
+      }
+
+      &__players {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .player {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
+}

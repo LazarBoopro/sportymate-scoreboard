@@ -1,20 +1,20 @@
+import Link from "next/link";
+import dayjs from "dayjs";
+
 import Button from "@/ui/components/atoms/Button.atom";
 
 import { TournamentType } from "@/interfaces/tournaments";
 
-import "@/ui/styles/moleculs/tourtnament.molecul.scss";
+import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
 
 import {
   IoTrashOutline,
-  IoPencilOutline,
   IoPlayOutline,
-  IoChevronBackOutline,
-  IoEyeOutline,
-  IoOptions,
+  IoSettingsOutline,
+  IoTvOutline,
 } from "react-icons/io5";
-import dayjs from "dayjs";
-import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
-import Link from "next/link";
+
+import "@/ui/styles/moleculs/tourtnament.molecul.scss";
 
 export default function TournamentCard({
   title,
@@ -26,10 +26,12 @@ export default function TournamentCard({
 
   return (
     <div className="tournament">
-      <div className="tournament__heading">
+      <div className="tournament__header">
         <p className="title">{title}</p>
         <p className="subtitle">
-          <span className={`status ${status.status}`}>{status.status}</span>
+          <span className={`status ${status.status ?? "idle"}`}>
+            {status.status ?? "idle"}
+          </span>
           {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
       </div>
@@ -41,7 +43,9 @@ export default function TournamentCard({
           }}
         >
           <Button>
-            <IoPlayOutline />
+            Gledaj
+            {/* <IoPlayOutline /> */}
+            <IoTvOutline />
           </Button>
         </Link>
 
@@ -51,13 +55,16 @@ export default function TournamentCard({
           }}
         >
           <Button type="action">
-            <IoOptions />
+            Sudi
+            <IoSettingsOutline />
           </Button>
         </Link>
 
-        <Button type="danger" onClick={() => deleteTournament(id)}>
-          <IoTrashOutline />
-        </Button>
+        <Link href={"#"}>
+          <Button type="danger" onClick={() => deleteTournament(id)}>
+            <IoTrashOutline />
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -1,0 +1,54 @@
+@import "variables.scss";
+
+.match__section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  outline: 1px solid $gray-clr-300;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 2px 10px 0px rgb($black-clr, 0.15);
+
+  .players {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    font-weight: 800;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+
+    .action {
+      .ctas {
+        gap: 0.5rem;
+        display: flex;
+      }
+    }
+  }
+}
+
+.match__score {
+  .score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: 800;
+    font-size: clamp(6rem, 5vw, 6rem);
+  }
+
+  .sets {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 0.5rem;
+    font-size: clamp(1.25rem, 5vw, 2rem);
+
+    .slash {
+      color: $gray-clr-500;
+      font-weight: 300;
+      font-size: clamp(1rem, 5vw, 1.25rem);
+    }
+  }
+}

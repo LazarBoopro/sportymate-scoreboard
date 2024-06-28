@@ -33,7 +33,10 @@ export default function SelectField({
   return (
     <Select onValueChange={(e) => handleChange(e)}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={defaultSelected || "Match status"} />
+        <SelectValue placeholder={defaultSelected || "Match status"}>
+          <div className={`indicator ${defaultSelected}`}></div>
+          {defaultSelected}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {selectOptions.map((n) => (
@@ -92,5 +95,9 @@ const selectOptions = [
   {
     id: 11,
     status: "Forfeited",
+  },
+  {
+    id: 12,
+    status: "Idle",
   },
 ];

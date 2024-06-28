@@ -1,5 +1,7 @@
 import Button from "@/ui/components/atoms/Button.atom";
 
+import "@/ui/styles/moleculs/team.molecul.scss";
+
 type PlayerType = {
   firstName: string;
   lastName: string;
@@ -11,7 +13,7 @@ export function Team({
   team,
 }: {
   players: PlayerType[] | undefined;
-  handleChange: CallableFunction;
+  handleChange?: CallableFunction;
   team: number;
 }) {
   return (
@@ -28,22 +30,26 @@ export function Team({
           <div className="ctas">
             <Button
               onClick={() =>
-                handleChange({
-                  team,
-                  path: "/score/currentSet",
-                  action: "plus",
-                })
+                handleChange
+                  ? handleChange({
+                      team,
+                      path: "/score/currentSet",
+                      action: "plus",
+                    })
+                  : null
               }
             >
               +
             </Button>
             <Button
               onClick={() =>
-                handleChange({
-                  team,
-                  path: `/score/currentSet`,
-                  action: "minus",
-                })
+                handleChange
+                  ? handleChange({
+                      team,
+                      path: `/score/currentSet`,
+                      action: "minus",
+                    })
+                  : null
               }
               type="danger"
             >

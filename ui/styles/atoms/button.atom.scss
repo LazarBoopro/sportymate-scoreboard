@@ -6,16 +6,17 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  border-radius: $border-radius-sm;
+  border-radius: 0.5rem;
+  text-wrap: nowrap;
   cursor: pointer;
   transition: 0.2s ease-in-out background;
 
   &.primary {
-    background-color: $purple-100;
+    background-color: $blue-clr-500;
     color: $white-clr;
 
     &:hover {
-      background-color: $purple-200;
+      background-color: $blue-clr-600;
     }
   }
 
@@ -23,26 +24,40 @@
     background: transparent;
 
     &:hover {
-      background-color: $gray-clr;
+      background-color: $gray-clr-100;
     }
   }
 
   &.danger {
-    background: $red-100;
-    color: $red-500;
+    background: $red-clr-100;
+    color: $red-clr-500;
 
     &:hover {
-      background-color: $red-300;
+      background-color: $red-clr-200;
+    }
+  }
+
+  &.secondary {
+    background: $lime-green-clr-400;
+    color: $lime-green-clr-900;
+
+    &:hover {
+      background: $lime-green-clr-500;
     }
   }
 
   &.action {
-    background: $green-clr;
-    color: $green-clr-2;
+    background: $green-clr-500;
+    color: $white-clr;
 
     &:hover {
-      background: $green-clr-1;
+      background: $green-clr-600;
     }
     // color: $green-clr-100;
+  }
+
+  &.fade {
+    background-color: $gray-clr-100;
+    color: $gray-clr-900;
   }
 }

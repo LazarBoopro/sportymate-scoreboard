@@ -1,6 +1,6 @@
 "use client";
 
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import dayjs from "dayjs";
 
@@ -13,22 +13,30 @@ import Button from "@/ui/components/atoms/Button.atom";
 import { useAddTournament } from "@/infrastructure/mutations/tournaments";
 import { PlayerType } from "@/interfaces/tournaments";
 
+import "@/ui/styles/organism/tournamentForm.organism.scss";
+import { IoChevronBack, IoTennisballOutline } from "react-icons/io5";
+
 type TournamentType = {
   title?: string;
   startTime?: {
     hour: string;
     minute: string;
   };
-  status?:
-    | "idle"
-    | "inProgress"
-    | "paused"
-    | "warmup"
-    | "over"
-    | "matchPoint"
-    | "tieBreak"
-    | "delayed"
-    | "intermission";
+  status?: {
+    id: number;
+    status:
+      | "idle"
+      | "inProgress"
+      | "paused"
+      | "warmup"
+      | "over"
+      | "matchPoint"
+      | "tieBreak"
+      | "delayed"
+      | "intermission"
+      | "idle";
+  };
+
   date?: string;
   players: {
     host?: PlayerType[];
@@ -37,8 +45,7 @@ type TournamentType = {
   score: {
     currentSet: number[];
     sets: {
-      host: number;
-      guest: number;
+      [key: number]: number;
     }[];
   };
 };
@@ -54,7 +61,10 @@ export default function TournamentForm() {
       hour: dayjs().hour().toString(),
       minute: dayjs().minute().toString(),
     },
-    status: "idle",
+    status: {
+      id: 12,
+      status: "idle",
+    },
     players: {
       host: [
         { firstName: "", lastName: "" },
@@ -69,16 +79,8 @@ export default function TournamentForm() {
       currentSet: [0, 0],
       sets: [
         {
-          host: 0,
-          guest: 0,
-        },
-        {
-          host: 0,
-          guest: 0,
-        },
-        {
-          host: 0,
-          guest: 0,
+          [0]: 0,
+          [1]: 0,
         },
       ],
     },
@@ -141,7 +143,10 @@ export default function TournamentForm() {
         hour: dayjs().hour().toString(),
         minute: dayjs().minute().toString(),
       },
-      status: "idle",
+      status: {
+        status: "idle",
+        id: 12,
+      },
       players: {
         host: [
           { firstName: "", lastName: "" },
@@ -156,31 +161,31 @@ export default function TournamentForm() {
         currentSet: [0, 0],
         sets: [
           {
-            host: 0,
-            guest: 0,
-          },
-          {
-            host: 0,
-            guest: 0,
-          },
-          {
-            host: 0,
-            guest: 0,
+            [0]: 0,
+            [1]: 0,
           },
         ],
       },
     });
   };
 
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleClick = () => {
+    const parent = ref.current?.parentElement;
+
+    parent?.children[0].scrollIntoView();
+  };
+
   return (
-    <div
-      className="tournament-form"
-      style={{
-        maxHeight: "50dvh",
-        overflowY: "auto",
-      }}
-    >
-      <h2>Dodaj turnir</h2>
+    <div ref={ref} id="add-tournaments" className="tournament-form">
+      <div className="header">
+        <Button onClick={handleClick} className="cta-slide" type="fade">
+          <IoChevronBack />
+          Turniri
+        </Button>
+        <h2 className="title">Dodaj turnir</h2>
+      </div>
       <form onSubmit={handleSubmit} className="tournament-form__form">
         <InputField
           onChange={handleOnChange}
@@ -199,41 +204,43 @@ export default function TournamentForm() {
           placeholder="Datum"
           required
         />
-        <div className="time-picker">
-          <p>Vreme</p>
-          <div className="selects">
-            <select
-              className="select hours"
-              defaultValue={data.startTime?.hour}
-              required
-            >
-              {Array.from({ length: 24 }).map((_, i) => (
-                <option key={i}>{(i + 1).toString().padStart(2, "0")}</option>
-              ))}
-            </select>
-            :
-            <select
-              className="select minutes"
-              defaultValue={data.startTime?.minute}
-              required
-            >
-              {Array.from({ length: 60 }).map((_, i) => (
-                <option key={i}>{i.toString().padStart(2, "0")}</option>
-              ))}
-            </select>
+        <div className="inline">
+          <div className="time-picker">
+            <p>Vreme</p>
+            <div className="selects">
+              <select
+                className="select hours"
+                defaultValue={data.startTime?.hour}
+                required
+              >
+                {Array.from({ length: 24 }).map((_, i) => (
+                  <option key={i}>{(i + 1).toString().padStart(2, "0")}</option>
+                ))}
+              </select>
+              :
+              <select
+                className="select minutes"
+                defaultValue={data.startTime?.minute}
+                required
+              >
+                {Array.from({ length: 60 }).map((_, i) => (
+                  <option key={i}>{i.toString().padStart(2, "0")}</option>
+                ))}
+              </select>
+            </div>
           </div>
+          {/* | */}
+          <InputField
+            onChange={() => setIsDouble((prev) => !prev)}
+            title="Dabl"
+            value={isDouble}
+            name="isDouble"
+            type="switch"
+          />
         </div>
-        <InputField
-          onChange={() => setIsDouble((prev) => !prev)}
-          title="Dabl"
-          value={isDouble}
-          name="isDouble"
-          type="switch"
-        />
-        <br />
 
         <div className="team">
-          <p className="team__title">Domacin</p>
+          <p className="team__title">Domaćin</p>
 
           <div className="team__players">
             <div className="player">
@@ -337,7 +344,7 @@ export default function TournamentForm() {
         </div>
         <br />
 
-        <Button>Dodaj turnir</Button>
+        <Button className="submit">Dodaj turnir</Button>
       </form>
     </div>
   );

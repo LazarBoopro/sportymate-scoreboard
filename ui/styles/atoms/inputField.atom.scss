@@ -3,8 +3,6 @@
 .input-field {
   display: flex;
   flex-direction: column;
-  // max-width: 15rem;
-  // padding: 0.5rem 1rem;
 
   &__title {
     color: $black-clr;
@@ -16,24 +14,23 @@
 
   &__input {
     position: relative;
-    // height: 3.5rem;
+
     & > input {
-      padding: 1rem 0.5rem;
-      background: $gray-clr;
+      padding: 1rem 0.75rem;
+      background: $gray-clr-100;
       border: none;
       outline: none;
-      border-radius: $border-radius-sm;
+      border-radius: 0.5rem;
       color: $black-clr;
       width: 100%;
       overflow: hidden;
 
       &:not(:valid) {
-        color: $gray-clr-2;
+        background-color: $gray-clr-100;
       }
     }
 
     .show-password {
-      // background: $white-clr;
       cursor: pointer;
       top: 0;
       background: transparent;

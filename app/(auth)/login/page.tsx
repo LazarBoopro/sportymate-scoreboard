@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -14,24 +15,41 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { useUserSignIn } from "@/infrastructure/mutations/user";
 
+import coverImage from "@/public/img/cover.jpg";
+
 import "@/ui/styles/pages/login.page.scss";
 
 export default function Login() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const userSession = JSON.parse(sessionStorage.getItem("user")!);
   const [user] = useAuthState(auth);
+  const [userSession, setUserSession] = useState<string | null>(null);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
+  useEffect(() => {
+    typeof sessionStorage !== "undefined"
+      ? setUserSession(JSON.parse(sessionStorage?.getItem("user")!))
+      : null;
+  }, []);
+
   if (user && userSession) {
     router.push("/");
   }
 
-  const { mutate: logIn, isError, failureReason } = useUserSignIn();
+  const onSuccessLogin = () => {
+    router.replace("/");
+  };
+
+  const {
+    mutate: logIn,
+    isError,
+    failureReason,
+    isSuccess,
+  } = useUserSignIn(onSuccessLogin);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -89,32 +107,43 @@ export default function Login() {
   return (
     <section className="login">
       <div className="form">
-        <div className="heading">
-          <h1>Dobrodošli nazad</h1>
-          <p>Unesi svoj email i lozinku kako biste pristupili nalogu</p>
-        </div>
-        <form className="form__form" onSubmit={handleSubmit}>
-          <InputField
-            onChange={handleOnChange}
-            title="email"
-            value={credentials.email}
-            placeholder="Email address"
-          />
-          <InputField
-            onChange={handleOnChange}
-            title="password"
-            type="password"
-            value={credentials.password}
-            placeholder="Password"
-          />
-          <Button type="primary">log in</Button>
-        </form>
+        <div className="form__content">
+          <div className="heading">
+            <h1>Dobrodošli nazad</h1>
+            <p>Unesi svoj email i lozinku kako biste pristupili nalogu</p>
+          </div>
+          <form className="form-content" onSubmit={handleSubmit}>
+            <InputField
+              onChange={handleOnChange}
+              title="email"
+              value={credentials.email}
+              placeholder="Email address"
+            />
+            <InputField
+              onChange={handleOnChange}
+              title="password"
+              type="password"
+              value={credentials.password}
+              placeholder="Password"
+            />
+            <Button>log in</Button>
+          </form>
 
-        <Link href={"/register"}>
-          <Button type="transparent">
-            Registruj se <u>ovde</u>{" "}
-          </Button>
-        </Link>
+          <Link href={"/register"}>
+            <Button type="transparent">
+              Registruj se <u>ovde</u>{" "}
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="decoration">
+        <div className="decoration__image">
+          <p className="text">
+            Sav sport <br />u jednoj aplikaciji
+          </p>
+          <Image src={coverImage} alt="sportyMate" />
+        </div>
       </div>
     </section>
   );

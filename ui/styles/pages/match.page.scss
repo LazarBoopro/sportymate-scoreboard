@@ -1,60 +1,128 @@
 @import "variables.scss";
 
 .match {
-  padding: 2rem;
+  padding: 1rem;
   display: grid;
-  grid-template-columns: 1fr 250px 1fr;
+  grid-template-rows: 1fr 250px 1fr;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
 
-  &__section {
-    &:nth-child(2) {
-      justify-self: center;
+@media (min-width: 768px) {
+  .match {
+    grid-template-columns: 1fr 0.65fr 1fr;
+    grid-template-rows: 1fr;
+  }
+}
 
-      .score {
-        font-size: clamp(5rem, 5vw, 15rem);
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+// --------
 
-      .sets {
-        text-align: center;
-        display: flex;
-        justify-content: space-between;
-        font-size: clamp(2rem, 5vw, 2rem);
-      }
+.match-view {
+  color: $white-clr;
+  background-color: $purple-clr-900;
+  height: 100dvh;
+  padding: 1rem;
+  position: relative;
+
+  &__logo {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  &__title {
+    top: 1rem;
+    position: absolute;
+    text-align: center;
+    font-weight: 800;
+    font-size: clamp(1rem, 3vw, 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    // flex-direction: column;
+
+    .status {
+      font-size: clamp(0.5rem, 3vw, 1rem);
+      outline: 1px solid $gray-clr-500;
+      border-radius: 100rem;
+      width: fit-content;
+      height: fit-content;
+      color: $gray-clr-900;
+      padding: 0.25rem 1rem;
+      background-color: $gray-clr-100;
+      font-weight: 500;
     }
+  }
 
-    &:nth-child(1) {
-      justify-self: left;
-    }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
 
-    &:nth-child(3) {
-      justify-self: end;
-    }
-
-    &.right,
-    &.left {
+    .team {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      justify-content: space-between;
 
-      .players {
-        font-size: clamp(1rem, 5vw, 1.25rem);
+      &__players {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
         font-weight: 800;
+        font-size: clamp(1.15rem, 2vw, 1.5rem);
+        align-self: center;
       }
 
-      .actions {
-        .action {
-          p {
-            font-weight: 800;
-          }
+      &__score {
+        display: flex;
+        gap: 1rem;
+        font-weight: 800;
+        color: $black-clr;
 
-          .ctas {
-            display: flex;
-            gap: 0.5rem;
+        --width-div: clamp(4rem, 5.5rem, 7rem);
+
+        .sets {
+          font-size: clamp(1rem, 3vw, 3rem);
+          display: flex;
+          align-items: center;
+          color: $white-clr;
+          & > p {
+            text-align: center;
+            width: var(--width-div);
           }
         }
+
+        .gem {
+          aspect-ratio: 1;
+          width: var(--width-div);
+          height: var(--width-div);
+          font-size: clamp(1rem, 3vw, 2rem);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          background: $lime-green-clr-500;
+        }
+      }
+    }
+
+    .line {
+      height: 0.35rem;
+      background: $purple-clr-500;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .match-view {
+    &__body {
+      .team {
+        flex-direction: column;
       }
     }
   }

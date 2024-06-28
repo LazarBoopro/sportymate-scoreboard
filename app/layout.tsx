@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
-import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import QueryProvider from "@/ui/components/providers/QueryProvider.provider";
+import QueryProvider from "@/ui/providers/QueryProvider.provider";
+
+import "./globals.css";
+import { NavbarContextProvider } from "@/ui/providers/NavbarContext.provider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
@@ -25,8 +27,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={plusJakartaSans.className}>
         <QueryProvider>
-          <Toaster />
-          {children}
+          <NavbarContextProvider>
+            <Toaster />
+            {children}
+          </NavbarContextProvider>
         </QueryProvider>
       </body>
     </html>

@@ -5,7 +5,7 @@ type ScoreType = {
 
 export function Score({ score }: { score: ScoreType | null }) {
   return (
-    <div className="match__section middle">
+    <div className="match__score">
       <div className="score">
         <span>{scores[score?.currentSet?.[0] || 0]}</span>
         <span>:</span>
@@ -13,9 +13,13 @@ export function Score({ score }: { score: ScoreType | null }) {
       </div>
       <div className="sets">
         {score?.sets.map((n, i) => (
-          <p key={i}>
-            {n?.[0]} : {n?.[1]}
-          </p>
+          <>
+            <p key={i}>
+              {n?.[0]} : {n?.[1]}
+            </p>
+
+            <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
+          </>
         ))}
       </div>
     </div>
