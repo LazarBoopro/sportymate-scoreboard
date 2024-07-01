@@ -1,6 +1,7 @@
 @import "variables.scss";
 
 .match {
+  isolation: isolate;
   padding: 1rem;
   display: grid;
   grid-template-rows: 1fr 250px 1fr;
@@ -18,11 +19,20 @@
 // --------
 
 .match-view {
+  isolation: isolate;
   color: $white-clr;
   background-color: $purple-clr-900;
   height: 100dvh;
   padding: 1rem;
   position: relative;
+
+  background-color: #361d3e;
+  opacity: 1;
+  background-image: radial-gradient(
+    $purple-clr-800 1.1px,
+    $purple-clr-900 0.9px
+  );
+  background-size: 18px 18px;
 
   &__logo {
     position: absolute;
@@ -113,7 +123,21 @@
 
     .line {
       height: 0.35rem;
-      background: $purple-clr-500;
+      background: linear-gradient(90deg, $purple-clr-500, transparent 90%);
+
+      isolation: isolate;
+      position: relative;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        background: rgb($purple-clr-300, 0.2);
+        filter: blur(5px);
+      }
     }
   }
 }

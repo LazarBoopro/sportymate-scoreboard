@@ -29,8 +29,8 @@
   }
 
   &.danger {
+    color: $red-clr-900;
     background: $red-clr-100;
-    color: $red-clr-500;
 
     &:hover {
       background-color: $red-clr-200;

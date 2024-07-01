@@ -1,0 +1,41 @@
+@import "variables.scss";
+
+.watch-message {
+  color: $white-clr;
+  background-color: $purple-clr-900;
+  height: 100dvh;
+  display: flex;
+  isolation: isolate;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+
+  font-size: clamp(3.5rem, 5vw, 10rem);
+
+  font-weight: 800;
+
+  background-color: #361d3e;
+  opacity: 1;
+  background-image: radial-gradient(
+    $purple-clr-800 1.1px,
+    $purple-clr-900 0.9px
+  );
+  background-size: 18px 18px;
+
+  .wrapper {
+    position: relative;
+    overflow: hidden;
+    display: block;
+
+    & > div {
+      & > span {
+        display: inline-block;
+      }
+
+      &:last-child {
+        inset: 0;
+        position: absolute;
+      }
+    }
+  }
+}

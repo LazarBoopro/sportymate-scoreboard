@@ -11,6 +11,9 @@
   gap: 2rem;
 
   &__header {
+    // display: flex;
+    // gap: 0.5rem;
+
     .title {
       font-weight: 800;
       font-size: clamp(1rem, 5vw, 1.25rem);
@@ -25,11 +28,91 @@
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
 
+        &.completed {
+          color: $green-clr-900;
+          background: $green-clr-100;
+        }
+
+        &.inprogress {
+          color: $blue-clr-900;
+          background: $blue-clr-100;
+        }
+
+        &.paused {
+          color: $gray-clr-900;
+          background: $gray-clr-100;
+        }
+
+        &.canceled {
+          color: $red-clr-900;
+          background: $red-clr-100;
+        }
+
+        &.warmup {
+          color: $lime-green-clr-900;
+          background: $lime-green-clr-100;
+        }
+
+        &.break {
+          color: $purple-clr-900;
+          background: $purple-clr-100;
+        }
+
+        &.interrupted {
+          color: $red-clr-800;
+          background: $red-clr-200;
+        }
+
+        &.delayed {
+          color: $yellow-clr-900;
+          background: $yellow-clr-300;
+        }
+
+        &.matchpoint {
+          color: $blue-clr-700;
+          background: $blue-clr-200;
+        }
+
+        &.tiebreak {
+          color: $purple-clr-700;
+          background: $purple-clr-200;
+        }
+
+        &.suspended {
+          color: $gray-clr-700;
+          background: $gray-clr-200;
+        }
+
+        &.forfeited {
+          color: $black-clr;
+          background: $red-clr-100;
+        }
+
         &.idle {
           color: $yellow-clr-900;
           background: $yellow-clr-100;
         }
       }
+    }
+  }
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .team {
+      & > p {
+        &::first-letter {
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .score {
+      display: flex;
+      font-weight: 800;
+      font-size: clamp(1.25rem, 5vw, 2rem);
     }
   }
 

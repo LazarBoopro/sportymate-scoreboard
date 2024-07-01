@@ -21,6 +21,8 @@ export default function TournamentCard({
   startTime,
   status,
   id,
+  players,
+  score,
 }: TournamentType) {
   const { mutate: deleteTournament } = useDeleteTournament();
 
@@ -29,12 +31,37 @@ export default function TournamentCard({
       <div className="tournament__header">
         <p className="title">{title}</p>
         <p className="subtitle">
-          <span className={`status ${status.status ?? "idle"}`}>
+          <span
+            className={`status ${
+              status.status.toLowerCase().replace(" ", "") ?? "idle"
+            }`}
+          >
             {status.status ?? "idle"}
           </span>
           {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
       </div>
+
+      <div className="tournament__body">
+        <div className="team">
+          {players.host.map((n) => (
+            <p>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
+          ))}
+        </div>
+
+        <div className="score">
+          <p>{score.currentSet[0]}</p>
+          <p>:</p>
+          <p>{score.currentSet[1]}</p>
+        </div>
+
+        <div className="team">
+          {players.guest.map((n) => (
+            <p>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
+          ))}
+        </div>
+      </div>
+
       <div className="tournament__ctas">
         <Link
           href={{

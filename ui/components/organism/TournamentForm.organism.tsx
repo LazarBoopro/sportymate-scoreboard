@@ -209,7 +209,9 @@ export default function TournamentForm() {
             <p>Vreme</p>
             <div className="selects">
               <select
+                onChange={handleOnChange}
                 className="select hours"
+                name="startTime.hour"
                 defaultValue={data.startTime?.hour}
                 required
               >
@@ -219,12 +221,14 @@ export default function TournamentForm() {
               </select>
               :
               <select
+                onChange={handleOnChange}
                 className="select minutes"
+                name="startTime.minute"
                 defaultValue={data.startTime?.minute}
                 required
               >
-                {Array.from({ length: 60 }).map((_, i) => (
-                  <option key={i}>{i.toString().padStart(2, "0")}</option>
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <option key={i}>{(i * 5).toString().padStart(2, "0")}</option>
                 ))}
               </select>
             </div>
