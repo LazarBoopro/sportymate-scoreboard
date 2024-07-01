@@ -2,68 +2,36 @@
 
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import dayjs from "dayjs";
 
 import { auth } from "@/lib/firebaseConfig";
-
 import { useAuthState } from "react-firebase-hooks/auth";
+
 import InputField from "@/ui/components/atoms/InputField.atom";
 import Button from "@/ui/components/atoms/Button.atom";
 
 import { useAddTournament } from "@/infrastructure/mutations/tournaments";
-import { PlayerType } from "@/interfaces/tournaments";
+
+import {
+  PlayerType,
+  TournamentType,
+  TournamentTypeService,
+} from "@/interfaces/tournaments";
+
+import { IoChevronBack } from "react-icons/io5";
 
 import "@/ui/styles/organism/tournamentForm.organism.scss";
-import { IoChevronBack, IoTennisballOutline } from "react-icons/io5";
-
-type TournamentType = {
-  title?: string;
-  startTime?: {
-    hour: string;
-    minute: string;
-  };
-  status?: {
-    id: number;
-    status:
-      | "idle"
-      | "inProgress"
-      | "paused"
-      | "warmup"
-      | "over"
-      | "matchPoint"
-      | "tieBreak"
-      | "delayed"
-      | "intermission"
-      | "idle";
-  };
-
-  date?: string;
-  players: {
-    host?: PlayerType[];
-    guest?: PlayerType[];
-  };
-  score: {
-    currentSet: number[];
-    sets: {
-      [key: number]: number;
-    }[];
-  };
-};
 
 export default function TournamentForm() {
-  const user = useAuthState(auth);
+  const ref = useRef<HTMLDivElement | null>(null);
 
+  const user = useAuthState(auth);
   const [isDouble, setIsDouble] = useState(true);
   const [data, setData] = useState<TournamentType>({
     title: "",
     date: "",
     startTime: {
-      hour: dayjs().hour().toString(),
-      minute: dayjs().minute().toString(),
-    },
-    status: {
-      id: 12,
-      status: "idle",
+      hour: "00",
+      minute: "00",
     },
     players: {
       host: [
@@ -75,41 +43,42 @@ export default function TournamentForm() {
         { firstName: "", lastName: "" },
       ],
     },
-    score: {
-      currentSet: [0, 0],
-      sets: [
-        {
-          [0]: 0,
-          [1]: 0,
-        },
-      ],
-    },
   });
 
   const { mutate: addTournament, isSuccess } = useAddTournament();
+
   const handleOnChange = (e: any) => {
     const { name, value } = e.target;
 
     const [field, index, subField] = name.split(".");
 
-    if (index !== undefined && subField !== undefined) {
-      setData((prevData) => ({
+    if (subField !== undefined && index !== undefined) {
+      return setData((prevData) => ({
         ...prevData,
         players: {
           ...prevData.players,
           // @ts-ignore
-          [field]: prevData.players[field as string].map(
-            (player: PlayerType, i: number) =>
-              i === Number(index) ? { ...player, [subField]: value } : player
+          [field]: prevData.players[field].map((n: PlayerType, i: number) =>
+            i === Number(index) ? { ...n, [subField]: value } : n
           ),
         },
       }));
-    } else {
-      setData((prevData) => ({
+    }
+
+    if (index !== undefined) {
+      return setData((prevData) => ({
         ...prevData,
-        [name]: value,
+        startTime: {
+          ...prevData.startTime,
+          [index]: value,
+        },
       }));
     }
+
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -121,17 +90,27 @@ export default function TournamentForm() {
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
-    const payload = {
+    const payload: TournamentTypeService = {
       matchId: Math.floor(Math.random() * 100),
-      userId: user?.[0]?.uid,
+      userId: user?.[0]?.uid!,
       title: data.title,
       startTime: `${data.date} ${data.startTime?.hour}:${data.startTime?.minute}`,
-      status: data.status,
+      status: {
+        id: 12,
+        status: "idle",
+      },
       players: data.players,
-      score: data.score,
+      score: {
+        currentSet: [0, 0],
+        sets: [
+          {
+            [0]: 0,
+            [1]: 0,
+          },
+        ],
+      },
     };
 
-    // @ts-ignore
     addTournament(payload);
   };
 
@@ -140,12 +119,8 @@ export default function TournamentForm() {
       title: "",
       date: "",
       startTime: {
-        hour: dayjs().hour().toString(),
-        minute: dayjs().minute().toString(),
-      },
-      status: {
-        status: "idle",
-        id: 12,
+        hour: "00",
+        minute: "00",
       },
       players: {
         host: [
@@ -157,19 +132,8 @@ export default function TournamentForm() {
           { firstName: "", lastName: "" },
         ],
       },
-      score: {
-        currentSet: [0, 0],
-        sets: [
-          {
-            [0]: 0,
-            [1]: 0,
-          },
-        ],
-      },
     });
   };
-
-  const ref = useRef<HTMLDivElement | null>(null);
 
   const handleClick = () => {
     const parent = ref.current?.parentElement;
@@ -195,6 +159,7 @@ export default function TournamentForm() {
           value={data?.title ?? ""}
           required
         />
+
         <InputField
           name="date"
           onChange={handleOnChange}
@@ -216,7 +181,9 @@ export default function TournamentForm() {
                 required
               >
                 {Array.from({ length: 24 }).map((_, i) => (
-                  <option key={i}>{(i + 1).toString().padStart(2, "0")}</option>
+                  <option key={i} value={i}>
+                    {i.toString().padStart(2, "0")}
+                  </option>
                 ))}
               </select>
               :
@@ -228,12 +195,13 @@ export default function TournamentForm() {
                 required
               >
                 {Array.from({ length: 12 }).map((_, i) => (
-                  <option key={i}>{(i * 5).toString().padStart(2, "0")}</option>
+                  <option key={i} value={5 * i}>
+                    {(5 * i).toString().padStart(2, "0")}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
-          {/* | */}
           <InputField
             onChange={() => setIsDouble((prev) => !prev)}
             title="Dabl"
@@ -242,7 +210,7 @@ export default function TournamentForm() {
             type="switch"
           />
         </div>
-
+        <br />
         <div className="team">
           <p className="team__title">Domaćin</p>
 

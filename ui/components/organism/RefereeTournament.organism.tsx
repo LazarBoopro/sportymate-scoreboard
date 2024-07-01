@@ -20,7 +20,7 @@ export default function RefereeTournament({
           handleChange={handleUpdateCurrentSetScore}
         />
         <div className="match__section">
-          <SelectField defaultSelected={tournament?.status.status ?? ""} />
+          <SelectField defaultSelected={tournament?.status?.status ?? ""} />
           <Score score={tournament?.score ?? null} />
         </div>
         <Team

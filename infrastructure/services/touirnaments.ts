@@ -1,7 +1,8 @@
+import { TournamentTypeService } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
 import { get, push, ref, remove, update } from "firebase/database";
 
-export const addTournament = (data: any) => {
+export const addTournament = (data: TournamentTypeService) => {
   const tournamentsRef = ref(database, "tournaments");
 
   return push(tournamentsRef, data);

@@ -3,18 +3,21 @@ import dayjs from "dayjs";
 
 import Button from "@/ui/components/atoms/Button.atom";
 
-import { TournamentType } from "@/interfaces/tournaments";
+import { TournamentTypeService } from "@/interfaces/tournaments";
 
 import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
 
 import {
   IoTrashOutline,
-  IoPlayOutline,
   IoSettingsOutline,
   IoTvOutline,
 } from "react-icons/io5";
 
 import "@/ui/styles/moleculs/tourtnament.molecul.scss";
+
+type TournamentType = TournamentTypeService & {
+  id: string;
+};
 
 export default function TournamentCard({
   title,
@@ -33,10 +36,10 @@ export default function TournamentCard({
         <p className="subtitle">
           <span
             className={`status ${
-              status.status.toLowerCase().replace(" ", "") ?? "idle"
+              status?.status.toLowerCase().replace(" ", "") ?? "idle"
             }`}
           >
-            {status.status ?? "idle"}
+            {status?.status ?? "idle"}
           </span>
           {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
@@ -71,7 +74,6 @@ export default function TournamentCard({
         >
           <Button>
             Gledaj
-            {/* <IoPlayOutline /> */}
             <IoTvOutline />
           </Button>
         </Link>

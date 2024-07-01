@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { signIn, signOutUser } from "../services/user";
+import { registerUser, signIn, signOutUser } from "../services/user";
 
 export const useUserSignIn = (onSuccess: () => void) => {
   return useMutation({
@@ -14,5 +14,13 @@ export const useUserSignIn = (onSuccess: () => void) => {
 export const useSignOutUser = () => {
   return useMutation({
     mutationFn: () => signOutUser(),
+  });
+};
+
+export const useRegisterUser = (onSuccess: () => void) => {
+  return useMutation({
+    mutationFn: (credentials: { email: string; password: string }) =>
+      registerUser(credentials.email, credentials.password),
+    onSuccess: () => onSuccess(),
   });
 };

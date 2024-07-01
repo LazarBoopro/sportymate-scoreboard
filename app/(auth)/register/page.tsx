@@ -1,17 +1,17 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 import Button from "@/ui/components/atoms/Button.atom";
 import InputField from "@/ui/components/atoms/InputField.atom";
 import { useToast } from "@/components/ui/use-toast";
 
-import { auth } from "@/lib/firebaseConfig";
+import { useRegisterUser } from "@/infrastructure/mutations/user";
+
+import { checkFailureMessage } from "@/lib/helpers/messages";
 
 import coverImage from "@/public/img/cover.jpg";
 
@@ -28,8 +28,16 @@ export default function Register() {
     confirmPassword: "",
   });
 
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth);
+  const onSuccess = () => {
+    router.push("/login");
+  };
+
+  const {
+    mutate: register,
+    isError,
+    error,
+    isPending,
+  } = useRegisterUser(onSuccess);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -42,20 +50,7 @@ export default function Register() {
       });
     }
 
-    try {
-      await createUserWithEmailAndPassword(
-        credentials.email,
-        credentials.password
-      );
-
-      router.push("/login");
-    } catch (error: any) {
-      toast({
-        title: "Greska!",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+    register({ email: credentials.email, password: credentials.password });
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +60,16 @@ export default function Register() {
     });
   };
 
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Greška!",
+        description: checkFailureMessage(error.message),
+        variant: "destructive",
+      });
+    }
+  }, [error]);
+
   return (
     <section className="login">
       <div className="form">
@@ -73,28 +78,34 @@ export default function Register() {
             <h1>Registruj se</h1>
             <p>Registruj besplatan nalog.</p>
           </div>
-          <form className="form-contetn" onSubmit={handleSubmit}>
+          <form className="form-content" onSubmit={handleSubmit}>
             <InputField
               onChange={handleOnChange}
               title="email"
+              name="email"
+              type="email"
               value={credentials.email}
-              placeholder="Email address"
+              placeholder="example@example.com"
             />
             <InputField
               onChange={handleOnChange}
-              title="password"
+              title="Lozinka"
+              name="password"
               value={credentials.password}
               type="password"
-              placeholder="Password"
+              placeholder="••••••••••••••"
             />
             <InputField
               onChange={handleOnChange}
-              title="confirmPassword"
+              title="Ponovi lozinku"
+              name="confirmPassword"
               value={credentials.confirmPassword}
               type="password"
-              placeholder="Password"
+              placeholder="••••••••••••••"
             />
-            <Button type="primary">log in</Button>
+            <Button type="primary" className={isPending ? "pending" : ""}>
+              Registruj se
+            </Button>
           </form>
 
           <Link href={"/login"}>

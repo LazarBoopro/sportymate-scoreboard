@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 import { auth, database } from "@/lib/firebaseConfig";
 
 import { equalTo, onValue, orderByChild, query, ref } from "firebase/database";
-import { TournamentType } from "@/interfaces/tournaments";
+import { TournamentTypeService } from "@/interfaces/tournaments";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+
+type TournamentType = TournamentTypeService & {
+  id: string;
+};
 
 export default function useTournaments() {
   const router = useRouter();

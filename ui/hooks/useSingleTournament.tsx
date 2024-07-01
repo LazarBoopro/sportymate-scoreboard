@@ -11,17 +11,25 @@ import {
   useUpdateCurrentSet,
   useUpdateGemScore,
 } from "@/infrastructure/mutations/tournaments";
-import { scores } from "../components/atoms/Score.atom";
+import { scores } from "@/lib/helpers/score";
+
+type ParamsType = {
+  team: number;
+  path: string;
+  action: "plus" | "minus";
+  advIndex?: number;
+};
+
+type HandleUpdateType = {
+  team: number;
+  path: string;
+  action: "plus" | "minus";
+};
 
 export default function useSingleTournament({ id }: { id: string }) {
   const [tournament, setTournament] = useState<TournamentType | null>(null);
-  const [score, setScore] = useState(tournament?.score.currentSet || [0, 0]);
-  const [params, setParams] = useState<{
-    team: number;
-    path: string;
-    action: "plus" | "minus";
-    advIndex?: number;
-  } | null>(null);
+  const [score, setScore] = useState(tournament?.score?.currentSet || [0, 0]);
+  const [params, setParams] = useState<ParamsType | null>(null);
 
   const { mutate: updateMatchScore } = useUpdateCurrentSet();
   const { mutate: updateGemScore } = useUpdateGemScore();
@@ -30,11 +38,7 @@ export default function useSingleTournament({ id }: { id: string }) {
     path,
     team,
     action,
-  }: {
-    team: number;
-    path: string;
-    action: "plus" | "minus";
-  }) => {
+  }: HandleUpdateType) => {
     setParams({ team, path, action });
     if (action === "minus" && score?.[team] !== 0) {
       setScore((prev) => prev?.map((n, i) => (i === team ? n - 1 : n)));
@@ -44,14 +48,13 @@ export default function useSingleTournament({ id }: { id: string }) {
   };
 
   const handleGemPoints = ({ team }: { team: number }) => {
-    const sets = tournament?.score.sets;
-    const currSet = tournament?.score.sets[sets?.length! - 1];
+    const sets = tournament?.score?.sets;
+    const currSet = tournament?.score?.sets[sets?.length! - 1];
     const currPoint = currSet?.[team];
     const gemTeam = sets?.[sets?.length - 1][team];
 
     // Add new set
     if (currPoint! >= 5) {
-      console.log("ssss");
       Array.from({ length: 2 }).forEach((_, i) =>
         updateGemScore({
           id,
@@ -69,7 +72,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       team,
       gem: sets?.length! - 1,
       score: gemTeam === undefined ? 0 : gemTeam + 1,
-      prevScore: tournament?.score.sets[sets?.length! - 1],
+      prevScore: tournament?.score?.sets[sets?.length! - 1],
     });
   };
 
@@ -122,7 +125,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       const data: TournamentType = snapshot.val();
 
       if (data) {
-        setScore(data.score.currentSet);
+        setScore(data?.score?.currentSet || [0, 0]);
         setTournament(data);
       } else {
         setTournament(null);

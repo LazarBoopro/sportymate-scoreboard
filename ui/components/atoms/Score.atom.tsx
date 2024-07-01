@@ -1,3 +1,5 @@
+import { scores } from "@/lib/helpers/score";
+
 type ScoreType = {
   currentSet: number[];
   sets: { [key: string]: number }[];
@@ -25,5 +27,3 @@ export function Score({ score }: { score: ScoreType | null }) {
     </div>
   );
 }
-
-export const scores = [0, 15, 30, 40, "AD", "POINT"];

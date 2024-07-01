@@ -1,5 +1,9 @@
 import { auth } from "@/lib/firebaseConfig";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 export const signIn = async (email: string, password: string) => {
   const userCredentials = await signInWithEmailAndPassword(
@@ -18,4 +22,8 @@ export const signIn = async (email: string, password: string) => {
 export const signOutUser = async () => {
   await signOut(auth);
   sessionStorage.removeItem("user");
+};
+
+export const registerUser = async (email: string, password: string) => {
+  await createUserWithEmailAndPassword(auth, email, password);
 };

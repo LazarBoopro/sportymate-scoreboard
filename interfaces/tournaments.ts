@@ -1,12 +1,43 @@
 export type TournamentType = {
-  id: string;
-  userId: string;
+  id?: string;
+  userId?: string;
   title: string;
+  date?: string;
+  status?: {
+    id: number;
+    status: string;
+  };
+  startTime: {
+    hour: string;
+    minute: string;
+  };
+  players: {
+    host: PlayerType[];
+    guest: PlayerType[];
+  };
+  score?: {
+    currentSet: number[];
+    sets: {
+      [key: string]: number;
+    }[];
+  };
+};
+
+export type PlayerType = {
+  firstName: string;
+  lastName: string;
+  isServing?: boolean;
+};
+
+export type TournamentTypeService = {
+  matchId?: number;
+  userId?: string | undefined;
+  title: string;
+  startTime: string;
   status: {
     id: number;
     status: string;
   };
-  startTime: string;
   players: {
     host: PlayerType[];
     guest: PlayerType[];
@@ -16,15 +47,5 @@ export type TournamentType = {
     sets: {
       [key: string]: number;
     }[];
-    // sets: {
-    //   host: number;
-    //   guest: number;
-    // }[];
   };
-};
-
-export type PlayerType = {
-  firstName: string;
-  lastName: string;
-  isServing?: boolean;
 };

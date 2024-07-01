@@ -11,6 +11,11 @@
   cursor: pointer;
   transition: 0.2s ease-in-out background;
 
+  &.pending {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   &.primary {
     background-color: $blue-clr-500;
     color: $white-clr;

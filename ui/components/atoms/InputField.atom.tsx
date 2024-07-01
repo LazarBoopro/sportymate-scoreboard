@@ -1,18 +1,18 @@
+import { useState } from "react";
+
 import { Switch } from "@/components/ui/switch";
-import "@/ui/styles/atoms/inputField.atom.scss";
-import { ChangeEventHandler, useState } from "react";
+
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import "@/ui/styles/atoms/inputField.atom.scss";
 
 type InputType = {
   title?: string;
   placeholder?: string;
   value?: string | boolean;
   name?: string;
-  type?: "text" | "password" | "date" | "number" | "switch";
-  // TODO: CHECK TYPE
+  type?: "text" | "password" | "date" | "number" | "switch" | "email";
   required?: boolean;
   onChange?: React.Dispatch<React.SetStateAction<any>>;
-  // onChange: (e: any) => void;
 };
 
 export default function InputField({
@@ -50,6 +50,7 @@ export default function InputField({
             data-date-format="DD MMMM YYYY"
             value={value as string}
             onChange={onChange}
+            placeholder="MM/DD/YYYY"
             required={required ? true : false}
           />
         );

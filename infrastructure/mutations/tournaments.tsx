@@ -9,12 +9,12 @@ import {
   updateMatchStatus,
   updateTournament,
 } from "../services/touirnaments";
-import { TournamentType } from "@/interfaces/tournaments";
+import { TournamentTypeService } from "@/interfaces/tournaments";
 
 export const useAddTournament = () => {
   return useMutation({
-    // @ts-ignore TODO: CHECK TYPE
-    mutationFn: (data: TournamentType) => addTournament(data),
+    // @ts-ignore
+    mutationFn: (data: TournamentTypeService) => addTournament(data),
   });
 };
 

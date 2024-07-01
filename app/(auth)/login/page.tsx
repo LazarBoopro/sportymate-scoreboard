@@ -15,6 +15,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { useUserSignIn } from "@/infrastructure/mutations/user";
 
+import { checkFailureMessage } from "@/lib/helpers/messages";
+
 import coverImage from "@/public/img/cover.jpg";
 
 import "@/ui/styles/pages/login.page.scss";
@@ -47,8 +49,8 @@ export default function Login() {
   const {
     mutate: logIn,
     isError,
-    failureReason,
-    isSuccess,
+    error,
+    isPending,
   } = useUserSignIn(onSuccessLogin);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -63,43 +65,11 @@ export default function Login() {
     });
   };
 
-  const checkFailureMessage = (message?: string | undefined): string => {
-    let tempString;
-
-    if (message !== undefined) {
-      const s = message?.indexOf("(") + 1;
-      const e = message?.indexOf(")");
-
-      tempString = message?.substring(s, e);
-    }
-
-    switch (tempString) {
-      case "auth/wrong-password":
-        return "Pogrešna lozinka";
-
-      case "auth/user-not-found":
-        return "Nepostojeći korisnik";
-
-      case "auth/too-many-requests":
-        return "Previše pokušaja";
-
-      case "auth/missing-password":
-        return "Unesi lozinku";
-
-      case "auth/invalid-credential":
-      case "auth/invalid-email":
-        return "Email ili šifra nisu tačni";
-
-      default:
-        return "Javila se nepoznata greška!";
-    }
-  };
-
   useEffect(() => {
     isError &&
       toast({
-        title: "Greska!",
-        description: checkFailureMessage(failureReason?.message),
+        title: "Greška!",
+        description: checkFailureMessage(error?.message),
         variant: "destructive",
       });
   }, [isError]);
@@ -117,16 +87,17 @@ export default function Login() {
               onChange={handleOnChange}
               title="email"
               value={credentials.email}
-              placeholder="Email address"
+              placeholder="Email adresa"
             />
             <InputField
               onChange={handleOnChange}
-              title="password"
+              title="Lozinka"
+              name="password"
               type="password"
               value={credentials.password}
-              placeholder="Password"
+              placeholder="••••••••••••••"
             />
-            <Button>log in</Button>
+            <Button className={isPending ? "pending" : ""}>Uloguj se</Button>
           </form>
 
           <Link href={"/register"}>
