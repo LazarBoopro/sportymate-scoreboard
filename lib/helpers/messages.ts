@@ -25,6 +25,9 @@ export const checkFailureMessage = (message?: string | undefined): string => {
     case "auth/invalid-email":
       return "Email ili šifra nisu tačni";
 
+    case "auth/email-already-in-use":
+      return "Korisnik sa ovim email-om već postoji";
+
     default:
       return "Javila se nepoznata greška!";
   }
