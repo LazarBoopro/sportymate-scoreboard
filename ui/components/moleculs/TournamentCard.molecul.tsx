@@ -7,6 +7,8 @@ import { TournamentTypeService } from "@/interfaces/tournaments";
 
 import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
 
+import { checkStatusMessage } from "@/lib/helpers/messages";
+
 import {
   IoTrashOutline,
   IoSettingsOutline,
@@ -39,7 +41,7 @@ export default function TournamentCard({
               status?.status.toLowerCase().replace(" ", "") ?? "idle"
             }`}
           >
-            {status?.status ?? "idle"}
+            {checkStatusMessage(status?.status) ?? "idle"}
           </span>
           {dayjs(startTime).format("DD.MM.YYYY / HH:mm")}
         </p>
@@ -47,8 +49,8 @@ export default function TournamentCard({
 
       <div className="tournament__body">
         <div className="team">
-          {players.host.map((n) => (
-            <p>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
+          {players.host.map((n, i) => (
+            <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
           ))}
         </div>
 
@@ -59,8 +61,8 @@ export default function TournamentCard({
         </div>
 
         <div className="team">
-          {players.guest.map((n) => (
-            <p>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
+          {players.guest.map((n, i) => (
+            <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
           ))}
         </div>
       </div>

@@ -1,0 +1,22 @@
+image: node: 18.15.0
+
+definitions:
+  caches:
+    npm: /.npm
+
+  steps:
+    - step: &Pull-Request
+        name: 'Node Build'
+        caches:
+          - npm
+        
+        script:
+          - npm install
+          - npm run build
+      
+
+  
+pipelines:
+  pull-requests:
+    '**':
+      - step: *Pull-Request

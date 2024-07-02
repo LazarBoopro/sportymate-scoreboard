@@ -26,7 +26,7 @@ export type TournamentType = {
 export type PlayerType = {
   firstName: string;
   lastName: string;
-  isServing?: boolean;
+  serving?: boolean;
 };
 
 export type TournamentTypeService = {

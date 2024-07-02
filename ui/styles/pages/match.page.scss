@@ -86,6 +86,29 @@
         font-weight: 800;
         font-size: clamp(1.15rem, 2vw, 1.5rem);
         align-self: center;
+
+        p {
+          display: flex;
+          align-items: center;
+          position: relative;
+
+          span {
+            position: absolute;
+            right: calc(100% + 1rem);
+            font-size: clamp(1.25rem, 5vw, 1.5rem);
+
+            svg {
+              color: $lime-green-clr-500;
+            }
+
+            img {
+              left: 0;
+              max-width: 2rem;
+              filter: drop-shadow(0px 2px 3px rgb($purple-clr-100, 0.5))
+                brightness(0.85);
+            }
+          }
+        }
       }
 
       &__score {

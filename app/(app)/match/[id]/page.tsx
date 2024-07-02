@@ -13,7 +13,6 @@ import { auth } from "@/lib/firebaseConfig";
 import { useGetSingleTournament } from "@/infrastructure/queries/tournaments";
 
 import useSingleTournament from "@/ui/hooks/useSingleTournament";
-import { scores } from "@/lib/helpers/score";
 
 import "@/ui/styles/pages/match.page.scss";
 

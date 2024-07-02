@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { database } from "@/lib/firebaseConfig";
 import { onValue, ref } from "firebase/database";
-
-import { TournamentType } from "@/interfaces/tournaments";
 
 import {
   useUpdateCurrentSet,
   useUpdateGemScore,
 } from "@/infrastructure/mutations/tournaments";
 import { scores } from "@/lib/helpers/score";
+import Context from "../providers/NavbarContext.provider";
+import { TournamentType } from "@/interfaces/tournaments";
 
 type ParamsType = {
   team: number;
@@ -27,7 +27,11 @@ type HandleUpdateType = {
 };
 
 export default function useSingleTournament({ id }: { id: string }) {
-  const [tournament, setTournament] = useState<TournamentType | null>(null);
+  const { tournament, setTournament } = useContext<{
+    tournament: TournamentType;
+    setTournament: CallableFunction;
+  }>(Context);
+
   const [score, setScore] = useState(tournament?.score?.currentSet || [0, 0]);
   const [params, setParams] = useState<ParamsType | null>(null);
 
