@@ -7,6 +7,7 @@ import {
   updateCurrentSetScore,
   updateGemScore,
   updateMatchStatus,
+  updateServingPlayer,
   updateTournament,
 } from "../services/touirnaments";
 import { TournamentTypeService } from "@/interfaces/tournaments";
@@ -63,5 +64,21 @@ export const useUpdateMatchStatus = () => {
       id: string;
       status: { status: string; id: number };
     }) => updateMatchStatus({ id, status }),
+  });
+};
+
+export const useUpdateServingPlayer = () => {
+  return useMutation({
+    mutationFn: ({
+      gameId,
+      team,
+      playerId,
+      isServing,
+    }: {
+      gameId: string;
+      team: string;
+      playerId: string;
+      isServing: boolean;
+    }) => updateServingPlayer({ gameId, team, playerId, isServing }),
   });
 };

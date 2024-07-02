@@ -1,14 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
-import WatchStatus from "../atoms/WatchStatus.atom";
+import WatchStatus from "@/ui/components/atoms/WatchStatus.atom";
+import BubbleAnimations from "@/ui/components/atoms/BubbleAnimation.atom";
 
 import { TournamentType } from "@/interfaces/tournaments";
 
-import logo from "@/public/img/logoGreen.svg";
-import { AnimatePresence } from "framer-motion";
-import BubbleAnimations from "../atoms/BubbleAnimation.atom";
 import { scores } from "@/lib/helpers/score";
+import { checkStatusMessage } from "@/lib/helpers/messages";
+
+import logo from "@/public/img/logoGreen.svg";
+import { IoTennisball } from "react-icons/io5";
 
 export default function WatchTournament({
   tournament,
@@ -20,17 +23,16 @@ export default function WatchTournament({
   if (status !== "inprogress") {
     return (
       <AnimatePresence>
-        <WatchStatus status={tournament?.status?.status} />;
+        <WatchStatus
+          status={checkStatusMessage(tournament?.status?.status ?? "idle")}
+        />
       </AnimatePresence>
     );
   }
 
   return (
     <section className="match-view">
-      <h1 className="match-view__title">
-        {tournament?.title}
-        {/* <span className="status">{tournament?.status.status}</span> */}
-      </h1>
+      <h1 className="match-view__title">{tournament?.title}</h1>
       <Link className="match-view__logo" href={"/"}>
         <Image src={logo} alt="SportyMate" />
       </Link>
@@ -38,7 +40,29 @@ export default function WatchTournament({
         <div className="team host">
           <div className="team__players">
             {tournament?.players.host?.map((n, i: number) => (
-              <p key={i}>{`${n.firstName}  ${n.lastName}`}</p>
+              <p key={i}>
+                {`${n.firstName}  ${n.lastName}`}
+                <AnimatePresence>
+                  {n.serving && (
+                    <motion.span
+                      initial={{
+                        opacity: 0,
+                        x: -200,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        x: -200,
+                      }}
+                    >
+                      <IoTennisball />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </p>
             ))}
           </div>
 
@@ -54,12 +78,33 @@ export default function WatchTournament({
             </div>
           </div>
         </div>
-        {/* <Team team={0} players={tournament?.players.host} /> */}
         <div className="line" />
         <div className="team guest">
           <div className="team__players">
             {tournament?.players.guest?.map((n, i: number) => (
-              <p key={i}>{`${n.firstName}  ${n.lastName}`}</p>
+              <p key={i}>
+                {`${n.firstName}  ${n.lastName}`}
+                <AnimatePresence>
+                  {n.serving && (
+                    <motion.span
+                      initial={{
+                        opacity: 0,
+                        x: -200,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        x: -200,
+                      }}
+                    >
+                      <IoTennisball />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </p>
             ))}
           </div>
 
@@ -75,7 +120,6 @@ export default function WatchTournament({
             </div>
           </div>
         </div>
-        {/* <Team team={1} players={tournament?.players.guest} /> */}
       </div>
       <BubbleAnimations />
     </section>

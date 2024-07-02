@@ -6,6 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateMatchStatus } from "@/infrastructure/mutations/tournaments";
+import { checkStatusMessage } from "@/lib/helpers/messages";
 import { useParams } from "next/navigation";
 
 export default function SelectField({
@@ -33,14 +34,18 @@ export default function SelectField({
   return (
     <Select onValueChange={(e) => handleChange(e)}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={defaultSelected || "Match status"}>
+        <SelectValue
+          placeholder={checkStatusMessage(defaultSelected) || "Match status"}
+        >
           <div className={`indicator ${defaultSelected}`}></div>
-          {defaultSelected}
+          {checkStatusMessage(defaultSelected)}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {selectOptions.map((n) => (
-          <SelectItem value={String(n.id)}>{n.status}</SelectItem>
+        {selectOptions.map((n, i) => (
+          <SelectItem key={i} value={String(n.id)}>
+            {checkStatusMessage(n.status)}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>

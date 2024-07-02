@@ -82,3 +82,14 @@ export const updateMatchStatus = async ({
     status: status.status,
   });
 };
+
+export const updateServingPlayer = async ({
+  gameId,
+  team,
+  playerId,
+  isServing,
+}: any) => {
+  update(ref(database, `tournaments/${gameId}/players/${team}/${playerId}`), {
+    serving: isServing,
+  });
+};

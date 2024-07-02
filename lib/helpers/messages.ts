@@ -32,3 +32,48 @@ export const checkFailureMessage = (message?: string | undefined): string => {
       return "Javila se nepoznata greška!";
   }
 };
+
+export const checkStatusMessage = (message: string) => {
+  const statusMessage = message.toLowerCase().replace(" ", "");
+
+  switch (statusMessage) {
+    case "idle":
+      return "U pripremi";
+
+    case "inprogress":
+      return "U toku";
+
+    case "completed":
+      return "Završeno";
+
+    case "paused":
+      return "Pauzirano";
+
+    case "warmup":
+      return "Zagrevanje";
+
+    case "break":
+      return "Pauza";
+
+    case "interrupted":
+      return "Prekinuto";
+
+    case "delayed":
+      return "Odloženo";
+
+    case "matchpoint":
+      return "Meč lopta";
+
+    case "tiebreak":
+      return "Tie Break";
+
+    case "suspended":
+      return "Obustavljen";
+
+    case "forfeited":
+      return "Predat";
+
+    case "canceled":
+      return "Otkazano";
+  }
+};

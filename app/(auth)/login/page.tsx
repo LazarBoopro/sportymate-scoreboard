@@ -20,6 +20,7 @@ import { checkFailureMessage } from "@/lib/helpers/messages";
 import coverImage from "@/public/img/cover.jpg";
 
 import "@/ui/styles/pages/login.page.scss";
+import { Users } from "lucide-react";
 
 export default function Login() {
   const { toast } = useToast();
@@ -38,9 +39,11 @@ export default function Login() {
       : null;
   }, []);
 
-  if (user && userSession) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (user && userSession) {
+      router.push("/");
+    }
+  }, [user, userSession]);
 
   const onSuccessLogin = () => {
     router.replace("/");
@@ -113,7 +116,12 @@ export default function Login() {
           <p className="text">
             Sav sport <br />u jednoj aplikaciji
           </p>
-          <Image src={coverImage} alt="sportyMate" />
+          <Image
+            priority={false}
+            src={coverImage}
+            placeholder="blur"
+            alt="sportyMate"
+          />
         </div>
       </div>
     </section>
