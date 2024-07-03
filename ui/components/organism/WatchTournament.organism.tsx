@@ -15,12 +15,14 @@ import { IoTennisball } from "react-icons/io5";
 
 export default function WatchTournament({
   tournament,
+  isTie,
 }: {
+  isTie: boolean;
   tournament: TournamentType | null;
 }) {
   const status = tournament?.status?.status.toLowerCase().replace(" ", "");
 
-  if (status !== "inprogress") {
+  if (status !== "inprogress" && status !== "tiebreak") {
     return (
       <AnimatePresence>
         <WatchStatus
@@ -32,7 +34,32 @@ export default function WatchTournament({
 
   return (
     <section className="match-view">
-      <h1 className="match-view__title">{tournament?.title}</h1>
+      <h1 className="match-view__title">
+        {tournament?.title}
+
+        <AnimatePresence>
+          {isTie && (
+            <motion.p
+              initial={{
+                opacity: 0,
+                y: "-100%",
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: "-100%",
+              }}
+              className="subtitle"
+            >
+              Tie Break
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </h1>
+
       <Link className="match-view__logo" href={"/"}>
         <Image src={logo} alt="SportyMate" />
       </Link>
@@ -68,13 +95,37 @@ export default function WatchTournament({
 
           <div className="team__score">
             <div className="sets">
-              {tournament?.score?.sets.map((n, i) => (
-                <p key={i}>{n?.[0]}</p>
-              ))}
+              <AnimatePresence>
+                {!isTie &&
+                  tournament?.score?.sets.map((n, i) => (
+                    <motion.p
+                      initial={{
+                        opacity: 0,
+                        y: "-100%",
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: "-100%",
+                      }}
+                      transition={{
+                        delay: i * 0.025,
+                      }}
+                      key={i}
+                    >
+                      {n?.[0]}
+                    </motion.p>
+                  ))}
+              </AnimatePresence>
             </div>
 
             <div className="gem">
-              {scores[tournament?.score?.currentSet[0]!]}
+              {isTie
+                ? tournament?.score?.tiebreak[0]
+                : scores[tournament?.score?.currentSet[0]!]}
             </div>
           </div>
         </div>
@@ -110,13 +161,37 @@ export default function WatchTournament({
 
           <div className="team__score">
             <div className="sets">
-              {tournament?.score?.sets.map((n, i) => (
-                <p key={i}>{n?.[1]}</p>
-              ))}
+              <AnimatePresence>
+                {!isTie &&
+                  tournament?.score?.sets.map((n, i) => (
+                    <motion.p
+                      initial={{
+                        opacity: 0,
+                        y: "100%",
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: "100%",
+                      }}
+                      transition={{
+                        delay: i * 0.025,
+                      }}
+                      key={i}
+                    >
+                      {n?.[1]}
+                    </motion.p>
+                  ))}
+              </AnimatePresence>
             </div>
 
             <div className="gem">
-              {scores[tournament?.score?.currentSet[1]!]}
+              {isTie
+                ? tournament?.score?.tiebreak[1]
+                : scores[tournament?.score?.currentSet[1]!]}
             </div>
           </div>
         </div>

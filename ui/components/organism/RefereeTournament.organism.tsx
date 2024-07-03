@@ -7,7 +7,9 @@ import { TournamentType } from "@/interfaces/tournaments";
 export default function RefereeTournament({
   tournament,
   handleUpdateCurrentSetScore,
+  isTie,
 }: {
+  isTie: boolean;
   tournament: TournamentType | null;
   handleUpdateCurrentSetScore: CallableFunction;
 }) {
@@ -21,7 +23,7 @@ export default function RefereeTournament({
         />
         <div className="match__section">
           <SelectField defaultSelected={tournament?.status?.status ?? ""} />
-          <Score score={tournament?.score ?? null} />
+          <Score isTie={isTie} score={tournament?.score ?? null} />
         </div>
         <Team
           team={1}

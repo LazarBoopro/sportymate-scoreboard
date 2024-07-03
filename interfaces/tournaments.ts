@@ -16,10 +16,9 @@ export type TournamentType = {
     guest: PlayerType[];
   };
   score?: {
+    tiebreak: number[];
     currentSet: number[];
-    sets: {
-      [key: string]: number;
-    }[];
+    sets: number[][];
   };
 };
 

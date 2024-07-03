@@ -57,9 +57,9 @@ export default function TournamentForm() {
         ...prevData,
         players: {
           ...prevData.players,
-          // @ts-ignore
-          [field]: prevData.players[field].map((n: PlayerType, i: number) =>
-            i === Number(index) ? { ...n, [subField]: value } : n
+          [field]: prevData.players[field as keyof typeof prevData.players].map(
+            (n: PlayerType, i: number) =>
+              i === Number(index) ? { ...n, [subField]: value } : n
           ),
         },
       }));

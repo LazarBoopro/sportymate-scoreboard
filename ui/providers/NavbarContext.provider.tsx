@@ -33,8 +33,7 @@ export function NavbarContextProvider({
 
     if (Object.keys(teams).length) {
       Object.keys(teams).forEach((team) => {
-        // @ts-ignore
-        Object.keys(teams?.[team]).forEach((teamId) => {
+        Object.keys(teams?.[team as keyof typeof teams]).forEach((teamId) => {
           updateServing({
             gameId: serving?.gameId,
             playerId: teamId,

@@ -8,6 +8,7 @@ import {
   updateGemScore,
   updateMatchStatus,
   updateServingPlayer,
+  updateTieScore,
   updateTournament,
 } from "../services/touirnaments";
 import { TournamentTypeService } from "@/interfaces/tournaments";
@@ -50,8 +51,15 @@ export const useUpdateCurrentSet = () => {
 
 export const useUpdateGemScore = () => {
   return useMutation({
-    mutationFn: ({ id, path, gem, team, score, prevScore }: any) =>
-      updateGemScore({ id, path, gem, team, score, prevScore }),
+    mutationFn: ({ id, gem, team, score, prevScore }: any) =>
+      updateGemScore({ id, gem, team, score, prevScore }),
+  });
+};
+
+export const useUpdateTieScore = () => {
+  return useMutation({
+    mutationFn: ({ id, team, score, prevScore }: any) =>
+      updateTieScore({ id, team, score, prevScore }),
   });
 };
 

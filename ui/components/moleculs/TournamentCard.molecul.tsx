@@ -54,7 +54,7 @@ export default function TournamentCard({
           ))}
         </div>
 
-        <div className="score">
+        <div className="scores">
           <p>{score.currentSet[0]}</p>
           <p>:</p>
           <p>{score.currentSet[1]}</p>

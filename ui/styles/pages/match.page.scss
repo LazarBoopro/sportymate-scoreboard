@@ -18,6 +18,21 @@
 
 // --------
 
+.score {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  flex-direction: column;
+
+  h1 {
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    font-weight: 300;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+  }
+}
+
 .match-view {
   isolation: isolate;
   color: $white-clr;
@@ -51,7 +66,15 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    // flex-direction: column;
+
+    .subtitle {
+      font-weight: 300;
+      font-size: clamp(0.75rem, 5vw, 1rem);
+      position: absolute;
+      top: 100%;
+      width: 100%;
+      text-align: center;
+    }
 
     .status {
       font-size: clamp(0.5rem, 3vw, 1rem);

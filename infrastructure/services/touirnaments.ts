@@ -42,21 +42,19 @@ export const updateTournament = async ({
 };
 
 export const updateCurrentSetScore = async ({ team, id, path, score }: any) => {
-  update(ref(database, `tournaments/${id}${path}`), {
+  update(ref(database, `tournaments/${id}/score/currentSet`), {
     [team]: score,
   });
 };
 
 export const updateGemScore = async ({
   id,
-  path,
   gem,
   team,
   score,
   prevScore,
 }: {
   id: string;
-  path?: string;
   gem: number;
   team: string;
   score: number;
@@ -64,6 +62,25 @@ export const updateGemScore = async ({
 }) => {
   update(ref(database, `tournaments/${id}/score/sets`), {
     [gem]: {
+      ...prevScore,
+      [team]: score,
+    },
+  });
+};
+
+export const updateTieScore = async ({
+  id,
+  prevScore,
+  team,
+  score,
+}: {
+  id: string;
+  prevScore: number[];
+  team: number;
+  score: number;
+}) => {
+  update(ref(database, `tournaments/${id}/score`), {
+    tiebreak: {
       ...prevScore,
       [team]: score,
     },
