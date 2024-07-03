@@ -46,5 +46,6 @@ export type TournamentTypeService = {
     sets: {
       [key: string]: number;
     }[];
+    tiebreak: number[];
   };
 };

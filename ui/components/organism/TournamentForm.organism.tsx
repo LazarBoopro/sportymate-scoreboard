@@ -108,6 +108,7 @@ export default function TournamentForm() {
             [1]: 0,
           },
         ],
+        tiebreak: [0, 0],
       },
     };
 
