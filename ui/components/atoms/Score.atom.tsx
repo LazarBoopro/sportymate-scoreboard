@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 type ScoreType = {
   currentSet: number[];
   tiebreak: number[];
-  sets: { [key: string]: number }[];
+  sets: number[][];
 };
 
 export function Score({
