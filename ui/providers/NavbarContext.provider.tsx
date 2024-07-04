@@ -21,6 +21,7 @@ export function NavbarContextProvider({
   const [showNavbar, setShowNavbar] = useState(true);
   const [serving, setServing] = useState<ServingType | null>(null);
   const [tournament, setTournament] = useState<TournamentType | null>(null);
+  const [isDrawerOpened, setIsDrawerOpened] = useState(false);
 
   const { mutate: updateServing } = useUpdateServingPlayer();
 
@@ -61,6 +62,8 @@ export function NavbarContextProvider({
         setServing,
         tournament,
         setTournament,
+        isDrawerOpened,
+        setIsDrawerOpened,
       }}
     >
       {children}

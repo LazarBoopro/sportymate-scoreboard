@@ -3,6 +3,8 @@
 import { IoHelp } from "react-icons/io5";
 
 import "@/ui/styles/moleculs/tabs.molecul.scss";
+import { useContext } from "react";
+import Context from "@/ui/providers/NavbarContext.provider";
 
 export default function Tabs({
   onChange,
@@ -16,11 +18,13 @@ export default function Tabs({
   name: string;
   type: string;
 }) {
+  const { setIsDrawerOpened } = useContext(Context);
+
   return (
     <article className="tabs">
       <div className="tabs__title">
         <p className="title">{title}</p>
-        <p className="help">
+        <p className="help" onClick={() => setIsDrawerOpened(true)}>
           <IoHelp />
         </p>
       </div>
