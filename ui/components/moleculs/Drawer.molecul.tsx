@@ -24,19 +24,19 @@ export default function Drawer({
       <AnimatePresence>
         {isDrawerOpened && (
           <motion.article
-            className="drawer"
             transition={{
-              type: "keyframes",
+              ease: "easeInOut",
             }}
             initial={{
-              y: "100%",
+              x: "-100%",
             }}
             animate={{
-              y: "0%",
+              x: `0%`,
             }}
             exit={{
-              y: "100%",
+              x: "-100%",
             }}
+            className={`drawer ${isDrawerOpened ? "opened" : ""}`}
           >
             <div className="drawer__title">
               <p>{title}</p>
@@ -46,6 +46,7 @@ export default function Drawer({
             </div>
             <div className="drawer__body">
               {/* {children} */}
+              {/* TEMPORARY HERE */}
               <ul className="match-type">
                 <li className="type">
                   <p className="type__title">Standardni</p>
@@ -56,7 +57,7 @@ export default function Drawer({
                   </p>
                 </li>
                 <li className="type">
-                  <p className="type__title">Standardni</p>
+                  <p className="type__title">Playoff</p>
                   <p className="type__description">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
                     numquam maiores tenetur, nam sit accusamus at vero
@@ -64,7 +65,7 @@ export default function Drawer({
                   </p>
                 </li>
                 <li className="type">
-                  <p className="type__title">Standardni</p>
+                  <p className="type__title">Grupna faza</p>
                   <p className="type__description">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
                     numquam maiores tenetur, nam sit accusamus at vero
@@ -76,12 +77,23 @@ export default function Drawer({
           </motion.article>
         )}
       </AnimatePresence>
-      {isDrawerOpened && (
-        <div
-          className="backdrop"
-          onClick={() => setIsDrawerOpened(false)}
-        ></div>
-      )}
+      <AnimatePresence>
+        {isDrawerOpened && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 0.8,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            className="backdrop"
+            onClick={() => setIsDrawerOpened(false)}
+          ></motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
