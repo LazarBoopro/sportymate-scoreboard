@@ -13,6 +13,7 @@ import {
 import { scores } from "@/lib/helpers/score";
 import Context from "@/ui/providers/NavbarContext.provider";
 import { TournamentType } from "@/interfaces/tournaments";
+import { notFound } from "next/navigation";
 
 type ParamsType = {
   team: number;
@@ -232,6 +233,7 @@ export default function useSingleTournament({ id }: { id: string }) {
         setTournament(data);
       } else {
         setTournament(null);
+        notFound();
       }
     });
 

@@ -7,6 +7,7 @@ export type TournamentType = {
     id: number;
     status: string;
   };
+  type: number;
   startTime: {
     hour: string;
     minute: string;
@@ -37,6 +38,7 @@ export type TournamentTypeService = {
     id: number;
     status: string;
   };
+  type: number;
   players: {
     host: PlayerType[];
     guest: PlayerType[];

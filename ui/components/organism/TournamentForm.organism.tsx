@@ -20,6 +20,7 @@ import {
 import { IoChevronBack } from "react-icons/io5";
 
 import "@/ui/styles/organism/tournamentForm.organism.scss";
+import Tabs from "../moleculs/Tabs.molecul";
 
 export default function TournamentForm() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -33,6 +34,7 @@ export default function TournamentForm() {
       hour: "00",
       minute: "00",
     },
+    type: 0,
     players: {
       host: [
         { firstName: "", lastName: "" },
@@ -99,6 +101,7 @@ export default function TournamentForm() {
         id: 12,
         status: "idle",
       },
+      type: data.type,
       players: data.players,
       score: {
         currentSet: [0, 0],
@@ -123,6 +126,7 @@ export default function TournamentForm() {
         hour: "00",
         minute: "00",
       },
+      type: 0,
       players: {
         host: [
           { firstName: "", lastName: "" },
@@ -211,6 +215,16 @@ export default function TournamentForm() {
             type="switch"
           />
         </div>
+        <br />
+
+        <Tabs
+          onChange={handleOnChange}
+          title="Izaberi tip turnira"
+          name="type"
+          type="select"
+          selected={data.type}
+        />
+
         <br />
         <div className="team">
           <p className="team__title">Domaćin</p>
