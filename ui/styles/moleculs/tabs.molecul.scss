@@ -49,6 +49,10 @@
       cursor: pointer;
       transition: all 0.2s ease-in-out;
 
+      &:hover {
+        background: rgb($blue-clr-500, 0.35);
+      }
+
       &.selected-opt {
         color: $white-clr;
         background: $blue-clr-500;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import Button from "../atoms/Button.atom";
@@ -18,6 +18,22 @@ export default function Drawer({
   //   children: React.ReactNode;
 }) {
   const { isDrawerOpened, setIsDrawerOpened } = useContext(Context);
+  const [screenWidth, setScreenWidth] = useState(
+    (typeof window !== "undefined" && window.innerWidth) || 0
+  );
+
+  const animationProps = screenWidth > 600 ? { x: "-100%" } : { y: "100%" };
+  const initialProps = screenWidth > 600 ? { x: 0 } : { y: 0 };
+
+  const handleResize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -28,13 +44,13 @@ export default function Drawer({
               ease: "easeInOut",
             }}
             initial={{
-              x: "-100%",
+              ...animationProps,
             }}
             animate={{
-              x: `0%`,
+              ...initialProps,
             }}
             exit={{
-              x: "-100%",
+              ...animationProps,
             }}
             className={`drawer ${isDrawerOpened ? "opened" : ""}`}
           >
