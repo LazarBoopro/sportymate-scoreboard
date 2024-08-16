@@ -25,8 +25,8 @@
   }
 
   &__body {
-    background: $gray-clr-100;
-    padding: 0.5rem;
+    // background: $gray-clr-100;
+    // padding: 0.5rem;
     border-radius: 0.5rem;
     display: flex;
     justify-content: space-evenly;
@@ -51,6 +51,12 @@
 
       &:hover {
         background: rgb($blue-clr-500, 0.35);
+      }
+
+      &:focus,
+      &:focus-within {
+        outline-offset: 2px;
+        outline: 2px solid black;
       }
 
       &.selected-opt {

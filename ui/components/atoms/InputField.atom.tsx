@@ -12,6 +12,7 @@ type InputType = {
   name?: string;
   type?: "text" | "password" | "date" | "number" | "switch" | "email";
   required?: boolean;
+  className?: string;
   onChange?: React.Dispatch<React.SetStateAction<any>>;
 };
 
@@ -21,6 +22,7 @@ export default function InputField({
   value,
   type = "text",
   name,
+  className,
   required,
   onChange,
 }: InputType) {
@@ -87,8 +89,8 @@ export default function InputField({
   };
 
   return (
-    <div className="input-field">
-      <label className="input-field__title" htmlFor={title}>
+    <div className={`input-field ${className}`}>
+      <label className="input-field__title" htmlFor={name}>
         {title}
       </label>
       <div className="input-field__input">{checkType()}</div>

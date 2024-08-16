@@ -16,17 +16,29 @@ import { IoTennisball } from "react-icons/io5";
 export default function WatchTournament({
   tournament,
   isTie,
+  winner,
 }: {
+  winner?: string | null;
   isTie: boolean;
   tournament: TournamentType | null;
 }) {
-  const status = tournament?.status?.status.toLowerCase().replace(" ", "");
+  const status = tournament?.status?.status.toLowerCase().replaceAll(" ", "");
 
-  if (status !== "inprogress" && status !== "tiebreak") {
+  if (
+    status !== "inprogress" &&
+    status !== "tiebreak" &&
+    status !== "completed"
+  ) {
     return (
       <AnimatePresence>
         <WatchStatus
           status={checkStatusMessage(tournament?.status?.status ?? "idle")}
+          winner={
+            winner
+              ? // @ts-ignore
+                tournament?.players?.[winner]!
+              : null
+          }
         />
       </AnimatePresence>
     );
@@ -54,7 +66,7 @@ export default function WatchTournament({
               }}
               className="subtitle"
             >
-              Tie Break
+              {!tournament?.superTieBreak ? "Tie Break" : "Super Tie Break"}
             </motion.p>
           )}
         </AnimatePresence>
@@ -64,7 +76,10 @@ export default function WatchTournament({
         <Image src={logo} alt="SportyMate" />
       </Link>
       <div className="match-view__body">
-        <div className="team host">
+        <div
+          className="team host"
+          style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
+        >
           <div className="team__players">
             {tournament?.players.host?.map((n, i: number) => (
               <p key={i}>
@@ -130,7 +145,10 @@ export default function WatchTournament({
           </div>
         </div>
         <div className="line" />
-        <div className="team guest">
+        <div
+          className="team guest"
+          style={{ opacity: winner && winner !== "guest" ? 0.25 : 1 }}
+        >
           <div className="team__players">
             {tournament?.players.guest?.map((n, i: number) => (
               <p key={i}>

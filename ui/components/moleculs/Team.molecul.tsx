@@ -18,13 +18,17 @@ export function Team({
   players,
   handleChange,
   team,
+  status,
 }: {
   players: PlayerType[] | undefined;
   handleChange?: CallableFunction;
   team: number;
+  status: string;
 }) {
   const { setServing } = useContext(Context);
   const { id } = useParams();
+
+  const s = status?.toLocaleLowerCase();
 
   const handleClick = (player: number) => {
     setServing({
@@ -55,7 +59,7 @@ export function Team({
           <div className="ctas">
             <Button
               onClick={() =>
-                handleChange
+                handleChange && s !== "completed"
                   ? handleChange({
                       team,
                       path: "/score/currentSet",
@@ -68,7 +72,7 @@ export function Team({
             </Button>
             <Button
               onClick={() =>
-                handleChange
+                handleChange && s !== "completed"
                   ? handleChange({
                       team,
                       path: `/score/currentSet`,

@@ -1,19 +1,24 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 
-import { database } from "@/lib/firebaseConfig";
-import { onValue, ref } from "firebase/database";
+import Context from "@/ui/providers/NavbarContext.provider";
 
 import {
   useUpdateCurrentSet,
   useUpdateGemScore,
+  useUpdateMatchStatus,
+  // useUpdateMatchWinner,
   useUpdateTieScore,
 } from "@/infrastructure/mutations/tournaments";
+
+import { database } from "@/lib/firebaseConfig";
+import { onValue, ref } from "firebase/database";
+import { selectOptions } from "@/lib/constants/match";
 import { scores } from "@/lib/helpers/score";
-import Context from "@/ui/providers/NavbarContext.provider";
+
 import { TournamentType } from "@/interfaces/tournaments";
-import { notFound } from "next/navigation";
 
 type ParamsType = {
   team: number;
@@ -43,31 +48,166 @@ export default function useSingleTournament({ id }: { id: string }) {
 
   const [score, setScore] = useState(tournament?.score?.currentSet || [0, 0]);
   const [gemScore, setGemScore] = useState(
+    tournament?.score?.sets[tournament?.score?.sets.length - 1]
+  );
+  const [tieBreakScore, setTieBreakScore] = useState(
     tournament?.score?.tiebreak || [0, 0]
   );
   const [params, setParams] = useState<ParamsType | null>(null);
   const [currentSet, setCurrentSet] = useState([0, 0]);
   const [tie, setIsTie] = useState(false);
-  const [bothAt6, setBothAt6] = useState(false);
+  const [winner, setWinner] = useState<null | string>(null);
+  const [totalPlayedSets, setTotalPlayedSets] = useState({
+    player1: 0,
+    player2: 0,
+    total: 0,
+  });
+  const [matchType, setMatchType] = useState({
+    setDuration: 3,
+    gemDuration: 6,
+    tieBreakDuration: 7,
+  });
 
+  // Queries and Mutations
   const { mutate: updateMatchScore } = useUpdateCurrentSet();
   const { mutate: updateGemScore } = useUpdateGemScore();
   const { mutate: updateTieScore } = useUpdateTieScore();
+  // const { mutate: updateMatchWinner } = useUpdateMatchWinner();
+  const { mutate: updateStatus } = useUpdateMatchStatus();
 
+  // Functions
+
+  // Check for total played sets
+  function checkTotalPlayedSets() {
+    let player1Sets = 0;
+    let player2Sets = 0;
+
+    if (tournament?.score?.sets) {
+      // Iterate over each set to count the wins
+      for (const set of tournament?.score?.sets) {
+        const [player1Score, player2Score] = set;
+
+        // Determine who won the set
+        if (player1Score > player2Score) {
+          player1Sets++;
+        } else if (player2Score > player1Score) {
+          player2Sets++;
+        }
+      }
+    }
+
+    setTotalPlayedSets({
+      player1: player1Sets,
+      player2: player2Sets,
+      total: player1Sets + player2Sets,
+    });
+  }
+
+  function handleCheckWinner() {
+    if (totalPlayedSets.player1 > totalPlayedSets.player2) {
+      setWinner("host");
+    } else if (totalPlayedSets.player2 > totalPlayedSets.player1) {
+      setWinner("guest");
+    } else {
+      setWinner(null);
+    }
+  }
+
+  // Add new Set
+  function addNewSet(setsLength: number, team: number) {
+    setTieBreakScore([0, 0]);
+
+    const setLength = tournament?.score?.sets?.length!;
+
+    if (setLength === matchType.setDuration) {
+      handleCheckWinner();
+    }
+
+    if (setLength >= matchType.setDuration && !checkIsTieBreak()) {
+      setIsTie(false);
+      team && resetTieScore(team);
+      return;
+    }
+
+    if (
+      +tournament?.type === 0 &&
+      totalPlayedSets.player1 >= matchType.setDuration - 1
+    ) {
+      return setWinner("host");
+    }
+
+    if (
+      +tournament?.type === 0 &&
+      totalPlayedSets.player2 >= matchType.setDuration - 1
+    ) {
+      return setWinner("guest");
+    }
+
+    Array.from({ length: 2 }).forEach((_, i) =>
+      updateGemScore({
+        id,
+        team: i,
+        gem: setsLength,
+        score: 0,
+        prevScore: [0, 0],
+      })
+    );
+  }
+
+  function resetTieScore(team: number) {
+    return updateTieScore({
+      id,
+      team,
+      prevScore: [0, 0],
+      score: 0,
+    });
+  }
+
+  function checkIsTieBreak() {
+    const type = +tournament?.type;
+    const bothAtLastGem = currentSet.every(
+      (teamScore) => teamScore >= matchType.gemDuration
+    );
+    const bothAtLastGemMinus1 = currentSet.every(
+      (teamScore) => teamScore >= matchType.gemDuration - 1
+    );
+
+    // Brzi
+    if (type === 2 && bothAtLastGemMinus1) {
+      return true;
+    }
+
+    // Kratki
+    if (type === 1 && (bothAtLastGem || totalPlayedSets.total >= 2)) {
+      return true;
+    }
+
+    // Standard
+    if (type === 0 && bothAtLastGem) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // CURRENT SCORE
   const handleUpdateCurrentSetScore = ({
+    action,
     path,
     team,
-    action,
   }: HandleUpdateType) => {
-    setParams({ team, path, action });
+    setParams({ action, path, team });
+
     if (tie) {
-      if (action === "minus") {
-        setGemScore((prev) => ({
+      if (action === "minus" && tieBreakScore[team] !== 0) {
+        return setTieBreakScore((prev) => ({
           ...prev,
           [team]: prev[team] - 1,
         }));
-      } else if (action === "plus") {
-        setGemScore((prev) => ({
+      }
+
+      if (action === "plus") {
+        return setTieBreakScore((prev) => ({
           ...prev,
           [team]: prev[team] + 1,
         }));
@@ -77,129 +217,21 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
 
     if (action === "minus" && score?.[team] !== 0) {
-      setScore((prev) => prev?.map((n, i) => (i === team ? n - 1 : n)));
-    } else if (action === "plus" && score?.[team]! < scores.length - 1) {
-      setScore((prev) => prev?.map((n, i) => (i === team ? n + 1 : n)));
+      return setScore((prev) => prev?.map((n, i) => (i === team ? n - 1 : n)));
+    }
+
+    if (action === "plus" && score?.[team]! < scores.length - 1) {
+      return setScore((prev) => prev?.map((n, i) => (i === team ? n + 1 : n)));
     }
   };
 
-  const handleTiePoints = ({ team }: { team: number }) => {
-    const score = tournament?.score?.tiebreak;
-    const sets = tournament?.score?.sets;
-    const isScoreUndefined = typeof score === "undefined";
-    const playerWonSet =
-      gemScore?.reduce?.((a, b) => Math.abs(a - b)) > 1 && gemScore?.[team] > 6;
-
-    const gemTeam = sets?.[sets?.length - 1][team];
-
-    if (playerWonSet) {
-      updateTieScore({
-        id,
-        team,
-        prevScore: [0, 0],
-        score: 0,
-      });
-
-      Array.from({ length: 2 }).forEach((_, i) =>
-        updateGemScore({
-          id,
-          team: i,
-          gem: sets?.length,
-          score: 0,
-          prevScore: [0, 0],
-        })
-      );
-
-      // Update gem in current set
-      updateGemScore({
-        id,
-        team,
-        gem: sets?.length! - 1,
-        score: gemTeam === undefined ? 0 : gemTeam + 1,
-        prevScore: tournament?.score?.sets[sets?.length! - 1],
-      });
-
-      return;
-    }
-
-    if (isNaN(team)) return;
-
-    updateTieScore({
-      id,
-      team,
-      prevScore: isScoreUndefined ? [0, 0] : score,
-      score: isScoreUndefined ? 1 : gemScore[team],
-    });
-  };
-
-  // Update gem in active set
-  const handleGemPoints = ({ team }: { team: number }) => {
-    const sets = tournament?.score?.sets;
-    const currSet = tournament?.score?.sets[sets?.length! - 1];
-    const currPoint = currSet?.[team];
-    const gemTeam = sets?.[sets?.length - 1][team];
-
-    if (currPoint! >= 6 && !bothAt6) {
-      // Add new set, check for tie
-      Array.from({ length: 2 }).forEach((_, i) =>
-        updateGemScore({
-          id,
-          team: i,
-          gem: sets?.length,
-          score: 0,
-          prevScore: [0, 0],
-        })
-      );
-
-      return;
-    }
-
-    // Update gem in current set
-    updateGemScore({
-      id,
-      team,
-      gem: sets?.length! - 1,
-      score: gemTeam === undefined ? 0 : gemTeam + 1,
-      prevScore: tournament?.score?.sets[sets?.length! - 1],
-    });
-  };
-
-  // UseEffect for gems (Tie break)
   useEffect(() => {
     const team = Number(params?.team);
-
-    handleTiePoints({ team });
-  }, [gemScore]);
-
-  // UseEffect for sets
-  useEffect(() => {
-    const team = Number(params?.team);
-    const bothAdv = score?.every((n) => n === scores?.length - 2)
-      ? true
-      : false;
-
+    const bothAdvantage = score?.every((n) => n === 4); // This is AD
     const playerWonGem =
-      score?.[team] > 3 && score?.reduce?.((a, b) => Math.abs(a - b)) > 1;
+      score?.[team] > 3 && score?.reduce((a, b) => Math.abs(a - b), 0) > 1;
 
-    setIsTie(
-      tournament?.score?.sets[tournament.score?.sets.length - 1].every(
-        (n: number) => n === 6
-      ) ?? false
-    );
-    setBothAt6(currentSet?.every((n: number) => n >= 6));
-    setGemScore(tournament?.score?.tiebreak!);
-
-    if (bothAdv) {
-      score?.forEach((_, i) => {
-        updateMatchScore({
-          id,
-          team: i,
-          score: 3,
-        });
-      });
-      return;
-    }
-
+    // If player won gem, set new set to 0:0, and score to 0:0
     if (playerWonGem) {
       score?.forEach((_, i) => {
         updateMatchScore({
@@ -208,11 +240,26 @@ export default function useSingleTournament({ id }: { id: string }) {
           score: 0,
         });
       });
+
       handleGemPoints({ team });
 
       return;
     }
 
+    // If both teams at AD:AD, set both to 40:40
+    if (bothAdvantage) {
+      score?.forEach((_, i) => {
+        updateMatchScore({
+          id,
+          team: i,
+          score: 3, // Index of point for 40
+        });
+      });
+
+      return;
+    }
+
+    // Basic add/subtract point for gems
     updateMatchScore({
       id,
       team,
@@ -220,21 +267,137 @@ export default function useSingleTournament({ id }: { id: string }) {
     });
   }, [score]);
 
+  // GEM SCORE
+  function handleGemPoints({ team }: { team: number }) {
+    const sets = tournament?.score?.sets;
+    const currentSet = sets?.[sets?.length - 1];
+    const updatedTeam = currentSet?.[team];
+
+    if (gemScore?.[team]! >= matchType.gemDuration) {
+      // console.log(matchType.gemDuration);
+      addNewSet(sets?.length || 0, team);
+
+      return;
+    }
+
+    updateGemScore({
+      id,
+      team,
+      gem: sets?.length! - 1,
+      score: updatedTeam === undefined ? 0 : updatedTeam + 1,
+      prevScore: sets?.[sets?.length! - 1],
+    });
+  }
+
+  useEffect(() => {
+    const sets = tournament?.score?.sets;
+    const isTieBreak = checkIsTieBreak();
+
+    if (
+      tournament?.score?.sets?.length! >= matchType.setDuration &&
+      !isTieBreak
+    ) {
+      setIsTie(false);
+    } else {
+      setIsTie(isTieBreak);
+    }
+
+    // Check for winner
+    if (sets?.length! >= matchType.setDuration + 1) {
+      return handleCheckWinner();
+    }
+  }, [gemScore]);
+
+  // TIE BREAK SCORE
+  function handleTiePoints({ team }: { team: number }) {
+    const sets = tournament?.score?.sets;
+    const currentSet = sets?.[sets?.length - 1];
+    const updatedTeam = currentSet?.[team];
+
+    const playerWonTieBreak =
+      tieBreakScore?.[team] >= matchType.tieBreakDuration &&
+      Object.values(tieBreakScore).reduce?.((a, b) => Math.abs(a - b), 0) > 1;
+
+    if (playerWonTieBreak) {
+      // Update gem in current set
+      updateGemScore({
+        id,
+        team,
+        gem: sets?.length! - 1,
+        score: updatedTeam === undefined ? 0 : updatedTeam + 1,
+        prevScore: tournament?.score?.sets[sets?.length! - 1],
+      });
+
+      resetTieScore(team);
+
+      addNewSet(sets?.length || 0, team);
+
+      return;
+    }
+
+    updateTieScore({
+      id,
+      team,
+      prevScore: tieBreakScore,
+      score: tieBreakScore[team],
+    });
+  }
+
+  useEffect(() => {
+    const team = Number(params?.team);
+
+    handleTiePoints({ team });
+  }, [tieBreakScore]);
+
+  // --------------------
+  // useEffect(() => {
+  //   winner &&
+  //     (console.log(winner),
+  //     updateMatchWinner({
+  //       gameId: id,
+  //       winner,
+  //     }),
+  //     updateStatus({
+  //       id,
+  //       status: selectOptions[0],
+  //     }));
+
+  //   console.log(winner);
+  // }, [winner, tournament?.winner, tournament?.id]);
+
+  // Match Settings
+  useEffect(() => {
+    const type = +tournament?.type;
+    const isSuperTieBreak = tournament?.superTieBreak;
+
+    setMatchType({
+      setDuration: type === 2 ? 1 : type === 1 ? 2 : 3,
+      gemDuration: type === 2 ? 9 : 6,
+      tieBreakDuration: isSuperTieBreak ? 10 : 7,
+    });
+  }, [tournament?.type, tournament?.superTieBreak]);
+
+  useEffect(() => {
+    checkTotalPlayedSets();
+  }, [tournament?.score?.sets]);
+
+  // Firebase
   useEffect(() => {
     const tournamentsRef = ref(database, `tournaments/${id}`);
 
     const unsubscribe = onValue(tournamentsRef, (snapshot) => {
       const data: TournamentType = snapshot.val();
 
-      if (data) {
-        setScore(data?.score?.currentSet || [0, 0]);
-
-        setCurrentSet(data.score?.sets[data.score?.sets.length - 1] ?? [0, 0]);
-        setTournament(data);
-      } else {
+      if (!data) {
         setTournament(null);
         notFound();
       }
+
+      setScore(data?.score?.currentSet || [0, 0]);
+      setGemScore(data?.score?.sets[data.score.sets.length - 1]);
+      setCurrentSet(data.score?.sets[data.score?.sets.length - 1] ?? [0, 0]);
+      setTournament(data);
+      checkTotalPlayedSets();
     });
 
     return () => unsubscribe();

@@ -7,6 +7,7 @@ import {
   updateCurrentSetScore,
   updateGemScore,
   updateMatchStatus,
+  updateMatchWinner,
   updateServingPlayer,
   updateTieScore,
   updateTournament,
@@ -90,3 +91,11 @@ export const useUpdateServingPlayer = () => {
     }) => updateServingPlayer({ gameId, team, playerId, isServing }),
   });
 };
+
+// export const useUpdateMatchWinner = () => {
+//   return useMutation({
+//     mutationFn: ({ gameId, winner }: { gameId: string; winner: string }) => (
+//       console.log(gameId, winner), updateMatchWinner({ gameId, winner })
+//     ),
+//   });
+// };

@@ -9,6 +9,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 import "@/ui/styles/moleculs/drawer.molecul.scss";
 import Context from "@/ui/providers/NavbarContext.provider";
+import { MATCH_TYPES } from "@/lib/constants/match";
 
 export default function Drawer({
   title,
@@ -64,30 +65,12 @@ export default function Drawer({
               {/* {children} */}
               {/* TEMPORARY HERE */}
               <ul className="match-type">
-                <li className="type">
-                  <p className="type__title">Standardni</p>
-                  <p className="type__description">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
-                    numquam maiores tenetur, nam sit accusamus at vero
-                    necessitatibus possimus obcaecati?
-                  </p>
-                </li>
-                <li className="type">
-                  <p className="type__title">Playoff</p>
-                  <p className="type__description">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
-                    numquam maiores tenetur, nam sit accusamus at vero
-                    necessitatibus possimus obcaecati?
-                  </p>
-                </li>
-                <li className="type">
-                  <p className="type__title">Grupna faza</p>
-                  <p className="type__description">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
-                    numquam maiores tenetur, nam sit accusamus at vero
-                    necessitatibus possimus obcaecati?
-                  </p>
-                </li>
+                {MATCH_TYPES.map((n, i) => (
+                  <li key={i} className="type">
+                    <p className="type__title">{n.title}</p>
+                    <p className="type__description">{n.description}</p>
+                  </li>
+                ))}
               </ul>
             </div>
           </motion.article>

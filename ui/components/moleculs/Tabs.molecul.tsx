@@ -5,6 +5,7 @@ import { IoHelp } from "react-icons/io5";
 import "@/ui/styles/moleculs/tabs.molecul.scss";
 import { useContext } from "react";
 import Context from "@/ui/providers/NavbarContext.provider";
+import { MATCH_TYPES } from "@/lib/constants/match";
 
 export default function Tabs({
   onChange,
@@ -30,7 +31,7 @@ export default function Tabs({
       </div>
 
       <div className="tabs__body">
-        {typeOptions.map((n, i) => (
+        {MATCH_TYPES.map((n, i) => (
           <button
             key={i}
             type="button"
@@ -46,18 +47,3 @@ export default function Tabs({
     </article>
   );
 }
-
-const typeOptions = [
-  {
-    id: 1,
-    title: "Standardni",
-  },
-  {
-    id: 2,
-    title: "Playoff",
-  },
-  {
-    id: 3,
-    title: "Grupna faza",
-  },
-];
