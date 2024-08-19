@@ -92,10 +92,9 @@ export const useUpdateServingPlayer = () => {
   });
 };
 
-// export const useUpdateMatchWinner = () => {
-//   return useMutation({
-//     mutationFn: ({ gameId, winner }: { gameId: string; winner: string }) => (
-//       console.log(gameId, winner), updateMatchWinner({ gameId, winner })
-//     ),
-//   });
-// };
+export const useUpdateMatchWinner = () => {
+  return useMutation({
+    mutationFn: ({ gameId, winner }: { gameId: string; winner: string }) =>
+      updateMatchWinner({ gameId, winner }),
+  });
+};

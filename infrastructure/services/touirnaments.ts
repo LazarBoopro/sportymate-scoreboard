@@ -122,15 +122,3 @@ export const updateMatchWinner = async ({
     winner,
   });
 };
-// export const updateMatchWinner = async ({
-//   gameId,
-//   winner,
-// }: {
-//   gameId: string;
-//   winner: number;
-// }) => {
-//   console.log(gameId, winner);
-//   update(ref(database, `tournaments/${gameId}`), {
-//     winner,
-//   });
-// };

@@ -24,6 +24,18 @@ export default function WatchTournament({
 }) {
   const status = tournament?.status?.status.toLowerCase().replaceAll(" ", "");
 
+  const printScore = ({ team }: { team: number }) => {
+    if (isTie) {
+      return tournament?.score?.tiebreak[team];
+    }
+
+    if (tournament?.type == 1 && tournament?.score?.sets?.length === 3) {
+      return tournament?.score?.currentSet[team]!;
+    } else {
+      return scores[tournament?.score?.currentSet[team]!];
+    }
+  };
+
   if (
     status !== "inprogress" &&
     status !== "tiebreak" &&
@@ -137,11 +149,7 @@ export default function WatchTournament({
               </AnimatePresence>
             </div>
 
-            <div className="gem">
-              {isTie
-                ? tournament?.score?.tiebreak[0]
-                : scores[tournament?.score?.currentSet[0]!]}
-            </div>
+            <div className="gem">{printScore({ team: 0 })}</div>
           </div>
         </div>
         <div className="line" />
@@ -206,11 +214,7 @@ export default function WatchTournament({
               </AnimatePresence>
             </div>
 
-            <div className="gem">
-              {isTie
-                ? tournament?.score?.tiebreak[1]
-                : scores[tournament?.score?.currentSet[1]!]}
-            </div>
+            <div className="gem">{printScore({ team: 1 })}</div>
           </div>
         </div>
       </div>
