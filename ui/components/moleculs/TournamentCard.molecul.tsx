@@ -59,7 +59,7 @@ export default function TournamentCard({
 
       <div className="tournament__body">
         <div className="team">
-          {players.host.map((n, i) => (
+          {players?.host?.map?.((n, i) => (
             <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
           ))}
         </div>
@@ -71,8 +71,8 @@ export default function TournamentCard({
             <p>{scores[score.currentSet[1]]}</p>
           </div>
           <div className="scores__bottom">
-            {score.sets.map((set, i) => (
-              <p>
+            {score?.sets?.map?.((set, i) => (
+              <p key={i}>
                 {`${set[0]}:${set[1]} ${
                   i !== score?.sets.length - 1 ? "/" : ""
                 }`}

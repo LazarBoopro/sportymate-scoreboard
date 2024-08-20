@@ -12,7 +12,7 @@ import { auth } from "@/lib/firebaseConfig";
 
 import { useGetSingleTournament } from "@/infrastructure/queries/tournaments";
 
-import useSingleTournament from "@/ui/hooks/useSingleTournament";
+import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
 
 import "@/ui/styles/pages/match.page.scss";
 
@@ -24,7 +24,11 @@ export default function Match({ params }: { params: { id: string } }) {
   const isWatchMode = searchParams.get("watch");
 
   const { data, isSuccess, isLoading } = useGetSingleTournament(params.id);
-  const { tie, tournament, handleUpdateCurrentSetScore } = useSingleTournament({
+  const {
+    tieBreak: tie,
+    tournament,
+    handleUpdateCurrentSetScore,
+  } = useSingleTournament({
     id: params.id,
   });
 

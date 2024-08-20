@@ -87,7 +87,7 @@ export function Score({
         </AnimatePresence>
       </div>
       <div className="sets">
-        {score?.sets.map((n, i) => (
+        {score?.sets?.map?.((n, i) => (
           <Fragment key={i}>
             <p key={i}>
               {n?.[0]} : {n?.[1]}
