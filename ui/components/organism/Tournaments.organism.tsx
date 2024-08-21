@@ -27,14 +27,15 @@ export default function Tournamets() {
 
   if (!tournaments?.length) {
     return (
-      <div className="tournaments">
+      <div ref={ref} className="tournaments" id="tournaments">
         <div className="tournaments__header">
           <h2 className="title">
-            Trenutno nema zapisa <Image src={tennisBallImage} alt="" />
-            <Button onClick={handleClick} className="cta-slide" type="fade">
-              Dodaj meč <IoChevronForwardOutline />
-            </Button>
+            Nema mečeva
+            <Image alt="" src={tennisBallImage} />
           </h2>
+          <Button onClick={handleClick} className="cta-slide" type="fade">
+            Dodaj meč <IoChevronForwardOutline />
+          </Button>
         </div>
       </div>
     );
