@@ -128,21 +128,26 @@ export default function useSingleTournament({ id }: { id: string }) {
     checkTotalPlayingSets();
 
     if (
-      type !== 2 &&
+      (type === 0 || type === 1) &&
       currentSet?.[team]! >= matchType.gemDuration - 1 &&
       !tieBreak
     ) {
-      if (setsLength === matchType.setDuration) {
+      if (
+        setsLength === matchType.setDuration ||
+        setsLength === matchType.setDuration - 1
+      ) {
+        console.log("ss", setsLength, matchType.setDuration);
         checkWinner();
-      } else {
-        addNewSet();
       }
+
+      addNewSet();
+
       return;
     }
 
     if (type === 2) {
       console.log("sss");
-      if (setsLength === matchType.setDuration) {
+      if (currentSet?.some((n) => n >= matchType.gemDuration - 1)) {
         console.log("sss");
         checkWinner();
       }
@@ -161,7 +166,6 @@ export default function useSingleTournament({ id }: { id: string }) {
     const sets = tournament?.score?.sets;
     const currentSet = sets?.[sets?.length - 1];
     const updatedTeam = currentSet?.[params!];
-    const total = totalPlayedSets();
 
     if (type === 0 || type === 1) {
       checkTotalPlayingSets();
@@ -389,6 +393,12 @@ export default function useSingleTournament({ id }: { id: string }) {
       return;
     }
   }
+
+  useEffect(() => {
+    checkMatchType();
+    checkTotalPlayingSets();
+  }, []);
+
   // Firebase
   useEffect(() => {
     const tournamentsRef = ref(database, `tournaments/${id}`);
@@ -401,7 +411,6 @@ export default function useSingleTournament({ id }: { id: string }) {
         notFound();
       }
 
-      checkMatchType();
       setTournament(data);
     });
 
