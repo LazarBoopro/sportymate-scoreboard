@@ -136,7 +136,6 @@ export default function useSingleTournament({ id }: { id: string }) {
         setsLength === matchType.setDuration ||
         setsLength === matchType.setDuration - 1
       ) {
-        console.log("ss", setsLength, matchType.setDuration);
         checkWinner();
       }
 
@@ -146,9 +145,7 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
 
     if (type === 2) {
-      console.log("sss");
       if (currentSet?.some((n) => n >= matchType.gemDuration - 1)) {
-        console.log("sss");
         checkWinner();
       }
     }
