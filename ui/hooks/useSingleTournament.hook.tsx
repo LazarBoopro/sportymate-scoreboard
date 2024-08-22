@@ -168,7 +168,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       checkTotalPlayingSets();
     }
 
-    if ((type === 0 || type === 1) && updatedTeam! >= matchType.gemDuration) {
+    if (type === 0 && updatedTeam! >= matchType.gemDuration) {
       addNewSet();
     }
 
@@ -209,12 +209,6 @@ export default function useSingleTournament({ id }: { id: string }) {
     if (playerWonTieBreak) {
       resetTieBreakScore(params!);
       handleGemPoint(params!);
-      if (
-        setsLength === matchType.setDuration ||
-        setsLength === matchType.setDuration - 1
-      ) {
-        checkWinner();
-      }
     }
   }, [isSuccessCurrentTieBreakScore]);
 
@@ -252,33 +246,20 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
   }
 
-  function checkForTieBreak() {
+  function checkForTieBreak(): boolean {
     if (type === 2) {
       currentSet?.every((n) => n === 8)
         ? setTieBreak(true)
         : setTieBreak(false);
-
-      return;
-    }
-
-    if (type === 1) {
-      if (
-        setsLength === matchType.setDuration ||
-        currentSet?.every((n) => n === 6)
-      ) {
-        setTieBreak(true);
-      }
-
-      return;
     }
 
     if (type === 0) {
       currentSet?.every((n) => n === 6)
         ? setTieBreak(true)
         : setTieBreak(false);
-
-      return;
     }
+
+    return false;
   }
 
   function resetTieBreakScore(team: number) {
@@ -330,7 +311,6 @@ export default function useSingleTournament({ id }: { id: string }) {
     for (const value of tournament?.score?.sets!) {
       const [p1, p2] = value;
 
-      // Last set or tiebreak (7 points)
       if (setsLength === matchType.setDuration || tieBreak) {
         if (p1 >= matchType.gemDuration || p2 >= matchType.gemDuration) {
           if (p1 > p2) {
@@ -349,17 +329,6 @@ export default function useSingleTournament({ id }: { id: string }) {
         }
       }
 
-      if (type === 1 && totalPlayedSets >= 1) {
-        console.log("uso");
-        if (p1 >= 1 || p2 >= 1) {
-          if (p1 > p2) {
-            player1!++;
-          } else {
-            player2!++;
-          }
-        }
-      }
-
       totalPlayedSets++;
     }
 
@@ -372,9 +341,8 @@ export default function useSingleTournament({ id }: { id: string }) {
 
   function checkWinner() {
     const total = totalPlayedSets();
-    console.log(total);
 
-    if (type === 0 || type === 1) {
+    if (type === 0) {
       if (total?.player1 >= 2) {
         // Winner of the match
         updateMatchWinner({
