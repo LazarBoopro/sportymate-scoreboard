@@ -12,7 +12,6 @@ import { checkStatusMessage } from "@/lib/helpers/messages";
 
 import logo from "@/public/img/logoGreen.svg";
 import { IoTennisball } from "react-icons/io5";
-import { CookingPot } from "lucide-react";
 
 export default function WatchTournament({
   tournament,

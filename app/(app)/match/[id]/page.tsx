@@ -24,7 +24,7 @@ export default function Match({ params }: { params: { id: string } }) {
   const isWatchMode = searchParams.get("watch");
 
   const { data, isSuccess, isLoading } = useGetSingleTournament(params.id);
-  const { isTieBreak, tournament, handleUpdateCurrentSetScore } =
+  const { tieBreak, tournament, handleUpdateCurrentSetScore } =
     useSingleTournament({
       id: params.id,
     });
@@ -46,8 +46,8 @@ export default function Match({ params }: { params: { id: string } }) {
   if (isWatchMode || !user?.uid) {
     return (
       <WatchTournament
-        winner={tournament?.winner}
-        isTie={isTieBreak}
+        winner={tournament.winner}
+        isTie={tieBreak}
         tournament={tournament}
       />
     );
@@ -56,7 +56,7 @@ export default function Match({ params }: { params: { id: string } }) {
   return (
     <>
       <RefereeTournament
-        isTie={isTieBreak}
+        isTie={tieBreak}
         tournament={tournament}
         handleUpdateCurrentSetScore={handleUpdateCurrentSetScore}
       />
