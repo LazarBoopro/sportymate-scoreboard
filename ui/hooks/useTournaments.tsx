@@ -69,6 +69,7 @@ export default function useTournaments() {
         ],
         tiebreak: [0, 0],
       },
+      winner: null,
     };
 
     addTournament(payload);
