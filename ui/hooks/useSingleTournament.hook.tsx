@@ -17,6 +17,7 @@ import { database } from "@/lib/firebaseConfig";
 import { onValue, ref } from "firebase/database";
 
 import { TournamentType } from "@/interfaces/tournaments";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function useSingleTournament({ id }: { id: string }) {
   //  Context
@@ -25,12 +26,13 @@ export default function useSingleTournament({ id }: { id: string }) {
     setTournament: CallableFunction;
   }>(Context);
 
+  const { toast } = useToast();
   const router = useRouter();
 
   // States
   const [params, setParams] = useState<null | number>(null);
   const [matchType, setMatchType] = useState({
-    setDuration: 2,
+    setDuration: 3,
     gemDuration: 7,
     tieBreakDuration: 7,
   });
@@ -47,6 +49,7 @@ export default function useSingleTournament({ id }: { id: string }) {
   const { mutate: updateStatus, isSuccess: isSuccessStatus } =
     useUpdateMatchStatus();
 
+  // Constants
   const currentGem = tournament?.score?.currentSet;
   const setsLength = tournament?.score?.sets?.length;
   const currentSet = tournament?.score?.sets[setsLength! - 1];
@@ -55,6 +58,7 @@ export default function useSingleTournament({ id }: { id: string }) {
     currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
   const type = +tournament?.type;
   const tieBreakScore = tournament?.score?.tiebreak;
+  const total = totalPlayedSets();
 
   // Functions
   function handleUpdateCurrentSetScore({
@@ -110,6 +114,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       return;
     }
 
+    // Both at ADV position
     if (currentGem?.every((n) => n === 4)) {
       Array.from({ length: 2 }).map((_, i) =>
         updateMatchScore({
@@ -119,15 +124,13 @@ export default function useSingleTournament({ id }: { id: string }) {
         })
       );
     }
-  }, [isSuccessCurrentMatchScore, tournament?.score]);
+  }, [isSuccessCurrentMatchScore, tournament?.score?.currentSet]);
 
   // GEMS
   function handleGemPoint(team: number) {
     const sets = tournament?.score?.sets;
     const currentSet = sets?.[sets?.length - 1];
     const updatedTeam = currentSet?.[team];
-
-    checkTotalPlayingSets();
 
     if (
       (type === 0 || type === 1) &&
@@ -160,20 +163,8 @@ export default function useSingleTournament({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    const sets = tournament?.score?.sets;
-    const currentSet = sets?.[sets?.length - 1];
-    const updatedTeam = currentSet?.[params!];
-
-    if (type === 0 || type === 1) {
-      checkTotalPlayingSets();
-    }
-
-    if (type === 0 && updatedTeam! >= matchType.gemDuration) {
-      addNewSet();
-    }
-
     checkForTieBreak();
-  }, [isSuccessCurrentGemScore, tournament?.score]);
+  }, [isSuccessCurrentGemScore, tournament?.score?.sets]);
 
   function handleUpdateCurrentTieBreakScore({
     team,
@@ -209,15 +200,11 @@ export default function useSingleTournament({ id }: { id: string }) {
     if (playerWonTieBreak) {
       resetTieBreakScore(params!);
       handleGemPoint(params!);
+      checkWinner();
     }
-  }, [isSuccessCurrentTieBreakScore, tournament?.score]);
+  }, [isSuccessCurrentTieBreakScore, tournament?.score?.tiebreak]);
 
-  useEffect(() => {
-    if (tournament?.status?.status === "completed") setTieBreak(false);
-  }, [isSuccessStatus]);
-
-  // HELPERS
-  /* TODO: Move helpers to the new file! */
+  // Helpers
   function checkMatchType() {
     const tieBreakDuration = tournament?.superTieBreak ? 10 : 7;
 
@@ -238,40 +225,46 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
   }
 
-  function checkForTieBreak(): boolean {
+  function checkForTieBreak() {
+    if (tournament?.winner) {
+      setTieBreak(false);
+      return;
+    }
+
     if (type === 2) {
       currentSet?.every((n) => n === 8)
         ? setTieBreak(true)
         : setTieBreak(false);
+
+      return;
+    }
+
+    if (type === 1) {
+      currentSet?.every((n) => n === 6) || total.total > 2
+        ? setTieBreak(true)
+        : setTieBreak(false);
+
+      return;
     }
 
     if (type === 0) {
       currentSet?.every((n) => n === 6)
         ? setTieBreak(true)
         : setTieBreak(false);
+      return;
     }
 
-    return false;
+    setTieBreak(false);
   }
 
   function resetTieBreakScore(team: number) {
+    setTieBreak(false);
     updateTieScore({
       id,
       team,
       prevScore: [0, 0],
       score: 0,
     });
-  }
-
-  function checkTotalPlayingSets() {
-    const total = totalPlayedSets();
-
-    if (total?.player1 === 1 && total.player2 === 1) {
-      setMatchType((prev) => ({
-        ...prev,
-        setDuration: 3,
-      }));
-    }
   }
 
   function addNewSet() {
@@ -303,20 +296,20 @@ export default function useSingleTournament({ id }: { id: string }) {
     for (const value of tournament?.score?.sets!) {
       const [p1, p2] = value;
 
-      if (type === 1 && setsLength === 3) {
+      if (p1 >= matchType.gemDuration - 1 || p2 >= matchType.gemDuration - 1) {
         if (p1 > p2) {
           player1!++;
         } else {
           player2!++;
         }
-
-        break;
       }
 
-      if (p1 >= matchType.gemDuration - 1 || p2 >= matchType.gemDuration - 1) {
+      if (tieBreak) {
         if (p1 > p2) {
           player1!++;
-        } else {
+        }
+
+        if (p2 < p1) {
           player2!++;
         }
       }
@@ -331,100 +324,49 @@ export default function useSingleTournament({ id }: { id: string }) {
     };
   }
 
-  useEffect(() => {
-    checkMatchType();
-  }, [tournament?.type]);
-
   function checkWinner() {
-    const total = totalPlayedSets();
-    console.log(total);
-
     if (type === 0 || type === 1) {
       if (total.total < 2) return;
 
       if (total?.player1 >= 2) {
-        // Winner of the match
-        updateMatchWinner({
-          gameId: id,
-          winner: "host",
-        });
-        updateStatus({
-          id,
-          status: {
-            status: "completed",
-            id: 0,
-          },
-        });
+        handleWinner("host");
       }
 
       if (total?.player2 >= 2) {
-        // Winner of the match
-        updateMatchWinner({
-          gameId: id,
-          winner: "guest",
-        });
-        updateStatus({
-          id,
-          status: {
-            status: "completed",
-            id: 0,
-          },
-        });
+        handleWinner("guest");
       }
     }
-    // if (type === 0 || type === 1) {
-    //   if (total?.player1 >= 2) {
-    //     // Winner of the match
-    //     updateMatchWinner({
-    //       gameId: id,
-    //       winner: "host",
-    //     });
-    //     updateStatus({
-    //       id,
-    //       status: {
-    //         status: "completed",
-    //         id: 0,
-    //       },
-    //     });
-    //   }
-
-    //   if (total?.player2 >= 2) {
-    //     // Winner of the match
-    //     updateMatchWinner({
-    //       gameId: id,
-    //       winner: "guest",
-    //     });
-    //     updateStatus({
-    //       id,
-    //       status: {
-    //         status: "completed",
-    //         id: 0,
-    //       },
-    //     });
-    //   }
-    // }
 
     if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration - 1) {
-      // Winner of the match
-      updateMatchWinner({
-        gameId: id,
-        winner: params === 0 ? "host" : "guest",
-      });
-      updateStatus({
-        id,
-        status: {
-          status: "completed",
-          id: 0,
-        },
-      });
+      handleWinner(params === 0 ? "host" : "guest");
       return;
     }
   }
 
+  function handleWinner(winner: "host" | "guest") {
+    updateMatchWinner({
+      gameId: id,
+      winner,
+    });
+    updateStatus({
+      id,
+      status: {
+        status: "completed",
+        id: 0,
+      },
+    });
+  }
+
+  useEffect(() => {
+    if (tournament?.winner || tournament?.status?.status === "completed") {
+      setTieBreak(false);
+    }
+  }, [tournament?.winner, tournament?.status?.status]);
+
   useEffect(() => {
     checkMatchType();
-    checkTotalPlayingSets();
-  }, []);
+    checkForTieBreak();
+  }, [tournament?.type]);
 
   // Firebase
   useEffect(() => {
@@ -436,6 +378,11 @@ export default function useSingleTournament({ id }: { id: string }) {
       if (!data) {
         setTournament(null);
         router.replace("/");
+        toast({
+          title: "Greška!",
+          description: `Meč ${id} ne postoji!`,
+          variant: "destructive",
+        });
         notFound();
       }
 
