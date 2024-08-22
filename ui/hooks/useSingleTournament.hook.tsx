@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 import Context from "@/ui/providers/NavbarContext.provider";
 
@@ -24,6 +24,8 @@ export default function useSingleTournament({ id }: { id: string }) {
     tournament: TournamentType;
     setTournament: CallableFunction;
   }>(Context);
+
+  const router = useRouter();
 
   // States
   const [params, setParams] = useState<null | number>(null);
@@ -117,7 +119,7 @@ export default function useSingleTournament({ id }: { id: string }) {
         })
       );
     }
-  }, [isSuccessCurrentMatchScore]);
+  }, [isSuccessCurrentMatchScore, tournament?.score]);
 
   // GEMS
   function handleGemPoint(team: number) {
@@ -144,10 +146,8 @@ export default function useSingleTournament({ id }: { id: string }) {
       return;
     }
 
-    if (type === 2) {
-      if (currentSet?.some((n) => n >= matchType.gemDuration - 1)) {
-        checkWinner();
-      }
+    if (type === 2 && currentSet?.some((n) => n >= matchType.gemDuration - 1)) {
+      checkWinner();
     }
 
     updateGemScore({
@@ -173,7 +173,7 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
 
     checkForTieBreak();
-  }, [isSuccessCurrentGemScore]);
+  }, [isSuccessCurrentGemScore, tournament?.score]);
 
   function handleUpdateCurrentTieBreakScore({
     team,
@@ -210,7 +210,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       resetTieBreakScore(params!);
       handleGemPoint(params!);
     }
-  }, [isSuccessCurrentTieBreakScore]);
+  }, [isSuccessCurrentTieBreakScore, tournament?.score]);
 
   useEffect(() => {
     if (tournament?.status?.status === "completed") setTieBreak(false);
@@ -221,15 +221,7 @@ export default function useSingleTournament({ id }: { id: string }) {
   function checkMatchType() {
     const tieBreakDuration = tournament?.superTieBreak ? 10 : 7;
 
-    if (type === 0) {
-      setMatchType({
-        setDuration: 3,
-        gemDuration: 7,
-        tieBreakDuration,
-      });
-    }
-
-    if (type === 1) {
+    if (type === 0 || type === 1) {
       setMatchType({
         setDuration: 3,
         gemDuration: 7,
@@ -311,14 +303,14 @@ export default function useSingleTournament({ id }: { id: string }) {
     for (const value of tournament?.score?.sets!) {
       const [p1, p2] = value;
 
-      if (setsLength === matchType.setDuration || tieBreak) {
-        if (p1 >= matchType.gemDuration || p2 >= matchType.gemDuration) {
-          if (p1 > p2) {
-            player1!++;
-          } else {
-            player2!++;
-          }
+      if (type === 1 && setsLength === 3) {
+        if (p1 > p2) {
+          player1!++;
+        } else {
+          player2!++;
         }
+
+        break;
       }
 
       if (p1 >= matchType.gemDuration - 1 || p2 >= matchType.gemDuration - 1) {
@@ -339,10 +331,17 @@ export default function useSingleTournament({ id }: { id: string }) {
     };
   }
 
+  useEffect(() => {
+    checkMatchType();
+  }, [tournament?.type]);
+
   function checkWinner() {
     const total = totalPlayedSets();
+    console.log(total);
 
-    if (type === 0) {
+    if (type === 0 || type === 1) {
+      if (total.total < 2) return;
+
       if (total?.player1 >= 2) {
         // Winner of the match
         updateMatchWinner({
@@ -373,6 +372,37 @@ export default function useSingleTournament({ id }: { id: string }) {
         });
       }
     }
+    // if (type === 0 || type === 1) {
+    //   if (total?.player1 >= 2) {
+    //     // Winner of the match
+    //     updateMatchWinner({
+    //       gameId: id,
+    //       winner: "host",
+    //     });
+    //     updateStatus({
+    //       id,
+    //       status: {
+    //         status: "completed",
+    //         id: 0,
+    //       },
+    //     });
+    //   }
+
+    //   if (total?.player2 >= 2) {
+    //     // Winner of the match
+    //     updateMatchWinner({
+    //       gameId: id,
+    //       winner: "guest",
+    //     });
+    //     updateStatus({
+    //       id,
+    //       status: {
+    //         status: "completed",
+    //         id: 0,
+    //       },
+    //     });
+    //   }
+    // }
 
     if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration - 1) {
       // Winner of the match
@@ -405,6 +435,7 @@ export default function useSingleTournament({ id }: { id: string }) {
 
       if (!data) {
         setTournament(null);
+        router.replace("/");
         notFound();
       }
 

@@ -46,7 +46,7 @@ export default function Match({ params }: { params: { id: string } }) {
   if (isWatchMode || !user?.uid) {
     return (
       <WatchTournament
-        winner={tournament.winner}
+        winner={tournament?.winner}
         isTie={tieBreak}
         tournament={tournament}
       />
