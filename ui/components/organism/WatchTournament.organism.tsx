@@ -46,11 +46,7 @@ export default function WatchTournament({
         <WatchStatus
           status={checkStatusMessage(tournament?.status?.status ?? "idle")}
           winner={
-            null
-            // winner
-            // ? // @ts-ignore
-            //   tournament?.players?.[winner]!
-            // : null
+            winner ? tournament?.players?.[winner as "host" | "guest"]! : null
           }
         />
       </AnimatePresence>
@@ -91,7 +87,7 @@ export default function WatchTournament({
       <div className="match-view__body">
         <div
           className="team host"
-          // style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
+          style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
         >
           <div className="team__players">
             {tournament?.players.host?.map((n, i: number) => (
@@ -156,7 +152,7 @@ export default function WatchTournament({
         <div className="line" />
         <div
           className="team guest"
-          // style={{ opacity: winner && winner !== "guest" ? 0.25 : 1 }}
+          style={{ opacity: winner && winner !== "guest" ? 0.25 : 1 }}
         >
           <div className="team__players">
             {tournament?.players.guest?.map((n, i: number) => (

@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 import Button from "@/ui/components/atoms/Button.atom";
 import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
@@ -12,6 +12,7 @@ import useTournaments from "@/ui/hooks/useTournaments";
 import tennisBallImage from "@/public/img/tennisBall.png";
 
 import { IoChevronForwardOutline } from "react-icons/io5";
+
 import "@/ui/styles/organism/tournaments.organism.scss";
 
 export default function Tournamets() {

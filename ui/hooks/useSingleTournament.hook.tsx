@@ -201,6 +201,7 @@ export default function useSingleTournament({ id }: { id: string }) {
       resetTieBreakScore(params!);
       handleGemPoint(params!);
       checkWinner();
+      addNewSet();
     }
   }, [isSuccessCurrentTieBreakScore, tournament?.score?.tiebreak]);
 
@@ -296,7 +297,9 @@ export default function useSingleTournament({ id }: { id: string }) {
     for (const value of tournament?.score?.sets!) {
       const [p1, p2] = value;
 
-      if (p1 >= matchType.gemDuration - 1 || p2 >= matchType.gemDuration - 1) {
+      const dur = tournament?.score?.sets?.[2]?.every((n) => n >= 6) ? 8 : 7;
+
+      if (p1 >= dur - 1 || p2 >= dur - 1) {
         if (p1 > p2) {
           player1!++;
         } else {
@@ -328,11 +331,9 @@ export default function useSingleTournament({ id }: { id: string }) {
     if (type === 0 || type === 1) {
       if (total.total < 2) return;
 
-      if (total?.player1 >= 2) {
+      if (total?.player1 > total.player2) {
         handleWinner("host");
-      }
-
-      if (total?.player2 >= 2) {
+      } else {
         handleWinner("guest");
       }
     }

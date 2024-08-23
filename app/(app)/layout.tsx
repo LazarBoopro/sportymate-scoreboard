@@ -1,8 +1,39 @@
+"use client";
+
+import { Suspense, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+
 import Drawer from "@/ui/components/moleculs/Drawer.molecul";
 import Navbar from "@/ui/components/moleculs/Navbar.molecul";
-import { Suspense } from "react";
+
+import { auth } from "@/lib/firebaseConfig";
+
+import logo from "@/public/img/logo.svg";
+
+import "@/ui/styles/pages/home.page.scss";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user && !loading) {
+      router.replace("/login");
+    }
+  }, [user]);
+
+  if (loading) {
+    return (
+      <main className="loading-screen">
+        <Image src={logo} alt="SportyMate" />
+        <div className="loader"></div>
+      </main>
+    );
+  }
+
   return (
     <>
       <Drawer title="Tipovi turnira" />

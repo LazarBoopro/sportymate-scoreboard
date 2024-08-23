@@ -54,7 +54,7 @@ export default function Navbar() {
     if (isSuccess) {
       router.push("/login");
     }
-  }, [isSuccess]);
+  }, [user, isSuccess]);
 
   const handleClick = () => {
     setIsOpenedNav((prev) => !prev);
