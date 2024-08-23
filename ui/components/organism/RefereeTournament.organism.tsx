@@ -3,6 +3,7 @@ import { Team } from "../moleculs/Team.molecul";
 import SelectField from "../moleculs/Select.molecul";
 import { Score } from "../atoms/Score.atom";
 import { TournamentType } from "@/interfaces/tournaments";
+import { MATCH_TYPES } from "@/lib/constants/match";
 
 export default function RefereeTournament({
   tournament,
@@ -20,15 +21,22 @@ export default function RefereeTournament({
           team={0}
           players={tournament?.players.host}
           handleChange={handleUpdateCurrentSetScore}
+          status={tournament?.status?.status!}
         />
         <div className="match__section">
           <SelectField defaultSelected={tournament?.status?.status ?? ""} />
-          <Score isTie={isTie} score={tournament?.score ?? null} />
+          <Score
+            isTie={isTie}
+            superTieBreak={tournament?.superTieBreak ?? false}
+            score={tournament?.score ?? null}
+            matchType={MATCH_TYPES?.[tournament?.type || 0].title}
+          />
         </div>
         <Team
           team={1}
           players={tournament?.players.guest}
           handleChange={handleUpdateCurrentSetScore}
+          status={tournament?.status?.status!}
         />
       </Suspense>
     </main>

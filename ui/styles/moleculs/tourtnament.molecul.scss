@@ -17,6 +17,14 @@
     .title {
       font-weight: 800;
       font-size: clamp(1rem, 5vw, 1.25rem);
+      width: 100%;
+      display: flex;
+
+      .type {
+        margin-left: auto;
+        font-weight: 300;
+        font-size: clamp(0.75rem, 5vw, 1rem);
+      }
     }
 
     .subtitle {
@@ -112,8 +120,24 @@
     .scores {
       // flex-direction: column !important;
       display: flex;
+      flex-direction: column;
       font-weight: 800;
       font-size: clamp(1.25rem, 5vw, 2rem);
+
+      &__top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &__bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
     }
   }
 

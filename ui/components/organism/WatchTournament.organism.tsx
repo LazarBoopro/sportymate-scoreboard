@@ -16,17 +16,39 @@ import { IoTennisball } from "react-icons/io5";
 export default function WatchTournament({
   tournament,
   isTie,
+  winner,
 }: {
+  winner?: string | null;
   isTie: boolean;
   tournament: TournamentType | null;
 }) {
-  const status = tournament?.status?.status.toLowerCase().replace(" ", "");
+  const status = tournament?.status?.status.toLowerCase().replaceAll(" ", "");
 
-  if (status !== "inprogress" && status !== "tiebreak") {
+  const printScore = ({ team }: { team: number }) => {
+    if (isTie) {
+      return tournament?.score?.tiebreak[team];
+    }
+
+    if (tournament?.type == 1 && tournament?.score?.sets?.length === 3) {
+      return tournament?.score?.currentSet[team]!;
+    } else {
+      return scores[tournament?.score?.currentSet[team]!];
+    }
+  };
+
+  if (
+    status !== "inprogress" &&
+    status !== "tiebreak" &&
+    status !== "completed"
+  ) {
     return (
       <AnimatePresence>
         <WatchStatus
           status={checkStatusMessage(tournament?.status?.status ?? "idle")}
+          winner={
+            null
+            // winner ? tournament?.players?.[winner as "host" | "guest"]! : null
+          }
         />
       </AnimatePresence>
     );
@@ -54,7 +76,7 @@ export default function WatchTournament({
               }}
               className="subtitle"
             >
-              Tie Break
+              {!tournament?.superTieBreak ? "Tie Break" : "Super Tie Break"}
             </motion.p>
           )}
         </AnimatePresence>
@@ -64,7 +86,10 @@ export default function WatchTournament({
         <Image src={logo} alt="SportyMate" />
       </Link>
       <div className="match-view__body">
-        <div className="team host">
+        <div
+          className="team host"
+          // style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
+        >
           <div className="team__players">
             {tournament?.players.host?.map((n, i: number) => (
               <p key={i}>
@@ -122,15 +147,14 @@ export default function WatchTournament({
               </AnimatePresence>
             </div>
 
-            <div className="gem">
-              {isTie
-                ? tournament?.score?.tiebreak[0]
-                : scores[tournament?.score?.currentSet[0]!]}
-            </div>
+            <div className="gem">{printScore({ team: 0 })}</div>
           </div>
         </div>
         <div className="line" />
-        <div className="team guest">
+        <div
+          className="team guest"
+          // style={{ opacity: winner && winner !== "guest" ? 0.25 : 1 }}
+        >
           <div className="team__players">
             {tournament?.players.guest?.map((n, i: number) => (
               <p key={i}>
@@ -188,11 +212,7 @@ export default function WatchTournament({
               </AnimatePresence>
             </div>
 
-            <div className="gem">
-              {isTie
-                ? tournament?.score?.tiebreak[1]
-                : scores[tournament?.score?.currentSet[1]!]}
-            </div>
+            <div className="gem">{printScore({ team: 1 })}</div>
           </div>
         </div>
       </div>

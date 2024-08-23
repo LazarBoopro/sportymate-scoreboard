@@ -1,0 +1,70 @@
+@import "variables.scss";
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__title {
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .help {
+      padding: 0.15rem;
+      border-radius: 100rem;
+      outline: 1px solid $gray-clr-500;
+      transition: background 0.2s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        background: $gray-clr-100;
+      }
+    }
+  }
+
+  &__body {
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 0.5rem;
+    position: relative;
+    isolation: isolate;
+
+    .option {
+      //   text-wrap: nowrap;
+      isolation: isolate;
+      padding: clamp(0.25rem, 5vw, 0.5rem);
+      border-radius: 0.25rem;
+      outline: 1px solid $blue-clr-500;
+      color: $blue-clr-500;
+      background: $blue-clr-100;
+      flex: 1;
+      text-align: center;
+      position: relative;
+      display: block;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background: rgb($blue-clr-500, 0.35);
+      }
+
+      &:focus,
+      &:focus-within {
+        outline: none;
+      }
+
+      &:focus-visible {
+        outline-offset: 2px;
+        outline: 2px solid black;
+      }
+
+      &.selected-opt {
+        color: $white-clr;
+        background: $blue-clr-500;
+      }
+    }
+  }
+}

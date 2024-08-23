@@ -1,0 +1,66 @@
+@import "variables.scss";
+
+.loading-screen {
+  background: red;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: #fff;
+  opacity: 1;
+  background-size: 18px 18px;
+
+  img {
+    width: 25rem;
+    height: 25rem;
+  }
+
+  .loader {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    scale: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    aspect-ratio: 2;
+    border: 10px solid #e0e0e0;
+    box-sizing: border-box;
+    background: radial-gradient(farthest-side, #000 98%, #0000) left/20px 20px,
+      radial-gradient(farthest-side, #000 98%, #0000) left/20px 20px,
+      radial-gradient(farthest-side, #000 98%, #0000) center/20px 20px,
+      radial-gradient(farthest-side, #000 98%, #0000) right/20px 20px, #e0e0e0;
+    background-repeat: no-repeat;
+    filter: blur(4px) contrast(10);
+    animation: l14 1s infinite;
+  }
+
+  @keyframes l14 {
+    100% {
+      background-position: right, left, center, right;
+    }
+  }
+
+  @keyframes loading {
+    100% {
+      background-position: right, left, center, right;
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

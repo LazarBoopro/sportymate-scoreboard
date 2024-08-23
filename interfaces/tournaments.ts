@@ -7,6 +7,8 @@ export type TournamentType = {
     id: number;
     status: string;
   };
+  type: number;
+  superTieBreak: boolean;
   startTime: {
     hour: string;
     minute: string;
@@ -20,6 +22,7 @@ export type TournamentType = {
     currentSet: number[];
     sets: number[][];
   };
+  winner: null;
 };
 
 export type PlayerType = {
@@ -37,6 +40,8 @@ export type TournamentTypeService = {
     id: number;
     status: string;
   };
+  type: number;
+  superTieBreak: boolean;
   players: {
     host: PlayerType[];
     guest: PlayerType[];
@@ -48,4 +53,5 @@ export type TournamentTypeService = {
     }[];
     tiebreak: number[];
   };
+  winner: null;
 };

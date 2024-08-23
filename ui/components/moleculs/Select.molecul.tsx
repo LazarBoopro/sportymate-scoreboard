@@ -6,6 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateMatchStatus } from "@/infrastructure/mutations/tournaments";
+import { selectOptions } from "@/lib/constants/match";
 import { checkStatusMessage } from "@/lib/helpers/messages";
 import { useParams } from "next/navigation";
 
@@ -51,58 +52,3 @@ export default function SelectField({
     </Select>
   );
 }
-
-const selectOptions = [
-  {
-    id: 0,
-    status: "Completed",
-  },
-  {
-    id: 1,
-    status: "In progress",
-  },
-  {
-    id: 2,
-    status: "Paused",
-  },
-  {
-    id: 3,
-    status: "Canceled",
-  },
-  {
-    id: 4,
-    status: "Warm up",
-  },
-  {
-    id: 5,
-    status: "Break",
-  },
-  {
-    id: 6,
-    status: "Interrupted",
-  },
-  {
-    id: 7,
-    status: "Delayed",
-  },
-  {
-    id: 8,
-    status: "Match point",
-  },
-  {
-    id: 9,
-    status: "Tie Break",
-  },
-  {
-    id: 10,
-    status: "Suspended",
-  },
-  {
-    id: 11,
-    status: "Forfeited",
-  },
-  {
-    id: 12,
-    status: "Idle",
-  },
-];

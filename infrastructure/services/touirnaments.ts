@@ -110,3 +110,15 @@ export const updateServingPlayer = async ({
     serving: isServing,
   });
 };
+
+export const updateMatchWinner = async ({
+  gameId,
+  winner,
+}: {
+  gameId: string;
+  winner: string;
+}) => {
+  return update(ref(database, `tournaments/${gameId}`), {
+    winner,
+  });
+};

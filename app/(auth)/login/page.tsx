@@ -20,7 +20,6 @@ import { checkFailureMessage } from "@/lib/helpers/messages";
 import coverImage from "@/public/img/cover.jpg";
 
 import "@/ui/styles/pages/login.page.scss";
-import { Users } from "lucide-react";
 
 export default function Login() {
   const { toast } = useToast();
