@@ -25,6 +25,7 @@ export default function TournamentForm() {
     handleOnChange,
     isSuperTieBreak,
     setIsSuperTieBreak,
+    isAddingTournament,
   } = useTournaments();
 
   const handleClick = () => {
@@ -234,7 +235,9 @@ export default function TournamentForm() {
         </section>
         <div className="divider"></div>
 
-        <Button className="submit">Dodaj turnir</Button>
+        <Button className={`submit ${isAddingTournament ? "pending" : ""}`}>
+          Dodaj turnir
+        </Button>
       </form>
     </div>
   );

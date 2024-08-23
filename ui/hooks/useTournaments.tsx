@@ -24,7 +24,11 @@ export default function useTournaments() {
 
   const [user] = useAuthState(auth);
 
-  const { mutate: addTournament, isSuccess } = useAddTournament();
+  const {
+    mutate: addTournament,
+    isSuccess,
+    isPending: isAddingTournament,
+  } = useAddTournament();
 
   const [tournaments, setTournaments] = useState<
     TournamentTypeExtended[] | null
@@ -149,6 +153,7 @@ export default function useTournaments() {
     tournaments,
     data,
     isDouble,
+    isAddingTournament,
     resetForm,
     handleSubmit,
     setIsDouble,
