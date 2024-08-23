@@ -285,7 +285,8 @@ export default function useSingleTournament({ id }: { id: string }) {
   function totalPlayedSets() {
     let player1 = 0,
       player2 = 0,
-      totalPlayedSets = 0;
+      totalPlayedSets = 0,
+      index = 0;
 
     if (!tournament)
       return {
@@ -297,7 +298,9 @@ export default function useSingleTournament({ id }: { id: string }) {
     for (const value of tournament?.score?.sets!) {
       const [p1, p2] = value;
 
-      const dur = tournament?.score?.sets?.[2]?.every((n) => n >= 6) ? 8 : 7;
+      const dur = tournament?.score?.sets?.[index]?.every((n) => n >= 6)
+        ? 8
+        : 7;
 
       if (p1 >= dur - 1 || p2 >= dur - 1) {
         if (p1 > p2) {
@@ -333,7 +336,9 @@ export default function useSingleTournament({ id }: { id: string }) {
 
       if (total?.player1 > total.player2) {
         handleWinner("host");
-      } else {
+      }
+
+      if (total?.player2 > total.player1) {
         handleWinner("guest");
       }
     }
