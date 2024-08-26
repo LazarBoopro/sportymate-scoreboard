@@ -23,7 +23,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (!user && !loading) {
       router.replace("/login");
     }
-  }, [user]);
+  }, [user, loading]);
 
   if (loading) {
     return (
