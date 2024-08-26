@@ -37,6 +37,11 @@ export default function useSingleTournament({ id }: { id: string }) {
     tieBreakDuration: 7,
   });
   const [tieBreak, setTieBreak] = useState(false);
+  const [total, setTotal] = useState({
+    player1: 0,
+    player2: 0,
+    total: 0,
+  });
 
   // Queries and Mutations
   const { mutate: updateMatchScore, isSuccess: isSuccessCurrentMatchScore } =
@@ -58,7 +63,6 @@ export default function useSingleTournament({ id }: { id: string }) {
     currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
   const type = +tournament?.type;
   const tieBreakScore = tournament?.score?.tiebreak;
-  const total = totalPlayedSets();
 
   // Functions
   function handleUpdateCurrentSetScore({
@@ -137,19 +141,13 @@ export default function useSingleTournament({ id }: { id: string }) {
       currentSet?.[team]! >= matchType.gemDuration - 1 &&
       !tieBreak
     ) {
-      if (
-        setsLength === matchType.setDuration ||
-        setsLength === matchType.setDuration - 1
-      ) {
-        checkWinner();
-      }
-
       addNewSet();
 
       return;
     }
 
-    if (type === 2 && currentSet?.some((n) => n >= matchType.gemDuration - 1)) {
+    console.log(matchType.gemDuration);
+    if (type === 2 && currentSet?.some((n) => n >= matchType.gemDuration)) {
       checkWinner();
     }
 
@@ -163,6 +161,7 @@ export default function useSingleTournament({ id }: { id: string }) {
   }
 
   useEffect(() => {
+    checkWinner();
     checkForTieBreak();
   }, [isSuccessCurrentGemScore, tournament?.score?.sets]);
 
@@ -241,7 +240,8 @@ export default function useSingleTournament({ id }: { id: string }) {
     }
 
     if (type === 1) {
-      currentSet?.every((n) => n === 6) || total.total > 2
+      console.log(total);
+      currentSet?.every((n) => n === 6) || total.total >= 2
         ? setTieBreak(true)
         : setTieBreak(false);
 
@@ -269,8 +269,19 @@ export default function useSingleTournament({ id }: { id: string }) {
   }
 
   function addNewSet() {
-    if (setsLength! >= matchType.setDuration) return;
+    if (setsLength! >= matchType.setDuration) {
+      return;
+    }
 
+    const team = params === 0 ? "player1" : "player2";
+
+    setTotal((prev) => ({
+      ...prev,
+      [team]: prev?.[team] + 1,
+      total: prev?.total + 1,
+    }));
+
+    // totalPlayedSets();
     Array.from({ length: 2 }).forEach((_, i) =>
       updateGemScore({
         id,
@@ -282,68 +293,24 @@ export default function useSingleTournament({ id }: { id: string }) {
     );
   }
 
-  function totalPlayedSets() {
-    let player1 = 0,
-      player2 = 0,
-      totalPlayedSets = 0,
-      index = 0;
-
-    if (!tournament)
-      return {
-        player1: 0,
-        player2: 0,
-        total: 0,
-      };
-
-    for (const value of tournament?.score?.sets!) {
-      const [p1, p2] = value;
-
-      const dur = tournament?.score?.sets?.[index]?.every((n) => n >= 6)
-        ? 8
-        : 7;
-
-      if (p1 >= dur - 1 || p2 >= dur - 1) {
-        if (p1 > p2) {
-          player1!++;
-        } else {
-          player2!++;
-        }
-      }
-
-      if (tieBreak) {
-        if (p1 > p2) {
-          player1!++;
-        }
-
-        if (p2 < p1) {
-          player2!++;
-        }
-      }
-
-      totalPlayedSets++;
-    }
-
-    return {
-      player1,
-      player2,
-      total: totalPlayedSets,
-    };
-  }
-
   function checkWinner() {
     if (type === 0 || type === 1) {
-      if (total.total < 2) return;
+      if (total.total < 2) {
+        return;
+      }
 
       if (total?.player1 > total.player2) {
         handleWinner("host");
+        return;
       }
 
       if (total?.player2 > total.player1) {
         handleWinner("guest");
+        return;
       }
     }
 
-    if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration - 1) {
+    if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
       handleWinner(params === 0 ? "host" : "guest");
       return;
     }
@@ -374,6 +341,59 @@ export default function useSingleTournament({ id }: { id: string }) {
     checkForTieBreak();
   }, [tournament?.type]);
 
+  useEffect(() => {
+    const { player1, player2 } = total;
+
+    if (type === 0 || type === 1) {
+      if (player1 === 1 && player2 === 1) {
+        setMatchType((prev) => ({
+          ...prev,
+          setDuration: 4,
+        }));
+      }
+    }
+  }, [tournament?.score?.sets]);
+
+  useEffect(() => {
+    checkForTieBreak();
+  }, [total]);
+
+  // Check total played sets on mount
+  useEffect(() => {
+    let index = 0;
+
+    const sets = tournament?.score?.sets;
+
+    if (!sets) return;
+
+    for (const [p1, p2] of sets!) {
+      let dur = sets?.[index].every((n) => n >= 6) ? 7 : 6;
+      console.log(dur);
+
+      if (p1 >= dur && p1 > p2) {
+        console.log("sss");
+        setTotal((prev) => ({
+          ...prev,
+          player1: prev.player1 + 1,
+        }));
+      }
+
+      if (p2 >= dur && p2 > p1) {
+        console.log("sss");
+        setTotal((prev) => ({
+          ...prev,
+          player2: prev.player2 + 1,
+        }));
+      }
+
+      setTotal((prev) => ({
+        ...prev,
+        total: prev.player1 + prev.player2,
+      }));
+      index++;
+    }
+  }, [tournament?.type]);
+
   // Firebase
   useEffect(() => {
     const tournamentsRef = ref(database, `tournaments/${id}`);
@@ -397,8 +417,80 @@ export default function useSingleTournament({ id }: { id: string }) {
 
     return () => {
       unsubscribe();
+      setTournament(null);
+      // setTotal({
+      //   player1: 0,
+      //   player2: 0,
+      //   total: 0,
+      // });
     };
   }, [id]);
 
   return { tournament, tieBreak, handleUpdateCurrentSetScore };
 }
+
+// function totalPlayedSets() {
+//   let player1: 0, player2: 0, total: 0;
+
+//   if (!tournament) return;
+
+//   const t = tournament?.score?.sets?.slice(0, -1);
+//   // const t = tournament?.score?.sets;
+
+//   for (const [player1, player2] of t!) {
+//     if (player1 < 6 && player2 < 6) {
+//       console.log(player1, player2, "Usao..");
+//       return;
+//     }
+
+//     if (player1 > player2) {
+//       console.log("Usao", player1);
+//       setTotal((prev) => ({
+//         ...prev,
+//         player1: player1 + 1,
+//       }));
+
+//       return;
+//     } else if (player2 > player1) {
+//       setTotal((prev) => ({
+//         ...prev,
+//         player2: player2 + 1,
+//       }));
+
+//       return;
+//     }
+
+//     setTotal((prev) => ({
+//       ...prev,
+//       total: player1 + player2,
+//     }));
+//   }
+//   // t?.forEach((set) => {
+//   //   const player1 = set?.[0];
+//   //   const player2 = set?.[1];
+
+//   //   if (player1 < 6 && player2 < 6) {
+//   //     console.log(player1, player2, "Usao..");
+
+//   //     return;
+//   //   }
+
+//   //   if (player1 > player2) {
+//   //     console.log("Usao", player1);
+//   //     setTotal((prev) => ({
+//   //       ...prev,
+//   //       player1: prev.player1 + 1,
+//   //     }));
+//   //   } else if (player2 > player1) {
+//   //     setTotal((prev) => ({
+//   //       ...prev,
+//   //       player2: prev.player2 + 1,
+//   //     }));
+//   //   }
+
+//   //   setTotal((prev) => ({
+//   //     ...prev,
+//   //     total: prev.player1 + prev.player2,
+//   //   }));
+//   // });
+// }
