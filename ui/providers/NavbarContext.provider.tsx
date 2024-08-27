@@ -1,9 +1,9 @@
 "use client";
 
-import { useUpdateServingPlayer } from "@/infrastructure/mutations/tournaments";
+import { useUpdateServingPlayer } from "@/infrastructure/mutations/matches";
 import { createContext, useEffect, useState } from "react";
 
-import { TournamentType } from "@/interfaces/tournaments";
+import { MatchType } from "@/interfaces/tournaments";
 
 const Context = createContext<any>({});
 
@@ -20,8 +20,12 @@ export function NavbarContextProvider({
 }) {
   const [showNavbar, setShowNavbar] = useState(true);
   const [serving, setServing] = useState<ServingType | null>(null);
-  const [tournament, setTournament] = useState<TournamentType | null>(null);
+  const [tournament, setTournament] = useState<MatchType | null>(null);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
+
+  const [screen, setScreen] = useState<"tournaments" | "matches">(
+    "tournaments"
+  );
 
   const { mutate: updateServing } = useUpdateServingPlayer();
 
@@ -64,6 +68,8 @@ export function NavbarContextProvider({
         setTournament,
         isDrawerOpened,
         setIsDrawerOpened,
+        screen,
+        setScreen,
       }}
     >
       {children}

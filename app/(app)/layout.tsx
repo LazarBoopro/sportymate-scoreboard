@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -19,13 +19,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(loading);
+
   useEffect(() => {
     if (!user && !loading) {
       router.replace("/login");
+      return;
     }
+
+    setIsLoading(false);
   }, [user, loading]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <main className="loading-screen">
         <Image src={logo} alt="SportyMate" />

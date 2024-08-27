@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useUpdateMatchStatus } from "@/infrastructure/mutations/tournaments";
+import { useUpdateMatchStatus } from "@/infrastructure/mutations/matches";
 import { selectOptions } from "@/lib/constants/match";
 import { checkStatusMessage } from "@/lib/helpers/messages";
 import { useParams } from "next/navigation";

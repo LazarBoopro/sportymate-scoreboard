@@ -5,7 +5,7 @@ import Button from "@/ui/components/atoms/Button.atom";
 
 import { TournamentTypeService } from "@/interfaces/tournaments";
 
-import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
+import { useDeleteTournament } from "@/infrastructure/mutations/matches";
 
 import { checkStatusMessage } from "@/lib/helpers/messages";
 

@@ -1,4 +1,4 @@
-export type TournamentType = {
+export type MatchType = {
   id?: string;
   userId?: string;
   title: string;
@@ -31,7 +31,7 @@ export type PlayerType = {
   serving?: boolean;
 };
 
-export type TournamentTypeService = {
+export type MatchTypeService = {
   matchId?: number;
   userId?: string | undefined;
   title: string;
