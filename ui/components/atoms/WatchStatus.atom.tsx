@@ -11,7 +11,7 @@ export default function WatchStatus({
     status,
     winner,
 }: {
-    winner?: null | PlayerType[];
+    winner?: null | { player1: PlayerType; player2: PlayerType };
     status: string | undefined;
 }) {
     return (

@@ -1,0 +1,122 @@
+@import "variables.scss";
+
+.tournament-group {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(1.25rem, 10vw, 1.5rem);
+  }
+
+  & > * {
+    h2 {
+      font-weight: 500;
+      font-size: clamp(1rem, 10vw, 1.15rem);
+    }
+  }
+
+  .table {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+
+    table {
+      outline: 1px solid $gray-clr-500;
+      outline-offset: -1px;
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 30rem;
+      overflow-x: auto;
+
+      th {
+        padding: 0.5rem;
+        border-inline: 1px solid $gray-clr-500;
+        background: $gray-clr-400;
+      }
+
+      tr {
+        border: 1px solid $gray-clr-500;
+        text-align: left;
+        background: $gray-clr-100;
+
+        &:nth-child(even) {
+          background: $gray-clr-300;
+        }
+
+        td {
+          position: relative;
+          padding: 0.5rem;
+          overflow: hidden;
+          min-width: 6rem;
+          height: fit-content;
+          border-inline: 1px solid $gray-clr-500;
+          font-size: clamp(0.75rem, 2vw, 1rem);
+
+          &.ctas {
+            top: 0;
+            inset: revert;
+
+            & .button {
+              inset: revert;
+              top: 0;
+              width: 50%;
+              position: absolute !important;
+
+              &:is(:first-child) {
+                float: left;
+                left: 0;
+              }
+              &:is(:last-child) {
+                float: right;
+                right: 0;
+              }
+            }
+          }
+
+          &:has(input[type="number"]) {
+            padding: 0;
+          }
+
+          input[type="number"] {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+          }
+
+          & > .button {
+            position: absolute;
+            inset: 0;
+            padding: 0;
+            border-radius: 0;
+            height: 100%;
+            width: 100%;
+            padding: 0.5rem;
+          }
+
+          &:first-child {
+            width: 2rem;
+            min-width: 0;
+            text-align: center;
+          }
+
+          &:last-child {
+            width: 4rem;
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .matches {
+    &-list {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+}

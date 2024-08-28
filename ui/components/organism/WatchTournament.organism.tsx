@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import WatchStatus from "@/ui/components/atoms/WatchStatus.atom";
 import BubbleAnimations from "@/ui/components/atoms/BubbleAnimation.atom";
 
-import { TournamentType } from "@/interfaces/matches";
+import { MatchType } from "@/interfaces/matches";
 
 import { scores } from "@/lib/helpers/score";
 import { checkStatusMessage } from "@/lib/helpers/messages";
@@ -20,7 +20,7 @@ export default function WatchTournament({
 }: {
     winner?: string | null;
     isTie: boolean;
-    tournament: TournamentType | null;
+    tournament: MatchType | null;
 }) {
     const status = tournament?.status?.status.toLowerCase().replaceAll(" ", "");
 
@@ -84,11 +84,17 @@ export default function WatchTournament({
                     style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
                 >
                     <div className="team__players">
-                        {tournament?.players.host?.map((n, i: number) => (
+                        {[1, 2]?.map((n, i: number) => (
                             <p key={i}>
-                                {`${n.firstName}  ${n.lastName}`}
+                                {/* @ts-ignore */}
+                                {`${tournament?.players.host[`player${n}`].firstName}  ${
+                                    // @ts-ignore
+                                    tournament?.players.host[`player${n}`].lastName
+                                }`}
                                 <AnimatePresence>
-                                    {n.serving && (
+                                    {/* @ts-ignore */}
+
+                                    {tournament?.players.host[`player${n}`].serving && (
                                         <motion.span
                                             initial={{
                                                 opacity: 0,
@@ -149,11 +155,43 @@ export default function WatchTournament({
                     style={{ opacity: winner && winner !== "guest" ? 0.25 : 1 }}
                 >
                     <div className="team__players">
-                        {tournament?.players.guest?.map((n, i: number) => (
+                        {/* {tournament?.players.guest?.map((n, i: number) => (
                             <p key={i}>
                                 {`${n.firstName}  ${n.lastName}`}
                                 <AnimatePresence>
                                     {n.serving && (
+                                        <motion.span
+                                            initial={{
+                                                opacity: 0,
+                                                x: -200,
+                                            }}
+                                            animate={{
+                                                opacity: 1,
+                                                x: 0,
+                                            }}
+                                            exit={{
+                                                opacity: 0,
+                                                x: -200,
+                                            }}
+                                        >
+                                            <IoTennisball />
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </p>
+                        ))} */}
+
+                        {[1, 2]?.map((n, i: number) => (
+                            <p key={i}>
+                                {/* @ts-ignore */}
+                                {`${tournament?.players.guest[`player${n}`].firstName}  ${
+                                    // @ts-ignore
+                                    tournament?.players.guest[`player${n}`].lastName
+                                }`}
+                                <AnimatePresence>
+                                    {/* @ts-ignore */}
+
+                                    {tournament?.players.guest[`player${n}`].serving && (
                                         <motion.span
                                             initial={{
                                                 opacity: 0,

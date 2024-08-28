@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import { IoAddCircleOutline, IoTrashOutline } from "react-icons/io5";
 import Button from "@/ui/components/atoms/Button.atom";
 import SelectInput from "@/ui/components/moleculs/Select.molecul";
+import Link from "next/link";
 
 const teams: any = {
     0: [
@@ -29,10 +30,8 @@ const teams: any = {
 };
 
 export default function SingleTournament({ params }: { params: { id: string } }) {
-    const { tournament, handleAddGroup, group, setGroup, groups, deleteGroup } =
-        useSingleTournament({
-            id: params.id,
-        });
+    const { tournament, deleteGroup, handleAddGroup, group, setGroup, groups } =
+        useSingleTournament({ id: params.id });
 
     const tournamentButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -40,6 +39,17 @@ export default function SingleTournament({ params }: { params: { id: string } })
     const [position, setPosition] = useState({
         left: 0,
         width: 0,
+    });
+
+    const [settings, setSettings] = useState({
+        double: true,
+        type: 0,
+        superTieBreak: true,
+    });
+
+    const [team, setTeam] = useState({
+        player1: "",
+        player2: "",
     });
 
     const handleMouseClick = (e: any) => {
@@ -50,6 +60,19 @@ export default function SingleTournament({ params }: { params: { id: string } })
                 tournamentButtonRef?.current?.getBoundingClientRect().width,
         });
         setScreen(e.target.dataset.type);
+    };
+
+    const handleOnChange = (e: any) => {
+        setTeam((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        // TODO: Save changes to the tournament
+        console.log("Settings updated:", settings);
     };
 
     useEffect(() => {
@@ -82,6 +105,7 @@ export default function SingleTournament({ params }: { params: { id: string } })
                     <AnimatePresence>
                         {screen === "matches" ? (
                             <GroupList
+                                tournamentId={params.id}
                                 //@ts-ignore
                                 groups={groups}
                                 //@ts-ignore
@@ -279,7 +303,15 @@ export default function SingleTournament({ params }: { params: { id: string } })
     );
 }
 
-function GroupList({ groups, handleDelete }: { groups: any[]; handleDelete: any }) {
+function GroupList({
+    tournamentId,
+    groups,
+    handleDelete,
+}: {
+    tournamentId: string;
+    groups: any[];
+    handleDelete: any;
+}) {
     if (!groups) return <div>Nema grupa</div>;
     return (
         <>
@@ -294,16 +326,17 @@ function GroupList({ groups, handleDelete }: { groups: any[]; handleDelete: any 
                             <IoTrashOutline />
                         </Button>
                     </div>
-
-                    <div className="group__list">
-                        {groups[key as keyof typeof groups]?.teams.map((team: any, i: any) => (
-                            <div className="team" key={i}>
-                                <span>{i + 1}</span>
-                                <p className="team__player">{`${team.player1.firstName[0]}. ${team.player1.lastName}`}</p>
-                                <p className="team__player">{`${team.player2.firstName[0]}. ${team.player2.lastName}`}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <Link href={`/tournaments/${tournamentId}/${alphabet[i].toLowerCase()}`}>
+                        <div className="group__list">
+                            {groups[key as keyof typeof groups]?.teams.map((team: any, i: any) => (
+                                <div className="team" key={i}>
+                                    <span>{i + 1}</span>
+                                    <p className="team__player">{`${team.player1.firstName[0]}. ${team.player1.lastName}`}</p>
+                                    <p className="team__player">{`${team.player2.firstName[0]}. ${team.player2.lastName}`}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </Link>
                 </article>
             ))}
         </>
