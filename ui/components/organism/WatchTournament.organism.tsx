@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import WatchStatus from "@/ui/components/atoms/WatchStatus.atom";
 import BubbleAnimations from "@/ui/components/atoms/BubbleAnimation.atom";
 
-import { TournamentType } from "@/interfaces/tournaments";
+import { TournamentType } from "@/interfaces/matches";
 
 import { scores } from "@/lib/helpers/score";
 import { checkStatusMessage } from "@/lib/helpers/messages";
