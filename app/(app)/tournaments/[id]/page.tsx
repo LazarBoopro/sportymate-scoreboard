@@ -17,6 +17,8 @@ import Button from "@/ui/components/atoms/Button.atom";
 import InputField from "@/ui/components/atoms/InputField.atom";
 import SelectFIeld from "@/ui/components/atoms/SelectField.atom";
 import SelectInput from "@/ui/components/moleculs/Select.molecul";
+import Link from "next/link";
+import Tabs from "@/ui/components/moleculs/Tabs.molecul";
 
 export default function SingleTournament({
   params,
@@ -33,6 +35,17 @@ export default function SingleTournament({
     width: 0,
   });
 
+  const [settings, setSettings] = useState({
+    double: true,
+    type: 0,
+    superTieBreak: true,
+  });
+
+  const [team, setTeam] = useState({
+    player1: "",
+    player2: "",
+  });
+
   const handleMouseClick = (e: any) => {
     setPosition({
       left: e?.target?.offsetLeft || tournamentButtonRef?.current?.offsetLeft,
@@ -41,6 +54,19 @@ export default function SingleTournament({
         tournamentButtonRef?.current?.getBoundingClientRect().width,
     });
     setScreen(e.target.dataset.type);
+  };
+
+  const handleOnChange = (e: any) => {
+    setTeam((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    // TODO: Save changes to the tournament
+    console.log("Settings updated:", settings);
   };
 
   useEffect(() => {
@@ -71,110 +97,240 @@ export default function SingleTournament({
         </div>
         <div className="tournaments__list">
           <AnimatePresence>
-            {screen === "matches" ? <GroupList /> : <TeamList />}
+            {screen === "matches" ? (
+              <GroupList tournamentId={params.id} />
+            ) : (
+              <TeamList />
+            )}
           </AnimatePresence>
         </div>
       </div>
 
-      <form
-        // onSubmit={handleSubmit}
-        className="tournament-form__form"
-        style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
-      >
-        <section
-          style={{
-            maxWidth: "100%",
-            height: "100%",
-            padding: "0",
-          }}
+      {screen === "matches" ? (
+        <form
+          onSubmit={handleSubmit}
+          className="tournament-form__form"
+          style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
         >
-          <h2
+          <section
             style={{
-              fontSize: "clamp(1rem, 10vw, 1.25rem)",
-              fontWeight: "800",
+              maxWidth: "100%",
+              height: "100%",
+              padding: "0",
             }}
           >
-            Dodaj novu grupu
-          </h2>
-          <div className="input-field">
-            <label className="input-field__title">Tim 1</label>
-            <SelectInput
-              selectOptions={[{ id: 0, name: "test" }]}
-              handleChange={() => console.log("...")}
-              defaultSelected={tournament?.status?.status ?? ""}
+            <h2
+              style={{
+                fontSize: "clamp(1rem, 10vw, 1.25rem)",
+                fontWeight: "800",
+              }}
+            >
+              Dodaj novu grupu
+            </h2>
+            <div className="input-field">
+              <label className="input-field__title">Tim 1</label>
+              <SelectInput
+                selectOptions={[{ id: 0, name: "test" }]}
+                handleChange={() => console.log("...")}
+                defaultSelected={tournament?.status?.status ?? ""}
+              />
+            </div>
+            <div className="input-field">
+              <label className="input-field__title">Tim 2</label>
+              <SelectInput
+                selectOptions={[{ id: 0, name: "test" }]}
+                handleChange={() => console.log("...")}
+                defaultSelected={tournament?.status?.status ?? ""}
+              />
+            </div>
+            <div className="input-field">
+              <label className="input-field__title">Tim 3</label>
+              <SelectInput
+                selectOptions={[{ id: 0, name: "test" }]}
+                handleChange={() => console.log("...")}
+                defaultSelected={tournament?.status?.status ?? ""}
+              />
+            </div>
+            <div className="input-field">
+              <label className="input-field__title">Tim 4</label>
+              <SelectInput
+                selectOptions={[{ id: 0, name: "test" }]}
+                handleChange={() => console.log("...")}
+                defaultSelected={tournament?.status?.status ?? ""}
+              />
+            </div>
+
+            <div
+              className="divider"
+              style={{
+                height: "1px",
+                width: "100%",
+                borderBottom: "1px solid #ccc",
+              }}
+            ></div>
+
+            <section
+              style={{
+                display: "flex",
+                gap: "1rem",
+                flexDirection: "column",
+              }}
+            >
+              <Tabs
+                onChange={(e) =>
+                  setSettings((prev) => ({
+                    ...prev,
+                    type: +e.target.value,
+                  }))
+                }
+                title="Izaberi tip turnira"
+                name="type"
+                type="select"
+                selected={settings?.type}
+              />
+
+              <InputField
+                onChange={() =>
+                  setSettings((prev) => ({
+                    ...prev,
+                    superTieBreak: !prev.superTieBreak,
+                  }))
+                }
+                title="Super Tie Break"
+                value={settings.superTieBreak}
+                name="isSuperTieBreak"
+                className={"row"}
+                type="switch"
+              />
+
+              <InputField
+                onChange={() =>
+                  setSettings((prev) => ({
+                    ...prev,
+                    double: !prev.double,
+                  }))
+                }
+                title="Dabl"
+                value={settings.double}
+                name="isDouble"
+                type="switch"
+                className="row"
+              />
+            </section>
+
+            <div
+              className="divider"
+              style={{
+                height: "1px",
+                width: "100%",
+                borderBottom: "1px solid #ccc",
+                marginBottom: "auto",
+              }}
+            ></div>
+            <Button>
+              dodaj grupu <IoAddCircleOutline />
+            </Button>
+          </section>
+        </form>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="tournament-form__form"
+          style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
+        >
+          <section
+            style={{
+              maxWidth: "100%",
+              height: "100%",
+              padding: "0",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "clamp(1rem, 10vw, 1.25rem)",
+                fontWeight: "800",
+              }}
+            >
+              Dodaj novi tim
+            </h2>
+            <InputField
+              onChange={handleOnChange}
+              title="Ime"
+              name="player1"
+              value={team.player1}
+              placeholder="Ime"
+              required
             />
-          </div>
-          <div className="input-field">
-            <label className="input-field__title">Tim 2</label>
-            <SelectInput
-              selectOptions={[{ id: 0, name: "test" }]}
-              handleChange={() => console.log("...")}
-              defaultSelected={tournament?.status?.status ?? ""}
+            <InputField
+              onChange={handleOnChange}
+              title="Ime"
+              name="player2"
+              value={team.player2}
+              placeholder="Ime"
+              required
             />
-          </div>
-          <div className="input-field">
-            <label className="input-field__title">Tim 3</label>
-            <SelectInput
-              selectOptions={[{ id: 0, name: "test" }]}
-              handleChange={() => console.log("...")}
-              defaultSelected={tournament?.status?.status ?? ""}
-            />
-          </div>
-          <div className="input-field" style={{ marginBottom: "auto" }}>
-            <label className="input-field__title">Tim 4</label>
-            <SelectInput
-              selectOptions={[{ id: 0, name: "test" }]}
-              handleChange={() => console.log("...")}
-              defaultSelected={tournament?.status?.status ?? ""}
-            />
-          </div>
-          <Button>
-            dodaj grupu <IoAddCircleOutline />
-          </Button>
-        </section>
-      </form>
+
+            <div
+              className="divider"
+              style={{
+                height: "1px",
+                width: "100%",
+                borderBottom: "1px solid #ccc",
+                marginBottom: "auto",
+              }}
+            ></div>
+            <Button>
+              dodaj tim <IoAddCircleOutline />
+            </Button>
+          </section>
+        </form>
+      )}
     </main>
   );
 }
 
-function GroupList() {
+function GroupList({ tournamentId }: { tournamentId: string }) {
   return (
     <>
       {Array.from({ length: 10 }).map((_, i) => (
-        <article className="group" key={i}>
-          <div className="group__header">
-            <h2>
-              <span>{alphabet[i]}</span> Grupa
-            </h2>
+        <Link
+          href={`/tournaments/${tournamentId}/${alphabet[i].toLowerCase()}`}
+        >
+          <article className="group" key={i}>
+            <div className="group__header">
+              <h2>
+                <span>{alphabet[i]}</span> Grupa
+              </h2>
 
-            <Button type="danger">
-              <IoTrashOutline />
-            </Button>
-          </div>
+              <Button type="danger">
+                <IoTrashOutline />
+              </Button>
+            </div>
 
-          <div className="group__list">
-            <div className="team">
-              <span>1.</span>
-              <p className="team__player">M. Veljkovic</p>
-              <p className="team__player">S. Andjelkovic</p>
+            <div className="group__list">
+              <div className="team">
+                <span>1.</span>
+                <p className="team__player">M. Veljkovic</p>
+                <p className="team__player">S. Andjelkovic</p>
+              </div>
+              <div className="team">
+                <span>2.</span>
+                <p className="team__player">S. Petrovic</p>
+                <p className="team__player">K. Milenkovic</p>
+              </div>
+              <div className="team">
+                <span>3.</span>
+                <p className="team__player">M. Jovanovic</p>
+                <p className="team__player">S. Boncic</p>
+              </div>
+              <div className="team">
+                <span>4.</span>
+                <p className="team__player">M. Kostic</p>
+                <p className="team__player">S. Stankovic</p>
+              </div>
             </div>
-            <div className="team">
-              <span>2.</span>
-              <p className="team__player">S. Petrovic</p>
-              <p className="team__player">K. Milenkovic</p>
-            </div>
-            <div className="team">
-              <span>3.</span>
-              <p className="team__player">M. Jovanovic</p>
-              <p className="team__player">S. Boncic</p>
-            </div>
-            <div className="team">
-              <span>4.</span>
-              <p className="team__player">M. Kostic</p>
-              <p className="team__player">S. Stankovic</p>
-            </div>
-          </div>
-        </article>
+          </article>
+        </Link>
       ))}
     </>
   );
