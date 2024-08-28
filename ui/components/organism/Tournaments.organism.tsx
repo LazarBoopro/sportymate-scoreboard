@@ -151,7 +151,7 @@ function TournamentsList() {
 }
 
 function MatchList() {
-  const { tournaments } = useTournaments();
+  const { tournaments } = useMatches();
 
   return tournaments?.map((n, i) => <TournamentCard key={i} {...n} />);
 }

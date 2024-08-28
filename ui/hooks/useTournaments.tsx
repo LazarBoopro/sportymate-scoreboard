@@ -15,13 +15,12 @@ export default function useTournaments() {
     TournamentTypeExtended[] | null
   >(null);
 
-  const { mutate: addTournament, isSuccess } = useAddTournament();
+  const { mutate: addTournament } = useAddTournament();
 
   function addNewTournament({ title }: { title: string }) {
-    console.log("sasa");
     return addTournament({
       title,
-      id: Math.floor(Math.random() * 10000) + title.slice(0, 5),
+      tournamentId: Math.floor(Math.random() * 10000) + title.slice(0, 5),
     });
   }
 

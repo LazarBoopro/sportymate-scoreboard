@@ -2,9 +2,9 @@
 
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { getSingleMatch } from "../services/matches";
-import { TournamentType } from "@/interfaces/tournaments";
+import { MatchType } from "@/interfaces/tournaments";
 
-export const useGetSingleTournament = (id: string): UseQueryResult<TournamentType> => {
+export const useGetSingleTournament = (id: string): UseQueryResult<MatchType> => {
     return useQuery({
         queryKey: ["tournament", id],
         queryFn: () => getSingleMatch(id),

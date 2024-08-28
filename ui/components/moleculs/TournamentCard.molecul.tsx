@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 
 import Button from "@/ui/components/atoms/Button.atom";
 
-import { TournamentTypeService } from "@/interfaces/matches";
+import { MatchTypeService } from "@/interfaces/matches";
 
-import { useDeleteTournament } from "@/infrastructure/mutations/matches";
+import { useDeleteMatch } from "@/infrastructure/mutations/matches";
 
 import { checkStatusMessage } from "@/lib/helpers/messages";
 
@@ -15,7 +15,7 @@ import "@/ui/styles/moleculs/tourtnament.molecul.scss";
 import { MATCH_TYPES } from "@/lib/constants/match";
 import { scores } from "@/lib/helpers/score";
 
-type TournamentType = TournamentTypeService & {
+type TournamentType = MatchTypeService & {
     id: string;
 };
 
@@ -29,14 +29,14 @@ export default function TournamentCard({
     score,
     superTieBreak,
 }: TournamentType) {
-    const { mutate: deleteTournament } = useDeleteTournament();
+    const { mutate: deleteTournament } = useDeleteMatch();
 
     return (
         <div className="tournament">
             <div className="tournament__header">
                 <p className="title">
                     {title}{" "}
-                    <span className="type">{`${MATCH_TYPES[type].title} ${
+                    <span className="type">{`${MATCH_TYPES[type]?.title} ${
                         superTieBreak && `+ Super TieBreak`
                     }`}</span>
                 </p>
