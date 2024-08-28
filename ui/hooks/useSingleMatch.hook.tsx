@@ -278,6 +278,8 @@ export default function useSingleMatch({ id }: { id: string }) {
                 id: 0,
             },
         });
+
+        //TODO: UPDATE GROUP TEAM WIN AND LOSS COUNT
     }
 
     //useEffect

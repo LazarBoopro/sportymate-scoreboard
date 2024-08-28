@@ -9,19 +9,39 @@ export type TournamentType = {
         [key: string]: { firstName: string; lastName: string }[];
     };
 
-    groups: {
-        [key: string]: {
-            matches: MatchType[];
-            teams: {
-                [key: string]: {
-                    firstName: string;
-                    lastName: string;
-                    wins: number;
-                    teamId: string;
-                }[];
+    matches: {
+        faza: {
+            [key: string]: {
+                matches: MatchType[];
+                teams: {
+                    [key: string]: {
+                        firstName: string;
+                        lastName: string;
+                        wins: number;
+                        teamId: string;
+                    }[];
+                };
             };
         };
+        // osmina:{}
+        // cetvrtina: {}
+        // polufinale: {}
+        // finale:{}
     };
+
+    // groups: {
+    //     [key: string]: {
+    //         matches: MatchType[];
+    //         teams: {
+    //             [key: string]: {
+    //                 firstName: string;
+    //                 lastName: string;
+    //                 wins: number;
+    //                 teamId: string;
+    //             }[];
+    //         };
+    //     };
+    // };
 };
 
 export type PlayerType = {

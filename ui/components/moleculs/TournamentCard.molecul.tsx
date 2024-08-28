@@ -55,9 +55,12 @@ export default function TournamentCard({
 
             <div className="tournament__body">
                 <div className="team">
-                    {players?.host?.map?.((n, i) => (
+                    {/* {players?.host?.map?.((n, i) => (
                         <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
-                    ))}
+                    ))} */}
+
+                    <p>{` ${players.host.player1?.firstName?.[0]}. ${players.host.player1?.lastName}`}</p>
+                    <p>{` ${players.host.player2?.firstName?.[0]}. ${players.host.player2?.lastName}`}</p>
                 </div>
 
                 <div className="scores">
@@ -76,9 +79,12 @@ export default function TournamentCard({
                 </div>
 
                 <div className="team">
-                    {players.guest.map((n, i) => (
+                    {/* {players.guest.map((n, i) => (
                         <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
-                    ))}
+                    ))} */}
+
+                    <p>{` ${players.guest.player1?.firstName?.[0]}. ${players.guest.player1?.lastName}`}</p>
+                    <p>{` ${players.guest.player2?.firstName?.[0]}. ${players.guest.player2?.lastName}`}</p>
                 </div>
             </div>
 

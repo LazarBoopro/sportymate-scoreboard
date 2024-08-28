@@ -1,5 +1,5 @@
 import { database } from "@/lib/firebaseConfig";
-import { get, push, ref, remove, update } from "firebase/database";
+import { child, get, push, ref, remove, set, update } from "firebase/database";
 
 export const addTournament = (data: any) => {
     const tournametsRef = ref(database, "tournaments");
@@ -38,16 +38,28 @@ export const updateTournament = async ({
     update(ref(database, `tournaments/${id}${path}`), data);
 };
 
-export const addGroup = (data: any, tournamentId: string) => {
-    const group = ref(database, `tournaments/${tournamentId}/group`);
-
-    return push(group, data);
+export const addGroup = (data: any, tournamentId: string, groupId: string, phase: string) => {
+    const group = ref(database, `tournaments/${tournamentId}/matches/${phase}`);
+    const customGroupRef = child(group, groupId);
+    return set(customGroupRef, data);
+    // return push(group, data);
 };
 
-export const deleteGroup = (tournamentId: string, groupId: string) => {
-    const groupsRef = ref(database, `tournaments/${tournamentId}/group/${groupId}`);
+export const deleteGroup = (tournamentId: string, groupId: string, phase: string) => {
+    const groupsRef = ref(database, `tournaments/${tournamentId}/matches/${phase}/${groupId}`);
 
     return remove(groupsRef);
+};
+
+export const getGroups = async (tournamentId: string, phase: string) => {
+    const groupsRef = ref(database, `tournaments/${tournamentId}/matches/${phase}`);
+
+    const snapshot = await get(groupsRef);
+    if (snapshot.exists()) {
+        return snapshot.val();
+    } else {
+        throw new Error("Game not found");
+    }
 };
 
 export const getSingleGroup = async (tournamentId: string, groupId: string) => {

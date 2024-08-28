@@ -35,7 +35,7 @@ export function NavbarContextProvider({ children }: { children: React.ReactNode 
                 Object.keys(teams?.[team as keyof typeof teams]).forEach((teamId) => {
                     updateServing({
                         gameId: serving?.gameId,
-                        playerId: teamId,
+                        playerId: `${teamId}`,
                         team,
                         isServing: false,
                     });
@@ -44,7 +44,7 @@ export function NavbarContextProvider({ children }: { children: React.ReactNode 
 
             updateServing({
                 gameId: serving?.gameId,
-                playerId: serving.playerId,
+                playerId: `player${serving.playerId + 1}`,
                 team: serving.team,
                 isServing: true,
             });

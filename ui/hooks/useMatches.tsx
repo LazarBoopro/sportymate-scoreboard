@@ -73,16 +73,20 @@ export default function useMatches() {
         const [field, index, subField] = name.split(".");
 
         if (subField !== undefined && index !== undefined) {
-            return setData((prevData) => ({
-                ...prevData,
-                players: {
-                    ...prevData.players,
-                    [field]: prevData.players[field as keyof typeof prevData.players].map(
-                        (n: PlayerType, i: number) =>
-                            i === Number(index) ? { ...n, [subField]: value } : n
-                    ),
-                },
-            }));
+            console.log(name, value, field, index, subField);
+
+            // @ts-ignore
+            data.players[field][index][subField] = value;
+            // return setData((prevData) => ({
+            //     ...prevData,
+            //     players: {
+            //         ...prevData.players,
+            //         [field]: prevData.players[field as keyof typeof prevData.players].map(
+            //             (n: PlayerType, i: number) =>
+            //                 i === Number(index) ? { ...n, [subField]: value } : n
+            //         ),
+            //     },
+            // }));
         }
 
         if (index !== undefined) {

@@ -143,10 +143,7 @@ export const updateServingPlayer = async ({
     if (tournament) {
         prefix = `tournaments/${tournament.tournamentId}/group/${tournament.groupId}/`;
     }
-    const tournamentsRef = ref(
-        database,
-        `${prefix}matches/${gameId}/status/players/${team}/${playerId}`
-    );
+    const tournamentsRef = ref(database, `${prefix}matches/${gameId}/players/${team}/${playerId}`);
 
     update(tournamentsRef, {
         serving: isServing,
