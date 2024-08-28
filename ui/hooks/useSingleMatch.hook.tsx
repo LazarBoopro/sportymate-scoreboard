@@ -21,9 +21,9 @@ import { useToast } from "@/components/ui/use-toast";
 
 export default function useSingleMatch({ id }: { id: string }) {
   //  Context
-  const { tournament, setTournament } = useContext<{
-    tournament: MatchType;
-    setTournament: CallableFunction;
+  const { match, setMatch } = useContext<{
+    match: MatchType;
+    setMatch: CallableFunction;
   }>(Context);
 
   const { toast } = useToast();
@@ -55,14 +55,14 @@ export default function useSingleMatch({ id }: { id: string }) {
     useUpdateMatchStatus();
 
   // Constants
-  const currentGem = tournament?.score?.currentSet;
-  const setsLength = tournament?.score?.sets?.length;
-  const currentSet = tournament?.score?.sets[setsLength! - 1];
+  const currentGem = match?.score?.currentSet;
+  const setsLength = match?.score?.sets?.length;
+  const currentSet = match?.score?.sets[setsLength! - 1];
   const playerWonGem =
     currentGem?.[params!]! > 3 &&
     currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
-  const type = +tournament?.type;
-  const tieBreakScore = tournament?.score?.tiebreak;
+  const type = +match?.type;
+  const tieBreakScore = match?.score?.tiebreak;
 
   // Functions
   function handleUpdateCurrentSetScore({
@@ -86,7 +86,7 @@ export default function useSingleMatch({ id }: { id: string }) {
       updateMatchScore({
         id,
         team,
-        score: tournament?.score?.currentSet[team]! - 1,
+        score: match?.score?.currentSet[team]! - 1,
       });
 
       return;
@@ -96,7 +96,7 @@ export default function useSingleMatch({ id }: { id: string }) {
       updateMatchScore({
         id,
         team,
-        score: tournament?.score?.currentSet[team]! + 1,
+        score: match?.score?.currentSet[team]! + 1,
       });
 
       return;
@@ -105,7 +105,7 @@ export default function useSingleMatch({ id }: { id: string }) {
 
   // GEMS
   function handleGemPoint(team: number) {
-    const sets = tournament?.score?.sets;
+    const sets = match?.score?.sets;
     const updatedTeam = currentSet?.[team];
 
     if (
@@ -171,7 +171,7 @@ export default function useSingleMatch({ id }: { id: string }) {
   }
 
   function checkMatchType() {
-    const tieBreakDuration = tournament?.superTieBreak ? 10 : 7;
+    const tieBreakDuration = match?.superTieBreak ? 10 : 7;
 
     if (type === 0 || type === 1) {
       setMatchType({
@@ -191,7 +191,7 @@ export default function useSingleMatch({ id }: { id: string }) {
   }
 
   function checkForTieBreak() {
-    if (tournament?.winner) {
+    if (match?.winner) {
       setTieBreak(false);
       return;
     }
@@ -307,12 +307,12 @@ export default function useSingleMatch({ id }: { id: string }) {
     if (currentGem?.every((n) => n === 4)) {
       updateScore({ arrayLength: 2, score: 3 });
     }
-  }, [isSuccessCurrentMatchScore, tournament?.score?.currentSet]);
+  }, [isSuccessCurrentMatchScore, match?.score?.currentSet]);
 
   useEffect(() => {
     checkWinner();
     checkForTieBreak();
-  }, [isSuccessCurrentGemScore, tournament?.score?.sets]);
+  }, [isSuccessCurrentGemScore, match?.score?.sets]);
 
   useEffect(() => {
     const playerWonTieBreak =
@@ -325,18 +325,18 @@ export default function useSingleMatch({ id }: { id: string }) {
       checkWinner();
       addNewSet();
     }
-  }, [isSuccessCurrentTieBreakScore, tournament?.score?.tiebreak]);
+  }, [isSuccessCurrentTieBreakScore, match?.score?.tiebreak]);
 
   useEffect(() => {
-    if (tournament?.winner || tournament?.status?.status === "completed") {
+    if (match?.winner || match?.status?.status === "completed") {
       setTieBreak(false);
     }
-  }, [tournament?.winner, tournament?.status?.status]);
+  }, [match?.winner, match?.status?.status]);
 
   useEffect(() => {
     checkMatchType();
     checkForTieBreak();
-  }, [tournament?.type]);
+  }, [match?.type]);
 
   useEffect(() => {
     const { player1, player2 } = total;
@@ -349,7 +349,7 @@ export default function useSingleMatch({ id }: { id: string }) {
         }));
       }
     }
-  }, [tournament?.score?.sets]);
+  }, [match?.score?.sets]);
 
   useEffect(() => {
     checkForTieBreak();
@@ -359,7 +359,7 @@ export default function useSingleMatch({ id }: { id: string }) {
   useEffect(() => {
     let index = 0;
 
-    const sets = tournament?.score?.sets;
+    const sets = match?.score?.sets;
 
     if (!sets) return;
 
@@ -386,17 +386,17 @@ export default function useSingleMatch({ id }: { id: string }) {
       }));
       index++;
     }
-  }, [tournament?.type]);
+  }, [match?.type]);
 
   // Firebase
   useEffect(() => {
-    const tournamentsRef = ref(database, `tournaments/${id}`);
+    const matchsRef = ref(database, `matches/${id}`);
 
-    const unsubscribe = onValue(tournamentsRef, (snapshot) => {
+    const unsubscribe = onValue(matchsRef, (snapshot) => {
       const data: MatchType = snapshot.val();
 
       if (!data) {
-        setTournament(null);
+        setMatch(null);
         router.replace("/");
         toast({
           title: "Greška!",
@@ -406,12 +406,12 @@ export default function useSingleMatch({ id }: { id: string }) {
         notFound();
       }
 
-      setTournament(data);
+      setMatch(data);
     });
 
     return () => {
       unsubscribe();
-      setTournament(null);
+      setMatch(null);
       setTotal({
         player1: 0,
         player2: 0,
@@ -420,5 +420,5 @@ export default function useSingleMatch({ id }: { id: string }) {
     };
   }, [id]);
 
-  return { tournament, tieBreak, handleUpdateCurrentSetScore };
+  return { match, tieBreak, handleUpdateCurrentSetScore };
 }

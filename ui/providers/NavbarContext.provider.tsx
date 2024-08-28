@@ -20,7 +20,7 @@ export function NavbarContextProvider({
 }) {
   const [showNavbar, setShowNavbar] = useState(true);
   const [serving, setServing] = useState<ServingType | null>(null);
-  const [tournament, setTournament] = useState<MatchType | null>(null);
+  const [match, setMatch] = useState<MatchType | null>(null);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
 
   const [screen, setScreen] = useState<"tournaments" | "matches">(
@@ -34,7 +34,7 @@ export function NavbarContextProvider({
       return;
     }
 
-    const teams = tournament?.players || {};
+    const teams = match?.players || {};
 
     if (Object.keys(teams).length) {
       Object.keys(teams).forEach((team) => {
@@ -64,8 +64,8 @@ export function NavbarContextProvider({
         setShowNavbar,
         serving,
         setServing,
-        tournament,
-        setTournament,
+        match,
+        setMatch,
         isDrawerOpened,
         setIsDrawerOpened,
         screen,

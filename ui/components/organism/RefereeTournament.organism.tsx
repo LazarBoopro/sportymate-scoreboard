@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { Team } from "../moleculs/Team.molecul";
-import SelectField from "../moleculs/Select.molecul";
+import SelectField from "../moleculs/SelectStatus.molecul";
 import { Score } from "../atoms/Score.atom";
-import { TournamentType } from "@/interfaces/tournaments";
+import { MatchType } from "@/interfaces/tournaments";
 import { MATCH_TYPES } from "@/lib/constants/match";
 
 export default function RefereeTournament({
@@ -11,7 +11,7 @@ export default function RefereeTournament({
   isTie,
 }: {
   isTie: boolean;
-  tournament: TournamentType | null;
+  tournament: MatchType | null;
   handleUpdateCurrentSetScore: CallableFunction;
 }) {
   return (

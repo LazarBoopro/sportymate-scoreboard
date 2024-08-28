@@ -9,13 +9,13 @@ export const addTournament = (data: MatchTypeService) => {
 };
 
 export const deleteTournament = (id: string) => {
-  const tournamentsRef = ref(database, `tournaments/${id}`);
+  const tournamentsRef = ref(database, `matches/${id}`);
 
   return remove(tournamentsRef);
 };
 
 export const getSingleTournament = async (id: string) => {
-  const tournamentsRef = ref(database, `tournaments/${id}`);
+  const tournamentsRef = ref(database, `matches/${id}`);
 
   const snapshot = await get(tournamentsRef);
   if (snapshot.exists()) {
@@ -36,13 +36,13 @@ export const updateTournament = async ({
   path: string;
   team?: any;
 }) => {
-  update(ref(database, `tournaments/${id}${path}`), {
+  update(ref(database, `matches/${id}${path}`), {
     [team]: Math.floor(Math.random() * 100),
   });
 };
 
 export const updateCurrentSetScore = async ({ team, id, path, score }: any) => {
-  update(ref(database, `tournaments/${id}/score/currentSet`), {
+  update(ref(database, `matches/${id}/score/currentSet`), {
     [team]: score,
   });
 };
@@ -60,7 +60,7 @@ export const updateGemScore = async ({
   score: number;
   prevScore: any;
 }) => {
-  update(ref(database, `tournaments/${id}/score/sets`), {
+  update(ref(database, `matches/${id}/score/sets`), {
     [gem]: {
       ...prevScore,
       [team]: score,
@@ -79,7 +79,7 @@ export const updateTieScore = async ({
   team: number;
   score: number;
 }) => {
-  update(ref(database, `tournaments/${id}/score`), {
+  update(ref(database, `matches/${id}/score`), {
     tiebreak: {
       ...prevScore,
       [team]: score,
@@ -94,7 +94,7 @@ export const updateMatchStatus = async ({
   id: string;
   status: { id: number; status: string };
 }) => {
-  update(ref(database, `tournaments/${id}/status`), {
+  update(ref(database, `matches/${id}/status`), {
     id: status.id,
     status: status.status,
   });
@@ -106,7 +106,7 @@ export const updateServingPlayer = async ({
   playerId,
   isServing,
 }: any) => {
-  update(ref(database, `tournaments/${gameId}/players/${team}/${playerId}`), {
+  update(ref(database, `matches/${gameId}/players/${team}/${playerId}`), {
     serving: isServing,
   });
 };
@@ -118,7 +118,7 @@ export const updateMatchWinner = async ({
   gameId: string;
   winner: string;
 }) => {
-  return update(ref(database, `tournaments/${gameId}`), {
+  return update(ref(database, `matches/${gameId}`), {
     winner,
   });
 };

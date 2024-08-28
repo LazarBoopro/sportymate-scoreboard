@@ -12,7 +12,7 @@ import { auth } from "@/lib/firebaseConfig";
 
 import { useGetSingleTournament } from "@/infrastructure/queries/tournaments";
 
-import useSingleTournament from "@/ui/hooks/useSingleMatch.hook";
+import useSingleMatch from "@/ui/hooks/useSingleMatch.hook";
 
 import "@/ui/styles/pages/match.page.scss";
 
@@ -24,10 +24,9 @@ export default function Match({ params }: { params: { id: string } }) {
   const isWatchMode = searchParams.get("watch");
 
   const { data, isSuccess, isLoading } = useGetSingleTournament(params.id);
-  const { tieBreak, tournament, handleUpdateCurrentSetScore } =
-    useSingleTournament({
-      id: params.id,
-    });
+  const { tieBreak, match, handleUpdateCurrentSetScore } = useSingleMatch({
+    id: params.id,
+  });
 
   useEffect(() => {
     if (isSuccess && !user) {
@@ -46,9 +45,9 @@ export default function Match({ params }: { params: { id: string } }) {
   if (isWatchMode || !user?.uid) {
     return (
       <WatchTournament
-        winner={tournament?.winner}
+        winner={match?.winner}
         isTie={tieBreak}
-        tournament={tournament}
+        tournament={match}
       />
     );
   }
@@ -57,7 +56,7 @@ export default function Match({ params }: { params: { id: string } }) {
     <>
       <RefereeTournament
         isTie={tieBreak}
-        tournament={tournament}
+        tournament={match}
         handleUpdateCurrentSetScore={handleUpdateCurrentSetScore}
       />
     </>
