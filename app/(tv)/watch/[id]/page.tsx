@@ -19,9 +19,6 @@ export default function WatchTournament({
   return (
     <>
       <div className="heading">
-        {/* <button>
-          <IoChevronBack />
-        </button> */}
         <button className="swap" onClick={() => setT((prev) => !prev)}>
           <IoSwapHorizontalOutline />
         </button>

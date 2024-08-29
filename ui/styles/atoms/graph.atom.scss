@@ -5,6 +5,7 @@
   --stroke-width: 1px;
   --stroke-size: calc(var(--col-width) / 2);
   --strok-position: calc(var(--col-width) - calc(var(--col-width) + 60%));
+  --border-radius: 0.25rem;
 
   display: flex;
   gap: 6rem;
@@ -32,7 +33,7 @@
               left: var(--strok-position);
               border-left: var(--stroke-width) solid $lime-green-clr-500;
               border-top: var(--stroke-width) solid $lime-green-clr-500;
-              border-radius: 0.5rem 0 0 0;
+              border-radius: var(--border-radius) 0 0 0;
               border-right: none;
             }
           }
@@ -43,7 +44,7 @@
               border-right: none;
               border-left: var(--stroke-width) solid $lime-green-clr-500;
               border-bottom: var(--stroke-width) solid $lime-green-clr-500;
-              border-radius: 0 0 0 0.5rem;
+              border-radius: 0 0 0 var(--border-radius);
             }
           }
         }
@@ -51,14 +52,14 @@
         &:first-child {
           &::before {
             border-right: none;
-            border-radius: 0.5rem 0 0 0;
+            border-radius: var(--border-radius) 0 0 0;
             border-left: var(--stroke-width) solid $lime-green-clr-500;
             left: calc(var(--strok-position) + 100%);
           }
 
           &::after {
             border-right: none;
-            border-radius: 0 0 0 0.5rem;
+            border-radius: 0 0 0 var(--border-radius);
             border-left: var(--stroke-width) solid $lime-green-clr-500;
             left: calc(var(--strok-position) + 100%);
           }
@@ -66,14 +67,14 @@
         &:last-child {
           &::before {
             border-right: none;
-            border-radius: 0.5rem 0 0 0;
+            border-radius: var(--border-radius) 0 0 0;
             border-left: var(--stroke-width) solid $lime-green-clr-500;
             left: calc(var(--strok-position) + 100%);
           }
 
           &::after {
             border-right: none;
-            border-radius: 0 0 0 0.5rem;
+            border-radius: 0 0 0 var(--border-radius);
             border-left: var(--stroke-width) solid $lime-green-clr-500;
             left: calc(var(--strok-position) + 100%);
           }
@@ -85,7 +86,7 @@
   .match {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--border-radius);
 
     // EVEN AND ODDS
 
@@ -95,7 +96,7 @@
       position: relative;
       width: fit-content;
       width: var(--col-width);
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem var(--border-radius);
       background-color: $white-clr;
       color: $purple-clr-500;
       font-weight: 800;
@@ -111,7 +112,7 @@
           width: var(--stroke-size);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0.5rem 0 0;
+          border-radius: 0 var(--border-radius) 0 0;
         }
       }
 
@@ -125,7 +126,7 @@
           height: 80%;
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0 0.5rem 0;
+          border-radius: 0 0 var(--border-radius) 0;
         }
       }
     }
@@ -149,7 +150,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0.5rem 0 0;
+          border-radius: 0 var(--border-radius) 0 0;
         }
 
         &::after {
@@ -161,7 +162,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0 0.5rem 0;
+          border-radius: 0 0 var(--border-radius) 0;
         }
       }
 
@@ -175,7 +176,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0.5rem 0 0;
+          border-radius: 0 var(--border-radius) 0 0;
         }
 
         &::after {
@@ -187,7 +188,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0 0.5rem 0;
+          border-radius: 0 0 var(--border-radius) 0;
         }
       }
     }
@@ -207,7 +208,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0.5rem 0 0;
+          border-radius: 0 var(--border-radius) 0 0;
         }
 
         &::after {
@@ -219,7 +220,7 @@
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
-          border-radius: 0 0 0.5rem 0;
+          border-radius: 0 0 var(--border-radius) 0;
         }
       }
     }
@@ -230,7 +231,7 @@
       position: relative;
       width: fit-content;
       width: var(--col-width);
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem var(--border-radius);
       background-color: $white-clr;
       color: $purple-clr-500;
       font-weight: 800;
