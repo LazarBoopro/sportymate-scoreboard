@@ -1,5 +1,35 @@
 @import "variables.scss";
 
+.tournaments__header {
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    h1 {
+      font-weight: 800;
+      font-size: clamp(0.75rem, 5vw, 1.5rem);
+      max-width: clamp(10ch, 15vw, 20ch);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .back {
+      padding: 0.25rem;
+      width: 2rem;
+      height: 2rem;
+      background: $gray-clr-100;
+      color: $black-clr;
+      border-radius: 100rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+  }
+}
+
 .group {
   padding: 0.5rem;
   background: $gray-clr-100;
@@ -88,6 +118,47 @@
     .icon {
       font-weight: 800;
       font-size: clamp(1.5rem, 10vw, 3rem);
+    }
+  }
+}
+
+.single-team {
+  background: rgb($gray-clr-100, 1);
+  outline: 1px solid $gray-clr-400;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  // align-items: center;
+  flex-direction: column;
+
+  .details {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    input[type="text"] {
+      border-radius: 0.15rem;
+      outline: 1px solid $gray-clr-400;
+      background: $white-clr;
+      padding: 0.25rem 0.5rem;
+    }
+
+    p {
+      // padding-block: 0.25rem;
+      // font-size: clamp(1rem, 10vw, 1.15rem);
+    }
+  }
+
+  .ctas {
+    gap: 0.5rem;
+    display: flex;
+    // flex-direction: column;
+
+    .button {
+      width: 100%;
+      padding: 0.25rem 0.5rem;
     }
   }
 }

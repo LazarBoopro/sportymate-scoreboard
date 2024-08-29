@@ -8,6 +8,9 @@
 
   h1 {
     font-weight: 800;
+    max-width: 20ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: clamp(1.25rem, 10vw, 1.5rem);
   }
 
