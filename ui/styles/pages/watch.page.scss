@@ -1,0 +1,55 @@
+@import "variables.scss";
+
+h1 {
+  font-size: clamp(1.5rem, 10vw, 2rem);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.watch-tv {
+  overflow: hidden;
+  isolation: isolate;
+  color: $white-clr;
+  background-color: $purple-clr-900;
+  height: 100dvh;
+  padding: 1rem;
+  position: relative;
+
+  background-color: $purple-clr-100;
+  opacity: 1;
+  background-image: radial-gradient(
+    $purple-clr-600 1.1px,
+    $purple-clr-800 0.9px
+  );
+  background-size: 18px 18px;
+
+  & > img {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .tournaments {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 1rem;
+
+    .tournament {
+      border-radius: 0.5rem;
+      padding: 1rem;
+      background-color: $purple-clr-700;
+      outline: 1px solid $purple-clr-500;
+      position: relative;
+      transition: all 0.2s ease;
+      height: fit-content;
+
+      &:hover,
+      &:focus {
+        outline: 1px solid $purple-clr-400;
+      }
+    }
+  }
+}
