@@ -73,18 +73,23 @@ export const getSingleGroup = async (tournamentId: string, groupId: string) => {
     }
 };
 
-export const updateGroup = async ({
+export const updateGroupPoints = async ({
     tournamentId,
     groupId,
-    path,
+    phase,
     data,
+    teamIndex,
 }: {
     tournamentId: string;
     groupId: string;
-    path: string;
+    phase: string;
     data?: any;
+    teamIndex: number;
 }) => {
-    update(ref(database, `tournaments/${tournamentId}/group/${groupId}${path}`), data);
+    update(
+        ref(database, `tournaments/${tournamentId}/matches/${phase}/${groupId}/teams/${teamIndex}`),
+        data
+    );
 };
 
 export const addTeam = (tournamentId: string, data: any) => {
@@ -97,4 +102,27 @@ export const deleteTeam = (tournamentId: string, teamId: string) => {
     const teamsRef = ref(database, `tournaments/${tournamentId}/teams/${teamId}`);
 
     return remove(teamsRef);
+};
+
+export const updateTeam = async ({
+    tournamentId,
+    teamId,
+    data,
+}: {
+    tournamentId: string;
+    teamId: string;
+    data?: any;
+}) => {
+    update(ref(database, `tournaments/${tournamentId}/teams/${teamId}`), data);
+};
+
+export const getTeams = async (tournamentId: string) => {
+    const groupsRef = ref(database, `tournaments/${tournamentId}/teams`);
+
+    const snapshot = await get(groupsRef);
+    if (snapshot.exists()) {
+        return snapshot.val();
+    } else {
+        throw new Error("Game not found");
+    }
 };

@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { addGroup, deleteGroup } from "../services/tournaments";
+import { addGroup, deleteGroup, updateGroupPoints } from "../services/tournaments";
+import { GroupPhaseEnum } from "@/interfaces/tournaments";
 
 export const useAddGroup = () => {
     return useMutation({
@@ -13,7 +14,7 @@ export const useAddGroup = () => {
             data: any;
             tournamentId: string;
             groupId: string;
-            phase: "groups" | "round-of-16" | "quarter-finals" | "semi-final" | "final";
+            phase: GroupPhaseEnum;
         }) => addGroup(data, tournamentId, groupId, phase),
     });
 };
@@ -27,13 +28,30 @@ export const useDeleteGroup = (onSuccess: any) => {
         }: {
             tournamentId: string;
             groupId: string;
-            phase: "groups" | "round-of-16" | "quarter-finals" | "semi-final" | "final";
+            phase: GroupPhaseEnum;
         }) => {
             return deleteGroup(tournamentId, groupId, phase);
         },
         onSuccess: (data, variables, context) => {
-            console.log({ data, variables, context });
             onSuccess();
         },
+    });
+};
+
+export const useUpdateGroup = () => {
+    return useMutation({
+        mutationFn: ({
+            tournamentId,
+            groupId,
+            phase,
+            data,
+            teamIndex,
+        }: {
+            tournamentId: string;
+            groupId: string;
+            phase: string;
+            data?: any;
+            teamIndex: number;
+        }) => updateGroupPoints({ tournamentId, groupId, phase, data, teamIndex }),
     });
 };

@@ -1,5 +1,14 @@
 import { MatchType } from "./matches";
 
+export enum GroupPhaseEnum {
+    GROUPS = "groups",
+    ROUND16 = "round-of-16",
+    QUARTER = "quater-finals",
+    SEMIFINAL = "semi-final",
+    FINAL = "final",
+    //"groups" | "round-of-16" | "quarter-finals" | "semi-final" | "final"
+}
+
 export type TournamentType = {
     id?: string;
     userId?: string;

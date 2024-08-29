@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { notFound, useRouter } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 
 import Context from "@/ui/providers/NavbarContext.provider";
 
@@ -19,7 +19,17 @@ import { onValue, ref } from "firebase/database";
 import { MatchType } from "@/interfaces/matches";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function useSingleMatch({ id }: { id: string }) {
+export default function useSingleMatch({
+    id,
+    tournament,
+}: {
+    id: string;
+    tournament?: {
+        tournamentId: string;
+        groupId: string;
+        phase: string;
+    };
+}) {
     //  Context
     const { match, setMatch } = useContext<{
         match: MatchType;
@@ -28,6 +38,7 @@ export default function useSingleMatch({ id }: { id: string }) {
 
     const { toast } = useToast();
     const router = useRouter();
+    const queryParams = useSearchParams();
 
     // States
     const [params, setParams] = useState<null | number>(null);
@@ -43,15 +54,6 @@ export default function useSingleMatch({ id }: { id: string }) {
         total: 0,
     });
 
-    // Queries and Mutations
-    const { mutate: updateMatchScore, isSuccess: isSuccessCurrentMatchScore } =
-        useUpdateCurrentSet();
-    const { mutate: updateGemScore, isSuccess: isSuccessCurrentGemScore } = useUpdateGemScore();
-    const { mutate: updateTieScore, isSuccess: isSuccessCurrentTieBreakScore } =
-        useUpdateTieScore();
-    const { mutate: updateMatchWinner } = useUpdateMatchWinner();
-    const { mutate: updateStatus, isSuccess: isSuccessStatus } = useUpdateMatchStatus();
-
     // Constants
     const currentGem = match?.score?.currentSet;
     const setsLength = match?.score?.sets?.length;
@@ -60,6 +62,19 @@ export default function useSingleMatch({ id }: { id: string }) {
         currentGem?.[params!]! > 3 && currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
     const type = +match?.type;
     const tieBreakScore = match?.score?.tiebreak;
+
+    const prefix = tournament
+        ? `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`
+        : "";
+
+    // Queries and Mutations
+    const { mutate: updateMatchScore, isSuccess: isSuccessCurrentMatchScore } =
+        useUpdateCurrentSet();
+    const { mutate: updateGemScore, isSuccess: isSuccessCurrentGemScore } = useUpdateGemScore();
+    const { mutate: updateTieScore, isSuccess: isSuccessCurrentTieBreakScore } =
+        useUpdateTieScore();
+    const { mutate: updateMatchWinner } = useUpdateMatchWinner();
+    const { mutate: updateStatus, isSuccess: isSuccessStatus } = useUpdateMatchStatus();
 
     // Functions
     function handleUpdateCurrentSetScore({
@@ -84,6 +99,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 id,
                 team,
                 score: match?.score?.currentSet[team]! - 1,
+                tournament,
             });
 
             return;
@@ -94,6 +110,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 id,
                 team,
                 score: match?.score?.currentSet[team]! + 1,
+                tournament,
             });
 
             return;
@@ -121,6 +138,7 @@ export default function useSingleMatch({ id }: { id: string }) {
             gem: sets?.length! - 1,
             score: updatedTeam === undefined ? 0 : updatedTeam + 1,
             prevScore: sets?.[sets?.length! - 1],
+            tournament,
         });
     }
 
@@ -137,6 +155,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 team,
                 prevScore: tieBreakScore,
                 score: tieBreakScore?.[team]! + 1,
+                tournament,
             });
         }
 
@@ -146,6 +165,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 team,
                 prevScore: tieBreakScore,
                 score: tieBreakScore?.[team]! - 1,
+                tournament,
             });
         }
     }
@@ -157,6 +177,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 id,
                 team: i,
                 score,
+                tournament,
             });
         });
     }
@@ -216,6 +237,7 @@ export default function useSingleMatch({ id }: { id: string }) {
             team,
             prevScore: [0, 0],
             score: 0,
+            tournament,
         });
     }
 
@@ -239,6 +261,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 gem: setsLength,
                 score: 0,
                 prevScore: [0, 0],
+                tournament,
             })
         );
     }
@@ -270,6 +293,7 @@ export default function useSingleMatch({ id }: { id: string }) {
         updateMatchWinner({
             gameId: id,
             winner,
+            tournament,
         });
         updateStatus({
             id,
@@ -277,6 +301,7 @@ export default function useSingleMatch({ id }: { id: string }) {
                 status: "completed",
                 id: 0,
             },
+            tournament,
         });
 
         //TODO: UPDATE GROUP TEAM WIN AND LOSS COUNT
@@ -379,7 +404,12 @@ export default function useSingleMatch({ id }: { id: string }) {
 
     // Firebase
     useEffect(() => {
-        const matchsRef = ref(database, `matches/${id}`);
+        let prefix = "";
+        if (tournament) {
+            prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+        }
+
+        const matchsRef = ref(database, `${prefix}matches/${id}`);
 
         const unsubscribe = onValue(matchsRef, (snapshot) => {
             const data: MatchType = snapshot.val();

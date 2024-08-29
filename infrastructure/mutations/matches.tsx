@@ -28,29 +28,36 @@ export const useDeleteMatch = () => {
 
 export const useUpdateCurrentSet = () => {
     return useMutation({
-        mutationFn: ({ team, score, path, id }: any) =>
-            updateCurrentSetScore({ team, id, score, path }),
+        mutationFn: ({ team, score, path, id, tournament }: any) =>
+            updateCurrentSetScore({ team, id, score, path, tournament }),
     });
 };
 
 export const useUpdateGemScore = () => {
     return useMutation({
-        mutationFn: ({ id, gem, team, score, prevScore }: any) =>
-            updateGemScore({ id, gem, team, score, prevScore }),
+        mutationFn: ({ id, gem, team, score, prevScore, tournament }: any) =>
+            updateGemScore({ id, gem, team, score, prevScore, tournament }),
     });
 };
 
 export const useUpdateTieScore = () => {
     return useMutation({
-        mutationFn: ({ id, team, score, prevScore }: any) =>
-            updateTieScore({ id, team, score, prevScore }),
+        mutationFn: ({ id, team, score, prevScore, tournament }: any) =>
+            updateTieScore({ id, team, score, prevScore, tournament }),
     });
 };
 
 export const useUpdateMatchStatus = () => {
     return useMutation({
-        mutationFn: ({ id, status }: { id: string; status: { status: string; id: number } }) =>
-            updateMatchStatus({ id, status }),
+        mutationFn: ({
+            id,
+            status,
+            tournament,
+        }: {
+            id: string;
+            status: { status: string; id: number };
+            tournament: any;
+        }) => updateMatchStatus({ id, status, tournament }),
     });
 };
 
@@ -61,18 +68,27 @@ export const useUpdateServingPlayer = () => {
             team,
             playerId,
             isServing,
+            tournament,
         }: {
             gameId: string;
             team: string;
             playerId: string;
             isServing: boolean;
-        }) => updateServingPlayer({ gameId, team, playerId, isServing }),
+            tournament: any;
+        }) => updateServingPlayer({ gameId, team, playerId, isServing, tournament }),
     });
 };
 
 export const useUpdateMatchWinner = () => {
     return useMutation({
-        mutationFn: ({ gameId, winner }: { gameId: string; winner: string }) =>
-            updateMatchWinner({ gameId, winner }),
+        mutationFn: ({
+            gameId,
+            winner,
+            tournament,
+        }: {
+            gameId: string;
+            winner: string;
+            tournament: any;
+        }) => updateMatchWinner({ gameId, winner, tournament }),
     });
 };

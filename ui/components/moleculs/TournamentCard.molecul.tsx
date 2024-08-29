@@ -17,6 +17,7 @@ import { scores } from "@/lib/helpers/score";
 
 type TournamentType = MatchTypeService & {
     id: string;
+    tournament: any;
 };
 
 export default function TournamentCard({
@@ -28,6 +29,7 @@ export default function TournamentCard({
     type,
     score,
     superTieBreak,
+    tournament,
 }: TournamentType) {
     const { mutate: deleteTournament } = useDeleteMatch();
 
@@ -92,7 +94,7 @@ export default function TournamentCard({
                 <Link
                     href={{
                         pathname: `/match/${id}`,
-                        query: { watch: "true" },
+                        query: { watch: "true", ...tournament },
                     }}
                 >
                     <Button>
@@ -104,6 +106,7 @@ export default function TournamentCard({
                 <Link
                     href={{
                         pathname: `/match/${id}`,
+                        query: { ...tournament },
                     }}
                 >
                     <Button type="action">

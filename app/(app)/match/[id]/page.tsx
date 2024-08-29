@@ -23,24 +23,27 @@ export default function Match({ params }: { params: { id: string } }) {
 
     const isWatchMode = searchParams.get("watch");
 
-    const { data, isSuccess, isLoading } = useGetSingleMatch(params.id);
+    // const { data, isSuccess, isLoading } = useGetSingleMatch(params.id, );
     const { tieBreak, match, handleUpdateCurrentSetScore } = useSingleMatch({
         id: params.id,
+        tournament: searchParams.get("tournamentId")
+            ? {
+                  tournamentId: searchParams.get("tournamentId") ?? "",
+                  groupId: searchParams.get("groupId") ?? "",
+                  phase: searchParams.get("phase") ?? "",
+              }
+            : undefined,
     });
 
     useEffect(() => {
-        if (isSuccess && !user) {
+        if (!user) {
             router.replace("/login");
         }
+    }, [user]);
 
-        if (isSuccess && data.userId !== user?.uid) {
-            router.replace("/");
-        }
-    }, [isSuccess, user]);
-
-    if (isLoading) {
-        return <WatchStatus status="Učitavam" />;
-    }
+    // if (isLoading) {
+    //     return <WatchStatus status="Učitavam" />;
+    // }
 
     if (isWatchMode || !user?.uid) {
         return <WatchTournament winner={match?.winner} isTie={tieBreak} tournament={match} />;
