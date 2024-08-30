@@ -1,51 +1,33 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-
-import { useAuthState } from "react-firebase-hooks/auth";
 
 import Drawer from "@/ui/components/moleculs/Drawer.molecul";
 import Navbar from "@/ui/components/moleculs/Navbar.molecul";
 
+import "@/ui/styles/pages/home.page.scss";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebaseConfig";
 
-import logo from "@/public/img/logo.svg";
-
-import "@/ui/styles/pages/home.page.scss";
-
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const [user, loading] = useAuthState(auth);
-    const router = useRouter();
+  const [user] = useAuthState(auth);
 
-    const [isLoading, setIsLoading] = useState(loading);
+  const [showNav, setShowNav] = useState(false);
 
-    useEffect(() => {
-        if (!user && !loading) {
-            router.replace("/login");
-            return;
-        }
-
-        setIsLoading(false);
-    }, [user, loading]);
-
-    if (isLoading) {
-        return (
-            <main className="loading-screen">
-                <Image src={logo} alt="SportyMate" />
-                <div className="loader"></div>
-            </main>
-        );
+  useEffect(() => {
+    if (!user) {
+      setShowNav(false);
+    } else {
+      setShowNav(true);
     }
+  }, [user]);
 
-    return (
-        <>
-            <Drawer title="Tipovi turnira" />
-            <Suspense fallback={null}>
-                <Navbar />
-            </Suspense>
-            {children}
-        </>
-    );
+  return (
+    <>
+      {showNav && <Navbar />}
+      <Drawer title="Tipovi turnira" />
+      <Suspense fallback={null}></Suspense>
+      {children}
+    </>
+  );
 }

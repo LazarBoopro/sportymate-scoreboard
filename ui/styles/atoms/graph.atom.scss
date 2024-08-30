@@ -7,16 +7,11 @@
   --strok-position: calc(var(--col-width) - calc(var(--col-width) + 60%));
   --border-radius: 0.25rem;
 
-  // height: 100%;
   display: flex;
   gap: 6rem;
   align-items: center;
   justify-content: space-between;
   max-width: 100vw;
-  // height: 100vh;
-  // width: 90%;
-  // align-self: center;
-  /* MAKE THIS WITH GRID */
 
   .vs {
     font-size: 2rem;
