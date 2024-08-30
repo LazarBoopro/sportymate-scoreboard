@@ -46,6 +46,14 @@ h1 {
 
   & > .tournament {
     outline: none;
+    width: 100%;
+    position: relative;
+
+    & > .graph {
+      position: absolute;
+      width: 100%;
+      height: 70%;
+    }
   }
 
   .tournaments.graph {
