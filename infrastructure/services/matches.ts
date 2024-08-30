@@ -3,174 +3,188 @@ import { database } from "@/lib/firebaseConfig";
 import { get, push, ref, remove, update } from "firebase/database";
 
 export const addMatch = (
-    data: any
-    // tournament?: { tournamentId: string; groupId: string; phase: string }
+  data: any
+  // tournament?: { tournamentId: string; groupId: string; phase: string }
 ) => {
-    let prefix = "";
-    const tournament = data.tournament;
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches`);
+  let prefix = "";
+  const tournament = data.tournament;
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches`);
 
-    delete data.tournament;
-    return push(tournamentsRef, data);
+  delete data.tournament;
+  return push(tournamentsRef, data);
 };
 
 export const deleteMatch = (
-    id: string,
-    tournament?: { tournamentId: string; groupId: string; phase: string }
+  id: string,
+  tournament?: { tournamentId: string; groupId: string; phase: string }
 ) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${id}`);
 
-    return remove(tournamentsRef);
+  return remove(tournamentsRef);
 };
 
 export const getSingleMatch = async (
-    id: string,
-    tournament?: { tournamentId: string; groupId: string; phase: string }
+  id: string,
+  tournament?: { tournamentId: string; groupId: string; phase: string }
 ) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${id}`);
 
-    const snapshot = await get(tournamentsRef);
-    if (snapshot.exists()) {
-        return snapshot.val();
-    } else {
-        throw new Error("Game not found");
-    }
+  const snapshot = await get(tournamentsRef);
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    throw new Error("Game not found");
+  }
 };
 
-export const updateCurrentSetScore = async ({ team, id, path, score, tournament }: any) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}/score/currentSet`);
+export const updateCurrentSetScore = async ({
+  team,
+  id,
+  path,
+  score,
+  tournament,
+}: any) => {
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(
+    database,
+    `${prefix}matches/${id}/score/currentSet`
+  );
 
-    update(tournamentsRef, {
-        [team]: score,
-    });
+  update(tournamentsRef, {
+    [team]: score,
+  });
 };
 
 export const updateGemScore = async ({
-    id,
-    gem,
-    team,
-    score,
-    prevScore,
-    tournament,
+  id,
+  gem,
+  team,
+  score,
+  prevScore,
+  tournament,
 }: {
-    id: string;
-    gem: number;
-    team: string;
-    score: number;
-    prevScore: any;
-    tournament?: { tournamentId: string; groupId: string; phase: string };
+  id: string;
+  gem: number;
+  team: string;
+  score: number;
+  prevScore: any;
+  tournament?: { tournamentId: string; groupId: string; phase: string };
 }) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}/score/sets`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${id}/score/sets`);
 
-    update(tournamentsRef, {
-        [gem]: {
-            ...prevScore,
-            [team]: score,
-        },
-    });
+  update(tournamentsRef, {
+    [gem]: {
+      ...prevScore,
+      [team]: score,
+    },
+  });
 };
 
 export const updateTieScore = async ({
-    id,
-    prevScore,
-    team,
-    score,
-    tournament,
+  id,
+  prevScore,
+  team,
+  score,
+  tournament,
 }: {
-    id: string;
-    prevScore: number[];
-    team: number;
-    score: number;
-    tournament?: { tournamentId: string; groupId: string; phase: string };
+  id: string;
+  prevScore: number[];
+  team: number;
+  score: number;
+  tournament?: { tournamentId: string; groupId: string; phase: string };
 }) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}/score`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${id}/score`);
 
-    update(tournamentsRef, {
-        tiebreak: {
-            ...prevScore,
-            [team]: score,
-        },
-    });
+  update(tournamentsRef, {
+    tiebreak: {
+      ...prevScore,
+      [team]: score,
+    },
+  });
 };
 
 export const updateMatchStatus = async ({
-    id,
-    status,
-    tournament,
+  id,
+  status,
+  tournament,
 }: {
-    id: string;
-    status: { id: number; status: string };
-    tournament?: { tournamentId: string; groupId: string; phase: string };
+  id: string;
+  status: { id: number; status: string };
+  tournament?: { tournamentId: string; groupId: string; phase: string };
 }) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${id}/status`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
 
-    update(tournamentsRef, {
-        id: status.id,
-        status: status.status,
-    });
+  console.log(`${prefix}matches/${id}/status`);
+  const tournamentsRef = ref(database, `${prefix}matches/${id}/status`);
+
+  update(tournamentsRef, {
+    id: status.id,
+    status: status.status,
+  });
 };
 
 export const updateServingPlayer = async ({
-    gameId,
-    team,
-    playerId,
-    isServing,
-    tournament,
+  gameId,
+  team,
+  playerId,
+  isServing,
+  tournament,
 }: any) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${gameId}/players/${team}/${playerId}`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(
+    database,
+    `${prefix}matches/${gameId}/players/${team}/${playerId}`
+  );
 
-    update(tournamentsRef, {
-        serving: isServing,
-    });
+  update(tournamentsRef, {
+    serving: isServing,
+  });
 };
 
 export const updateMatchWinner = async ({
-    gameId,
-    winner,
-    tournament,
+  gameId,
+  winner,
+  tournament,
 }: {
-    gameId: string;
-    winner: string;
-    tournament?: { tournamentId: string; groupId: string; phase: string };
+  gameId: string;
+  winner: string;
+  tournament?: { tournamentId: string; groupId: string; phase: string };
 }) => {
-    let prefix = "";
-    if (tournament) {
-        prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
-    }
-    const tournamentsRef = ref(database, `${prefix}matches/${gameId}`);
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${gameId}`);
 
-    return update(tournamentsRef, {
-        winner,
-    });
+  return update(tournamentsRef, {
+    winner,
+  });
 };

@@ -25,9 +25,25 @@
     background: transparent !important;
     outline: none !important;
 
+    .team {
+      p {
+        max-width: 9ch;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-wrap: nowrap;
+      }
+    }
+
     &.right {
       .match {
         .team {
+          p {
+            max-width: 3ch;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-wrap: nowrap;
+          }
+
           &:first-child {
             &::after {
               left: var(--strok-position);
@@ -88,6 +104,12 @@
     flex-direction: column;
     gap: var(--border-radius);
 
+    & > a {
+      display: inherit;
+      gap: inherit;
+      flex-direction: inherit;
+    }
+
     // EVEN AND ODDS
 
     // -------
@@ -101,13 +123,6 @@
       color: $purple-clr-500;
       font-weight: 800;
       border-radius: 0.25rem;
-
-      & > p {
-        max-width: 9ch;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-wrap: nowrap;
-      }
 
       &:first-child {
         &::after {
@@ -141,7 +156,7 @@
 
   .quarter-finals {
     justify-content: space-between;
-    height: 70%;
+    height: 75%;
     position: relative;
 
     .match {
