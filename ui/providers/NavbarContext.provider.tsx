@@ -4,6 +4,7 @@ import { useUpdateServingPlayer } from "@/infrastructure/mutations/matches";
 import { createContext, useEffect, useState } from "react";
 
 import { MatchType } from "@/interfaces/matches";
+import { useSearchParams } from "next/navigation";
 
 const Context = createContext<any>({});
 
@@ -27,6 +28,8 @@ export function NavbarContextProvider({
     "tournaments"
   );
 
+  const searchParams = useSearchParams();
+
   const { mutate: updateServing } = useUpdateServingPlayer();
 
   useEffect(() => {
@@ -45,6 +48,13 @@ export function NavbarContextProvider({
             playerId: `${teamId}`,
             team,
             isServing: false,
+            tournament: searchParams.get("tournamentId")
+              ? {
+                  tournamentId: searchParams.get("tournamentId") ?? "",
+                  groupId: searchParams.get("groupId") ?? "",
+                  phase: searchParams.get("phase") ?? "",
+                }
+              : undefined,
           });
         });
       });
@@ -55,6 +65,13 @@ export function NavbarContextProvider({
         playerId: `player${serving.playerId + 1}`,
         team: serving.team,
         isServing: true,
+        tournament: searchParams.get("tournamentId")
+          ? {
+              tournamentId: searchParams.get("tournamentId") ?? "",
+              groupId: searchParams.get("groupId") ?? "",
+              phase: searchParams.get("phase") ?? "",
+            }
+          : undefined,
       });
     }
   }, [serving]);

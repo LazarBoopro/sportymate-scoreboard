@@ -139,7 +139,6 @@ export const updateMatchStatus = async ({
     prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
   }
 
-  console.log(`${prefix}matches/${id}/status`);
   const tournamentsRef = ref(database, `${prefix}matches/${id}/status`);
 
   update(tournamentsRef, {

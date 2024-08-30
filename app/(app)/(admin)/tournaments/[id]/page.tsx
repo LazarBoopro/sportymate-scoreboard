@@ -92,7 +92,6 @@ export default function SingleTournament({
   const handleSubmit = (e: any) => {
     e.preventDefault();
     // TODO: Save changes to the tournament
-    console.log("Settings updated:", settings);
   };
 
   const handleDeleteTeam = (teamId: string) => {

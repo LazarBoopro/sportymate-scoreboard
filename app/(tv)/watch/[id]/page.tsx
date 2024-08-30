@@ -175,38 +175,6 @@ function Graph({
         </div>
       );
     });
-
-    return matches.map((group: any, i) => {
-      if (!group.matches)
-        return Array.from({ length: arrLen }).map((_, i) => (
-          <div key={i} className="match">
-            <div className="team">
-              <p>/</p>
-              <p>/</p>
-            </div>
-
-            <div className="team">
-              <p>/</p>
-              <p>/</p>
-            </div>
-          </div>
-        ));
-      return Object.keys(group.matches).map((m) => {
-        return (
-          <div key={m} className="match">
-            <div className="team">
-              <p>{getName(group.matches?.[m], "host", "player1")}</p>
-              <p>{getName(group.matches[m], "host", "player2")}</p>
-            </div>
-
-            <div className="team">
-              <p>{getName(group.matches[m], "guest", "player1")}</p>
-              <p>{getName(group.matches[m], "guest", "player2")}</p>
-            </div>
-          </div>
-        );
-      });
-    });
   }
 
   const finals =
@@ -214,8 +182,6 @@ function Graph({
     Object.keys(tournament.matches.final).map((finalGroupKeys) => {
       return Object.keys(tournament.matches.final[finalGroupKeys]?.matches).map(
         (finalMatchKey: any) => {
-          // console.log(finalMatch, "FINAL", tournament.matches.final[finalGroupKeys]);
-
           const finalMatch =
             tournament.matches.final[finalGroupKeys]?.matches[finalMatchKey];
           return {
