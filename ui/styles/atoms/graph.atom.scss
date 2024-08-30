@@ -178,8 +178,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -35%;
-          height: 25%;
+          top: -20%;
+          height: 20%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -190,8 +190,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -35%;
-          height: 25%;
+          bottom: -20%;
+          height: 20%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -204,8 +204,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -35%;
-          height: 25%;
+          top: -20%;
+          height: 20%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -216,8 +216,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -35%;
-          height: 25%;
+          bottom: -20%;
+          height: 20%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
