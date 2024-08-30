@@ -3,7 +3,7 @@
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
 
 import "@/ui/styles/pages/watchSingle.page.scss";
-// import "@/ui/styles/atoms/graph.atom.scss";
+import "@/ui/styles/atoms/graph.atom.scss";
 import { Suspense, useState } from "react";
 import { IoSwapHorizontalOutline } from "react-icons/io5";
 import Link from "next/link";
