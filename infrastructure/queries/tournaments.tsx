@@ -7,7 +7,7 @@ import { getGroups } from "../services/tournaments";
 
 export const useGetSingleMatch = (
     id: string,
-    tournament?: { tournamentId: string; groupId: string }
+    tournament?: { tournamentId: string; groupId: string; phase: string }
 ): UseQueryResult<MatchType> => {
     return useQuery({
         queryKey: ["match", id],

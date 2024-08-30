@@ -1,37 +1,78 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { useAddGroup, useDeleteGroup } from "@/infrastructure/mutations/group";
+import { useAddGroup, useDeleteGroup, useUpdateGroup } from "@/infrastructure/mutations/group";
+import { useAddTeam, useDeleteTeam, useUpdateTeam } from "@/infrastructure/mutations/teams";
+import { GroupPhaseEnum } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
 import { onValue, ref } from "firebase/database";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(i + 65));
 
-export default function useSingleTournament({ id }: { id: string }) {
+export default function useSingleTournament({ id, groupId }: { id: string; groupId?: string }) {
     // states
     const [tournament, setTournament] = useState<any>(null);
-    const [group, setGroup] = useState<any>({ teams: [] });
-
+    const [group, setGroup] = useState<any>({
+        teams: [],
+        double: true,
+        superTieBreak: true,
+        type: 0,
+    });
+    const [team, setTeam] = useState({
+        player1: { firstName: "", lastName: "" },
+        player2: { firstName: "", lastName: "" },
+    });
     const { toast } = useToast();
     const router = useRouter();
+    const queryParams = useSearchParams();
+    const phase = (queryParams.get("phase") as GroupPhaseEnum) ?? "groups";
 
     // services
-    const { mutate: addGroup, isSuccess: isAddSuccess } = useAddGroup();
+    const { mutate: addGroup, isSuccess: isAddGroupSuccess } = useAddGroup();
     const { mutate: deleteGroup } = useDeleteGroup(onDeleteSuccess);
+    const { mutate: updateGroup } = useUpdateGroup();
+
+    const { mutate: addTeam, isSuccess: isAddTeamSuccess } = useAddTeam();
+    const { mutate: deleteTeam } = useDeleteTeam();
+    const { mutate: updateTeam } = useUpdateTeam();
 
     // functions
+
+    function handleOnChangeTeam(e: any) {
+        const [player, name] = e.target.name.split(".");
+        const tmpTeam = { ...team };
+
+        //@ts-ignore
+        tmpTeam[player][name] = e.target.value;
+
+        setTeam(tmpTeam);
+    }
+
+    function handleAddTeam() {
+        addTeam({ tournamentId: id, data: team });
+    }
+
+    function handleUpdateTeam(
+        teamId: string,
+        data: {
+            player1: { firstName: string; lastName: string };
+            player2: { firstName: string; lastName: string };
+        }
+    ) {
+        updateTeam({ tournamentId: id, teamId, data });
+    }
 
     function onDeleteSuccess() {}
 
     function handleAddGroup(ev: any) {
         ev.preventDefault();
 
-        console.log(tournament?.matches?.groups);
+        // const phase = (queryParams.get("phase") as GroupPhaseEnum) ?? "groups";
 
-        const groupLen = tournament?.matches?.groups
-            ? Object.keys(tournament?.matches?.groups)?.length
+        const groupLen = tournament?.matches?.[phase]
+            ? Object.keys(tournament?.matches?.[phase])?.length
             : 0;
 
         // const matches = [];
@@ -72,21 +113,30 @@ export default function useSingleTournament({ id }: { id: string }) {
 
         addGroup({
             data: {
-                teams: group.teams,
                 matches: [],
                 name: alphabet[groupLen],
+                ...group,
             },
             tournamentId: id,
             groupId: alphabet[groupLen],
-            phase: "groups",
+            phase,
         });
     }
 
     useEffect(() => {
-        if (isAddSuccess) {
-            setGroup({ teams: [] });
+        if (isAddGroupSuccess) {
+            setGroup({ teams: [], double: true, superTieBreak: true, type: 0 });
         }
-    }, [isAddSuccess]);
+        if (isAddTeamSuccess) {
+            setTeam({
+                player1: { firstName: "", lastName: "" },
+                player2: {
+                    firstName: "",
+                    lastName: "",
+                },
+            });
+        }
+    }, [isAddGroupSuccess, isAddTeamSuccess]);
     // Firebase
     useEffect(() => {
         const matchsRef = ref(database, `tournaments/${id}`);
@@ -117,7 +167,17 @@ export default function useSingleTournament({ id }: { id: string }) {
         handleAddGroup,
         group,
         setGroup,
-        groups: tournament?.matches?.groups ?? [],
+        groups: tournament?.matches?.[phase] ?? [],
         deleteGroup,
+        handleAddTeam,
+        handleOnChangeTeam,
+        team,
+        teams: tournament?.teams ?? [],
+        deleteTeam,
+        handleUpdateTeam,
+        singleGroup: groupId ? tournament?.matches?.[phase]?.[groupId.toUpperCase()] : null,
+        updateGroup,
+        phase,
+        matches: groupId ? tournament?.matches?.[phase]?.[groupId.toUpperCase()]?.matches : [],
     };
 }
