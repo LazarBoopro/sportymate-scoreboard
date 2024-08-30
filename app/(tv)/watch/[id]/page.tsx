@@ -4,7 +4,7 @@ import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
 
 import "@/ui/styles/pages/watchSingle.page.scss";
 import "@/ui/styles/atoms/graph.atom.scss";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { IoSwapHorizontalOutline } from "react-icons/io5";
 import Link from "next/link";
 import { watch } from "fs";
@@ -28,11 +28,15 @@ export default function WatchTournament({
       </div>
       <article className="tv-tournament">
         {t ? (
-          Object.values(groups)?.map((n: any, i: number) => (
-            <Group key={i} {...n} />
-          ))
+          <Suspense fallback={null}>
+            {Object.values(groups)?.map((n: any, i: number) => (
+              <Group key={i} {...n} />
+            ))}
+          </Suspense>
         ) : (
-          <Graph tournament={tournament} tournamentId={params.id} />
+          <Suspense fallback={null}>
+            <Graph tournament={tournament} tournamentId={params.id} />
+          </Suspense>
         )}
       </article>
     </>
