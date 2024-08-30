@@ -67,13 +67,35 @@ export default function Tournamets() {
     return (
       <div ref={ref} className="tournaments" id="tournaments">
         <div className="tournaments__header">
-          <h2 className="title">
+          <div className="screen-switch">
+            <button
+              data-type="tournaments"
+              ref={tournamentButtonRef}
+              onClick={handleMouseClick}
+            >
+              Turniri
+            </button>
+            <button
+              ref={matchesButtonRef}
+              data-type="matches"
+              onClick={handleMouseClick}
+            >
+              Mecevi
+            </button>
+            <div
+              className="cursor"
+              style={{
+                ...position,
+              }}
+            ></div>
+          </div>
+          {/* <h2 className="title">
             Nema mečeva
             <Image alt="" src={tennisBallImage} />
           </h2>
           <Button onClick={handleClick} className="cta-slide" type="fade">
             Dodaj meč <IoChevronForwardOutline />
-          </Button>
+          </Button> */}
         </div>
       </div>
     );
