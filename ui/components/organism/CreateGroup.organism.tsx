@@ -86,18 +86,18 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
 
     return (
         <div>
-            <div>
+            <div className="group-btn-header">
                 <button
                     onClick={() => setType("group")}
-                    className={"group-btn" + type === "group" ? " active" : ""}
+                    className={`group-btn  ${type === "group" ? " active" : ""}`}
                 >
                     Grupa
                 </button>
                 <button
                     onClick={() => setType("match")}
-                    className={"group-btn" + type === "match" ? " active" : ""}
+                    className={`group-btn  ${type === "match" ? " active" : ""}`}
                 >
-                    Mec
+                    Meč
                 </button>
             </div>
             {type === "group" ? (

@@ -30,6 +30,34 @@
   }
 }
 
+.group-btn-header {
+  width: 100%;
+  border-bottom: 1px solid $gray-clr-100;
+  display: flex;
+
+  .group-btn {
+    flex: 1;
+    width: 100%;
+    padding: 1rem;
+    background: $blue-clr-200;
+    color: $blue-clr-500;
+    transition: all 0.2s ease-in-out;
+    outline: 1px solid $blue-clr-500;
+    outline-offset: -1px;
+
+    &.active {
+      // outline: none;
+      background: $blue-clr-500;
+      color: $white-clr;
+    }
+
+    // &:first-child {
+    //   border-right: 1px solid rgb($blue-clr-500, 1);
+    // }
+    // background: red;
+  }
+}
+
 .group {
   padding: 0.5rem;
   background: $gray-clr-100;
