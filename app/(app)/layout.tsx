@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -16,31 +16,36 @@ import logo from "@/public/img/logo.svg";
 import "@/ui/styles/pages/home.page.scss";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const [user, loading] = useAuthState(auth);
-  const router = useRouter();
+    const [user, loading] = useAuthState(auth);
+    const router = useRouter();
 
-  useEffect(() => {
-    if (!user && !loading) {
-      router.replace("/login");
+    const [isLoading, setIsLoading] = useState(loading);
+
+    useEffect(() => {
+        if (!user && !loading) {
+            router.replace("/login");
+            return;
+        }
+
+        setIsLoading(false);
+    }, [user, loading]);
+
+    if (isLoading) {
+        return (
+            <main className="loading-screen">
+                <Image src={logo} alt="SportyMate" />
+                <div className="loader"></div>
+            </main>
+        );
     }
-  }, [user, loading]);
 
-  if (loading) {
     return (
-      <main className="loading-screen">
-        <Image src={logo} alt="SportyMate" />
-        <div className="loader"></div>
-      </main>
+        <>
+            <Drawer title="Tipovi turnira" />
+            <Suspense fallback={null}>
+                <Navbar />
+            </Suspense>
+            {children}
+        </>
     );
-  }
-
-  return (
-    <>
-      <Drawer title="Tipovi turnira" />
-      <Suspense fallback={null}>
-        <Navbar />
-      </Suspense>
-      {children}
-    </>
-  );
 }

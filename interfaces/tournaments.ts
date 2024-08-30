@@ -1,57 +1,60 @@
+import { MatchType } from "./matches";
+
+export enum GroupPhaseEnum {
+    GROUPS = "groups",
+    ROUND16 = "round-of-16",
+    QUARTER = "quater-finals",
+    SEMIFINAL = "semi-final",
+    FINAL = "final",
+    //"groups" | "round-of-16" | "quarter-finals" | "semi-final" | "final"
+}
+
 export type TournamentType = {
-  id?: string;
-  userId?: string;
-  title: string;
-  date?: string;
-  status?: {
-    id: number;
-    status: string;
-  };
-  type: number;
-  superTieBreak: boolean;
-  startTime: {
-    hour: string;
-    minute: string;
-  };
-  players: {
-    host: PlayerType[];
-    guest: PlayerType[];
-  };
-  score?: {
-    tiebreak: number[];
-    currentSet: number[];
-    sets: number[][];
-  };
-  winner: null;
+    id?: string;
+    userId?: string;
+    title: string;
+
+    teams: {
+        [key: string]: { firstName: string; lastName: string }[];
+    };
+
+    matches: {
+        faza: {
+            [key: string]: {
+                matches: MatchType[];
+                teams: {
+                    [key: string]: {
+                        firstName: string;
+                        lastName: string;
+                        wins: number;
+                        teamId: string;
+                    }[];
+                };
+            };
+        };
+        // osmina:{}
+        // cetvrtina: {}
+        // polufinale: {}
+        // finale:{}
+    };
+
+    // groups: {
+    //     [key: string]: {
+    //         matches: MatchType[];
+    //         teams: {
+    //             [key: string]: {
+    //                 firstName: string;
+    //                 lastName: string;
+    //                 wins: number;
+    //                 teamId: string;
+    //             }[];
+    //         };
+    //     };
+    // };
 };
 
 export type PlayerType = {
-  firstName: string;
-  lastName: string;
-  serving?: boolean;
-};
-
-export type TournamentTypeService = {
-  matchId?: number;
-  userId?: string | undefined;
-  title: string;
-  startTime: string;
-  status: {
-    id: number;
-    status: string;
-  };
-  type: number;
-  superTieBreak: boolean;
-  players: {
-    host: PlayerType[];
-    guest: PlayerType[];
-  };
-  score: {
-    currentSet: number[];
-    sets: {
-      [key: string]: number;
-    }[];
-    tiebreak: number[];
-  };
-  winner: null;
+    firstName: string;
+    lastName: string;
+    serving?: boolean;
 };

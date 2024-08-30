@@ -4,13 +4,21 @@ import { Switch } from "@/components/ui/switch";
 
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import "@/ui/styles/atoms/inputField.atom.scss";
+import { Select } from "@/components/ui/select";
 
 type InputType = {
   title?: string;
   placeholder?: string;
   value?: string | boolean;
   name?: string;
-  type?: "text" | "password" | "date" | "number" | "switch" | "email";
+  type?:
+    | "text"
+    | "password"
+    | "date"
+    | "number"
+    | "switch"
+    | "email"
+    | "select";
   required?: boolean;
   className?: string;
   onChange?: React.Dispatch<React.SetStateAction<any>>;
@@ -56,6 +64,9 @@ export default function InputField({
             required={required ? true : false}
           />
         );
+
+      case "select":
+        return <Select />;
 
       default:
         return (

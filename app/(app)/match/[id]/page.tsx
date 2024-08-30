@@ -10,9 +10,9 @@ import WatchStatus from "@/ui/components/atoms/WatchStatus.atom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebaseConfig";
 
-import { useGetSingleTournament } from "@/infrastructure/queries/tournaments";
+import { useGetSingleMatch } from "@/infrastructure/queries/tournaments";
 
-import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
+import useSingleMatch from "@/ui/hooks/useSingleMatch.hook";
 
 import "@/ui/styles/pages/match.page.scss";
 
@@ -23,36 +23,37 @@ export default function Match({ params }: { params: { id: string } }) {
 
     const isWatchMode = searchParams.get("watch");
 
-    const { data, isSuccess, isLoading } = useGetSingleTournament(params.id);
-    const { tieBreak, tournament, handleUpdateCurrentSetScore } = useSingleTournament({
+    // const { data, isSuccess, isLoading } = useGetSingleMatch(params.id, );
+    const { tieBreak, match, handleUpdateCurrentSetScore } = useSingleMatch({
         id: params.id,
+        tournament: searchParams.get("tournamentId")
+            ? {
+                  tournamentId: searchParams.get("tournamentId") ?? "",
+                  groupId: searchParams.get("groupId") ?? "",
+                  phase: searchParams.get("phase") ?? "",
+              }
+            : undefined,
     });
 
     useEffect(() => {
-        if (isSuccess && !user) {
+        if (!user) {
             router.replace("/login");
         }
+    }, [user]);
 
-        if (isSuccess && data.userId !== user?.uid) {
-            router.replace("/");
-        }
-    }, [isSuccess, user]);
-
-    if (isLoading) {
-        return <WatchStatus status="Učitavam" />;
-    }
+    // if (isLoading) {
+    //     return <WatchStatus status="Učitavam" />;
+    // }
 
     if (isWatchMode || !user?.uid) {
-        return (
-            <WatchTournament winner={tournament?.winner} isTie={tieBreak} tournament={tournament} />
-        );
+        return <WatchTournament winner={match?.winner} isTie={tieBreak} tournament={match} />;
     }
 
     return (
         <>
             <RefereeTournament
                 isTie={tieBreak}
-                tournament={tournament}
+                tournament={match}
                 handleUpdateCurrentSetScore={handleUpdateCurrentSetScore}
             />
         </>

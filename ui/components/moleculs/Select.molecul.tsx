@@ -1,54 +1,37 @@
+"use client";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
-import { useUpdateMatchStatus } from "@/infrastructure/mutations/tournaments";
-import { selectOptions } from "@/lib/constants/match";
-import { checkStatusMessage } from "@/lib/helpers/messages";
-import { useParams } from "next/navigation";
 
-export default function SelectField({
-  defaultSelected,
+export default function SelectInput({
+    handleChange,
+    defaultSelected,
+    selectOptions,
 }: {
-  defaultSelected: string;
+    defaultSelected: string;
+    handleChange: CallableFunction;
+    selectOptions: any;
 }) {
-  const { mutate: updateStatus } = useUpdateMatchStatus();
-  const params = useParams();
-
-  const handleChange = (value: string) => {
-    const [selectedStatus] = selectOptions.filter(
-      (n) => n.id === Number(value)
+    return (
+        <Select onValueChange={(e) => handleChange(e)}>
+            <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={defaultSelected}>
+                    <div className={`indicator ${defaultSelected}`}></div>
+                    {defaultSelected}
+                </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+                {selectOptions.map((n: any, i: number) => (
+                    <SelectItem key={i} value={String(n.id)}>
+                        {n.name}
+                    </SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
     );
-
-    updateStatus({
-      id: String(params.id),
-      status: {
-        id: selectedStatus.id,
-        status: selectedStatus.status,
-      },
-    });
-  };
-
-  return (
-    <Select onValueChange={(e) => handleChange(e)}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue
-          placeholder={checkStatusMessage(defaultSelected) || "Match status"}
-        >
-          <div className={`indicator ${defaultSelected}`}></div>
-          {checkStatusMessage(defaultSelected)}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {selectOptions.map((n, i) => (
-          <SelectItem key={i} value={String(n.id)}>
-            {checkStatusMessage(n.status)}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
 }

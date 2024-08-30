@@ -2,34 +2,34 @@ import { motion } from "framer-motion";
 
 import "@/ui/styles/atoms/watchStatus.atom.scss";
 import BubbleAnimations from "./BubbleAnimation.atom";
-import { PlayerType } from "@/interfaces/tournaments";
+import { PlayerType } from "@/interfaces/matches";
 
 const duration = 0.2;
 const stagger = 0.025;
 
 export default function WatchStatus({
-  status,
-  winner,
+    status,
+    winner,
 }: {
-  winner?: null | PlayerType[];
-  status: string | undefined;
+    winner?: null | { player1: PlayerType; player2: PlayerType };
+    status: string | undefined;
 }) {
-  return (
-    <>
-      <section className="watch-message">
-        <motion.div
-          className="wrapper"
-          initial="initial"
-          animate="animated"
-          transition={{
-            delayChildren: 2,
-            repeat: Infinity,
-            repeatType: "mirror",
-            duration: 2,
-            repeatDelay: 1,
-          }}
-        >
-          {/* {winner ? (
+    return (
+        <>
+            <section className="watch-message">
+                <motion.div
+                    className="wrapper"
+                    initial="initial"
+                    animate="animated"
+                    transition={{
+                        delayChildren: 2,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                        duration: 2,
+                        repeatDelay: 1,
+                    }}
+                >
+                    {/* {winner ? (
             <>
               <p
                 style={{
@@ -43,52 +43,52 @@ export default function WatchStatus({
               <h1>{`${winner[0].firstName}, ${winner[1].firstName}`}</h1>
             </>
           ) : ( */}
-          <>
-            <div>
-              {status?.split("").map((n, i) => {
-                return (
-                  <motion.span
-                    key={i}
-                    transition={{
-                      duration,
-                      ease: "easeInOut",
-                      delay: stagger * i,
-                    }}
-                    variants={{
-                      initial: { y: 0 },
-                      animated: { y: "-100%" },
-                    }}
-                  >
-                    {n}
-                  </motion.span>
-                );
-              })}
-            </div>
-            <div>
-              {status?.split("").map((n, i) => {
-                return (
-                  <motion.span
-                    key={i}
-                    transition={{
-                      duration,
-                      ease: "easeInOut",
-                      delay: stagger * i,
-                    }}
-                    variants={{
-                      initial: { y: "100%" },
-                      animated: { y: 0 },
-                    }}
-                  >
-                    {n}
-                  </motion.span>
-                );
-              })}
-            </div>
-          </>
-          {/* )} */}
-        </motion.div>
-        <BubbleAnimations />
-      </section>
-    </>
-  );
+                    <>
+                        <div>
+                            {status?.split("").map((n, i) => {
+                                return (
+                                    <motion.span
+                                        key={i}
+                                        transition={{
+                                            duration,
+                                            ease: "easeInOut",
+                                            delay: stagger * i,
+                                        }}
+                                        variants={{
+                                            initial: { y: 0 },
+                                            animated: { y: "-100%" },
+                                        }}
+                                    >
+                                        {n}
+                                    </motion.span>
+                                );
+                            })}
+                        </div>
+                        <div>
+                            {status?.split("").map((n, i) => {
+                                return (
+                                    <motion.span
+                                        key={i}
+                                        transition={{
+                                            duration,
+                                            ease: "easeInOut",
+                                            delay: stagger * i,
+                                        }}
+                                        variants={{
+                                            initial: { y: "100%" },
+                                            animated: { y: 0 },
+                                        }}
+                                    >
+                                        {n}
+                                    </motion.span>
+                                );
+                            })}
+                        </div>
+                    </>
+                    {/* )} */}
+                </motion.div>
+                <BubbleAnimations />
+            </section>
+        </>
+    );
 }
