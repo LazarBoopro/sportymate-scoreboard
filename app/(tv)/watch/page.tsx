@@ -12,7 +12,7 @@ export default function Watch() {
   return (
     <>
       <h1>Turniri</h1>
-      <article className="tournaments">
+      <article className="tournaments graph">
         {tournaments?.map((tournament, i) => (
           <Link
             href={`/watch/${tournament?.id}`}
