@@ -6,6 +6,8 @@ import "@/ui/styles/pages/watchSingle.page.scss";
 import "@/ui/styles/atoms/graph.atom.scss";
 import { useState } from "react";
 import { IoSwapHorizontalOutline } from "react-icons/io5";
+import Link from "next/link";
+import { watch } from "fs";
 
 export default function WatchTournament({
   params,
@@ -30,7 +32,7 @@ export default function WatchTournament({
             <Group key={i} {...n} />
           ))
         ) : (
-          <Graph tournament={tournament} />
+          <Graph tournament={tournament} tournamentId={params.id} />
         )}
       </article>
     </>
@@ -69,7 +71,13 @@ function Group({ name, teams }: { name: string; teams: any[] }) {
   );
 }
 
-function Graph({ tournament }: { tournament: any }) {
+function Graph({
+  tournament,
+  tournamentId,
+}: {
+  tournament: any;
+  tournamentId: string;
+}) {
   // @ts-ignore
   function getName(match, type, player) {
     if (!match) return null;
@@ -105,16 +113,19 @@ function Graph({ tournament }: { tournament: any }) {
     const mecevi = matches
       .map((group: any, i) => {
         if (!group.matches) return Array.from({ length: arrLen });
-        return Object.keys(group.matches).map((m) => group.matches?.[m]);
+        return Object.keys(group.matches).map((m) => ({
+          ...group.matches?.[m],
+          matchId: m,
+          groupId: group.name,
+        }));
       })
       .flat();
 
     if (mecevi.length < arrLen) {
       const len = mecevi.length;
-      console.log(arrLen - len, arrLen, len, mecevi);
+
       for (let el = 0; el < arrLen - len; el++) {
         mecevi.push({
-          matchId: 85,
           players: {
             guest: {
               player1: { firstName: "/", lastName: "/" },
@@ -139,15 +150,27 @@ function Graph({ tournament }: { tournament: any }) {
     return mecevi.map((m: any, i: number) => {
       return (
         <div key={i} className="match">
-          <div className="team">
-            <p>{getName(m, "host", "player1")}</p>
-            <p>{getName(m, "host", "player2")}</p>
-          </div>
+          <Link
+            href={{
+              pathname: `/match/${m.matchId}`,
+              query: {
+                tournamentId: tournamentId,
+                phase,
+                groupId: m.groupId,
+                watch: true,
+              },
+            }}
+          >
+            <div className="team">
+              <p>{getName(m, "host", "player1")}</p>
+              <p>{getName(m, "host", "player2")}</p>
+            </div>
 
-          <div className="team">
-            <p>{getName(m, "guest", "player1")}</p>
-            <p>{getName(m, "guest", "player2")}</p>
-          </div>
+            <div className="team">
+              <p>{getName(m, "guest", "player1")}</p>
+              <p>{getName(m, "guest", "player2")}</p>
+            </div>
+          </Link>
         </div>
       );
     });

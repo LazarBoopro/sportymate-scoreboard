@@ -8,7 +8,7 @@ import {
 import { useUpdateMatchStatus } from "@/infrastructure/mutations/matches";
 import { selectOptions } from "@/lib/constants/match";
 import { checkStatusMessage } from "@/lib/helpers/messages";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function SelectFieldStatus({
   defaultSelected,
@@ -17,6 +17,7 @@ export default function SelectFieldStatus({
 }) {
   const { mutate: updateStatus } = useUpdateMatchStatus();
   const params = useParams();
+  const searchParams = useSearchParams();
 
   const handleChange = (value: string) => {
     const [selectedStatus] = selectOptions.filter(
@@ -30,6 +31,13 @@ export default function SelectFieldStatus({
         id: selectedStatus.id,
         status: selectedStatus.status,
       },
+      tournament: searchParams.get("tournamentId")
+        ? {
+            tournamentId: searchParams.get("tournamentId") ?? "",
+            groupId: searchParams.get("groupId") ?? "",
+            phase: searchParams.get("phase") ?? "",
+          }
+        : undefined,
     });
   };
 
