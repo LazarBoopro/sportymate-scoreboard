@@ -108,8 +108,9 @@
   .match {
     display: flex;
     flex-direction: column;
-    gap: var(--border-radius);
+    gap: 0.25rem;
 
+    // gap: var(--border-radius);
     & > a {
       display: inherit;
       gap: inherit;
