@@ -96,7 +96,7 @@ function Graph({
 
     if (matches.length === 0) {
       return Array.from({ length: arrLen }).map((_, i) => (
-        <div key={i} className="match">
+        <div key={i} className="tv-match">
           <div className="team">
             <p>/</p>
             <p>/</p>
@@ -144,7 +144,7 @@ function Graph({
 
     return mecevi.map((m: any, i: number) => {
       return (
-        <div key={i} className="match">
+        <div key={i} className="tv-match">
           <Link
             href={{
               pathname: m.matchId ? `/match/${m.matchId}` : "#",
