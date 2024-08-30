@@ -17,6 +17,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { GroupPhaseEnum } from "@/interfaces/tournaments";
 import { isNull } from "util";
 import { useAddMatch } from "@/infrastructure/mutations/matches";
+import { getRSCModuleInformation } from "next/dist/build/analysis/get-page-static-info";
 
 const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
     const { handleAddGroup, group, setGroup, teams, phase, groups, tournament } =
@@ -53,6 +54,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                 status: "idle",
             },
             superTieBreak: match.superTieBreak,
+            goldenPoint: match.goldenPoint,
             type: match.type,
             players: {
                 host: match.host,
@@ -70,7 +72,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
             },
             winner: null,
         };
-        //tournament?: { tournamentId: string; groupId: string; phase: string }
+
         const tournamentInfo = {
             tournamentId,
             groupId: match.group,
@@ -78,11 +80,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
         };
         addMatch({ ...payload, tournament: tournamentInfo });
     }
-
-    // useEffect(() => {
-    //     isNull(match.players.guest)
-    //     console.log(match);
-    // }, [match]);
 
     return (
         <div>
@@ -126,9 +123,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                             <SelectInput
                                 selectOptions={Object.keys?.(teams)?.map?.((el) => ({
                                     id: el,
-                                    // name: teams[el]
-                                    //     .map((t: any) => t.firstName + " " + t.lastName)
-                                    //     .join(", "),
 
                                     name:
                                         teams[el].player1.firstName +
@@ -142,8 +136,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 handleChange={(val: string) => {
                                     const tmpTeams = [...group.teams];
                                     tmpTeams[0] = {
-                                        // first: `${teams[val]?.[0]?.firstName} ${teams[val]?.[0]?.lastName}`,
-                                        // second: `${teams[val]?.[1]?.firstName} ${teams[val]?.[1]?.lastName}`,
                                         player1: teams[val]?.player1,
                                         player2: teams[val]?.player2,
                                         wins: 0,
@@ -165,18 +157,10 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                         </div>
                         <div className="input-field">
                             <label className="input-field__title">Tim 2</label>
-                            {/* <SelectInput
-        selectOptions={[{ id: 0, name: "test" }]}
-        handleChange={() => console.log("...")}
-        defaultSelected={tournament?.status?.status ?? ""}
-    /> */}
 
                             <SelectInput
                                 selectOptions={Object.keys(teams).map((el) => ({
                                     id: el,
-                                    // name: teams[el]
-                                    //     .map((t: any) => t.firstName + " " + t.lastName)
-                                    //     .join(", "),
 
                                     name:
                                         teams[el].player1.firstName +
@@ -190,8 +174,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 handleChange={(val: string) => {
                                     const tmpTeams = [...group.teams];
                                     tmpTeams[1] = {
-                                        // first: `${teams[val]?.[0]?.firstName} ${teams[val]?.[0]?.lastName}`,
-                                        // second: `${teams[val]?.[1]?.firstName} ${teams[val]?.[1]?.lastName}`,
                                         player1: teams[val]?.player1,
                                         player2: teams[val]?.player2,
                                         wins: 0,
@@ -213,18 +195,11 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                         </div>
                         <div className="input-field">
                             <label className="input-field__title">Tim 3</label>
-                            {/* <SelectInput
-        selectOptions={[{ id: 0, name: "test" }]}
-        handleChange={() => console.log("...")}
-        defaultSelected={tournament?.status?.status ?? ""}
-    /> */}
 
                             <SelectInput
                                 selectOptions={Object.keys(teams).map((el) => ({
                                     id: el,
-                                    // name: teams[el]
-                                    //     .map((t: any) => t.firstName + " " + t.lastName)
-                                    //     .join(", "),
+
                                     name:
                                         teams[el].player1.firstName +
                                         " " +
@@ -237,8 +212,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 handleChange={(val: string) => {
                                     const tmpTeams = [...group.teams];
                                     tmpTeams[2] = {
-                                        // first: `${teams[val]?.[0]?.firstName} ${teams[val]?.[0]?.lastName}`,
-                                        // second: `${teams[val]?.[1]?.firstName} ${teams[val]?.[1]?.lastName}`,
                                         player1: teams[val]?.player1,
                                         player2: teams[val]?.player2,
                                         wins: 0,
@@ -260,18 +233,10 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                         </div>
                         <div className="input-field" style={{ marginBottom: "auto" }}>
                             <label className="input-field__title">Tim 4</label>
-                            {/* <SelectInput
-        selectOptions={[{ id: 0, name: "test" }]}
-        handleChange={() => console.log("...")}
-        defaultSelected={tournament?.status?.status ?? ""}
-    /> */}
 
                             <SelectInput
                                 selectOptions={Object.keys(teams).map((el) => ({
                                     id: el,
-                                    // name: teams[el]
-                                    //     .map((t: any) => t.firstName + " " + t.lastName)
-                                    //     .join(", "),
 
                                     name:
                                         teams[el].player1.firstName +
@@ -285,8 +250,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 handleChange={(val: string) => {
                                     const tmpTeams = [...group.teams];
                                     tmpTeams[3] = {
-                                        // first: `${teams[val]?.[0]?.firstName} ${teams[val]?.[0]?.lastName}`,
-                                        // second: `${teams[val]?.[1]?.firstName} ${teams[val]?.[1]?.lastName}`,
                                         player1: teams[val]?.player1,
                                         player2: teams[val]?.player2,
                                         wins: 0,
@@ -401,20 +364,6 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 className={"row"}
                                 type="switch"
                             />
-
-                            {/* <InputField
-            onChange={() =>
-                setGroup((prev) => ({
-                    ...prev,
-                    double: !prev.double,
-                }))
-            }
-            title="Dabl"
-            value={group.double}
-            name="isDouble"
-            type="switch"
-            className="row"
-        /> */}
                         </section>
 
                         <div
@@ -456,13 +405,11 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                         <div className="input-field">
                             <label className="input-field__title">Izaberite grupu</label>
                             <SelectInput
-                                selectOptions={Object.keys?.(groups)?.map?.((el) => ({
+                                selectOptions={Object.keys?.(groups)?.map?.((el, i) => ({
                                     id: el,
                                     name: el,
                                 }))}
                                 handleChange={(val: string) => {
-                                    console.log("VALUE", val);
-
                                     setMatch({
                                         ...match,
                                         group: val,
@@ -477,18 +424,33 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                         <div className="input-field">
                             <label className="input-field__title">Tim 1</label>
                             <SelectInput
-                                selectOptions={Object.keys?.(teams)?.map?.((el) => ({
-                                    id: el,
+                                selectOptions={
+                                    match.group
+                                        ? groups[match.group]?.teams?.map?.((el: any) => ({
+                                              id: el.teamId,
 
-                                    name:
-                                        teams[el].player1.firstName +
-                                        " " +
-                                        teams[el].player1.lastName +
-                                        ", " +
-                                        teams[el].player2.firstName +
-                                        " " +
-                                        teams[el].player2.lastName,
-                                }))}
+                                              name:
+                                                  el?.player1.firstName +
+                                                  " " +
+                                                  el?.player1.lastName +
+                                                  ", " +
+                                                  el?.player2.firstName +
+                                                  " " +
+                                                  el?.player2.lastName,
+                                          }))
+                                        : Object.keys?.(teams)?.map?.((el) => ({
+                                              id: el,
+
+                                              name:
+                                                  teams[el].player1.firstName +
+                                                  " " +
+                                                  teams[el].player1.lastName +
+                                                  ", " +
+                                                  teams[el].player2.firstName +
+                                                  " " +
+                                                  teams[el].player2.lastName,
+                                          }))
+                                }
                                 handleChange={(val: string) => {
                                     setMatch({
                                         ...match,
@@ -512,18 +474,33 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                             <label className="input-field__title">Tim 2</label>
 
                             <SelectInput
-                                selectOptions={Object.keys(teams).map((el) => ({
-                                    id: el,
+                                selectOptions={
+                                    match.group
+                                        ? groups[match.group]?.teams?.map?.((el: any) => ({
+                                              id: el.teamId,
 
-                                    name:
-                                        teams[el].player1.firstName +
-                                        " " +
-                                        teams[el].player1.lastName +
-                                        ", " +
-                                        teams[el].player2.firstName +
-                                        " " +
-                                        teams[el].player2.lastName,
-                                }))}
+                                              name:
+                                                  el?.player1.firstName +
+                                                  " " +
+                                                  el?.player1.lastName +
+                                                  ", " +
+                                                  el?.player2.firstName +
+                                                  " " +
+                                                  el?.player2.lastName,
+                                          }))
+                                        : Object.keys?.(teams)?.map?.((el) => ({
+                                              id: el,
+
+                                              name:
+                                                  teams[el].player1.firstName +
+                                                  " " +
+                                                  teams[el].player1.lastName +
+                                                  ", " +
+                                                  teams[el].player2.firstName +
+                                                  " " +
+                                                  teams[el].player2.lastName,
+                                          }))
+                                }
                                 handleChange={(val: string) => {
                                     setMatch({
                                         ...match,
@@ -585,6 +562,20 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                                 title="Super Tie Break"
                                 value={match.superTieBreak}
                                 name="isSuperTieBreak"
+                                className={"row"}
+                                type="switch"
+                            />
+
+                            <InputField
+                                onChange={() =>
+                                    setMatch((prev: any) => ({
+                                        ...prev,
+                                        goldenPoint: !prev.goldenPoint,
+                                    }))
+                                }
+                                title="Zlatni poen"
+                                value={match?.goldenPoint}
+                                name="isGoldenPoint"
                                 className={"row"}
                                 type="switch"
                             />
