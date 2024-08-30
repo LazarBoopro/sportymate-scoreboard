@@ -1,29 +1,31 @@
 @import "variables.scss";
 
 .graph {
-  --col-width: 8rem;
+  font-size: 16px;
+
+  --col-width: 8em;
   --stroke-width: 1px;
   --stroke-size: calc(var(--col-width) / 2);
   --strok-position: calc(var(--col-width) - calc(var(--col-width) + 60%));
-  --border-radius: 0.25rem;
+  --border-radius: 0.25em;
 
   max-height: 700px;
   height: 100%;
   display: flex;
-  gap: 6rem;
+  gap: 6em;
   align-items: center;
   justify-content: space-between;
   max-width: 100vw;
 
   .vs {
-    font-size: 2rem;
+    font-size: 2em;
     font-weight: 800;
   }
 
   .group {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    // gap: 2em;
     background: transparent !important;
     outline: none !important;
     max-height: 100%;
@@ -121,11 +123,11 @@
       position: relative;
       width: fit-content;
       width: var(--col-width);
-      padding: 0.25rem var(--border-radius);
+      padding: 0.25em var(--border-radius);
       background-color: $white-clr;
       color: $purple-clr-500;
       font-weight: 800;
-      border-radius: 0.25rem;
+      border-radius: 0.25em;
 
       &:first-child {
         &::after {
@@ -163,7 +165,7 @@
 
   .quarter-finals {
     justify-content: space-between;
-    height: 73%;
+    height: 72%;
 
     position: relative;
 
@@ -176,7 +178,7 @@
           position: absolute;
           top: -35%;
           height: 25%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
@@ -188,7 +190,7 @@
           position: absolute;
           bottom: -35%;
           height: 25%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
@@ -202,7 +204,7 @@
           position: absolute;
           top: -35%;
           height: 25%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
@@ -214,7 +216,7 @@
           position: absolute;
           bottom: -35%;
           height: 25%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
@@ -236,7 +238,7 @@
           position: absolute;
           top: -120%;
           height: 110%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-top: var(--stroke-width) solid $lime-green-clr-500;
@@ -248,7 +250,7 @@
           position: absolute;
           bottom: -120%;
           height: 110%;
-          width: calc(var(--stroke-size) + 15%);
+          width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
           border-bottom: var(--stroke-width) solid $lime-green-clr-500;
@@ -259,15 +261,16 @@
   }
 
   .finals {
+    // width: 10%;
     .team {
       position: relative;
       width: fit-content;
       width: var(--col-width);
-      padding: 0.25rem var(--border-radius);
+      padding: 0.25em var(--border-radius);
       background-color: $white-clr;
       color: $purple-clr-500;
       font-weight: 800;
-      border-radius: 0.25rem;
+      border-radius: 0.25em;
 
       &::before {
         content: "";
@@ -275,7 +278,7 @@
         top: 50%;
         transform: translateY(-50%);
         z-index: -1;
-        width: calc(var(--stroke-size) + 15%);
+        width: calc(var(--stroke-size) + 0%);
         right: calc(var(--strok-position) + 110%);
         border-right: var(--stroke-width) solid $lime-green-clr-500;
         border-top: var(--stroke-width) solid $lime-green-clr-500;
