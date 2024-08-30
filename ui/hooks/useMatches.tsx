@@ -42,9 +42,7 @@ export default function useMatches() {
 
   // FUNCTIONS
   const resetForm = () => {
-    setData({
-      ...MATCH_DEFAULT_OPTIONS,
-    });
+    setData(JSON.parse(JSON.stringify(MATCH_DEFAULT_OPTIONS)));
   };
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {

@@ -63,7 +63,6 @@ export default function useSingleMatch({
     currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
   const type = +match?.type;
   const tieBreakScore = match?.score?.tiebreak;
-  const isGoldenPoint = match?.goldenPoint;
 
   const prefix = tournament
     ? `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`
@@ -324,7 +323,7 @@ export default function useSingleMatch({
   //useEffect
 
   useEffect(() => {
-    if (playerWonGem || (currentGem?.[params!]! > 3 && isGoldenPoint)) {
+    if (playerWonGem) {
       updateScore({ arrayLength: 2, score: 0 });
       handleGemPoint(params!);
 

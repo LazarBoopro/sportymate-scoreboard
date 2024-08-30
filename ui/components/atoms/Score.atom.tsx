@@ -1,6 +1,7 @@
 import { scores } from "@/lib/helpers/score";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { match } from "assert";
 
 type ScoreType = {
   currentSet: number[];
