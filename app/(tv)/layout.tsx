@@ -14,7 +14,7 @@ export default function TvLayout({
     <main className="watch-tv">
       <Image src={logo} alt="SportyMate" />
       {children}
-      <BubbleAnimations />
+      {/* <BubbleAnimations /> */}
     </main>
   );
 }
