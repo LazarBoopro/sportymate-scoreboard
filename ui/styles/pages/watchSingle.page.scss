@@ -1,0 +1,102 @@
+@import "variables.scss";
+
+.heading {
+  font-size: clamp(1.5rem, 10vw, 2rem);
+  font-weight: 800;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  // width: 90%;
+  // justify-content: space-between;
+  gap: 1rem;
+
+  .swap {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 1.5rem;
+    background: $purple-clr-800;
+    outline: 1px solid $purple-clr-500;
+
+    transition: 0.2s ease background;
+
+    &:hover {
+      background: $purple-clr-700;
+    }
+  }
+}
+
+.tournament {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+
+  height: 90dvh;
+  flex-direction: column;
+  place-content: center;
+
+  &:has(> .graph) {
+    // width: 100vw;
+    height: 100%;
+    overflow: hidden;
+    // height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__group {
+    outline: 2px solid $purple-clr-500;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    background: $purple-clr-500;
+
+    h2 {
+      font-weight: 800;
+      background: $purple-clr-500;
+      padding: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      height: fit-content;
+
+      thead {
+        border-top: 1px solid $purple-clr-600;
+      }
+
+      td {
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+
+        &:not(:last-child) {
+          //   border-right: 2px solid $purple-clr-500;
+        }
+
+        &.small {
+          text-align: center;
+          aspect-ratio: 1;
+          width: 10rem;
+        }
+      }
+    }
+
+    .teams {
+      background: $purple-clr-800;
+      border-radius: 0.25rem 0.25rem 0.5rem 0.5rem;
+
+      .team {
+        width: 100%;
+
+        &:not(:last-child) {
+          border-bottom: 2px solid $purple-clr-500;
+        }
+
+        .player {
+          //   font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}

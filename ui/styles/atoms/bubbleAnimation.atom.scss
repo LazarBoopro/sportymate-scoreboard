@@ -53,11 +53,11 @@
       filter: blur(80px);
 
       &.a {
-        background-color: mix($purple-clr-200, white, 80%);
+        background-color: mix($purple-clr-100, white, 80%);
         animation: circular2 30s linear infinite;
       }
       &.b {
-        background-color: mix($purple-clr-600, white, 50%);
+        background-color: mix($purple-clr-200, white, 50%);
         animation: circular 10s linear infinite;
       }
       &.c {

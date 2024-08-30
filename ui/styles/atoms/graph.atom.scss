@@ -1,0 +1,260 @@
+@import "variables.scss";
+
+.graph {
+  --col-width: 8rem;
+  --stroke-width: 1px;
+  --stroke-size: calc(var(--col-width) / 2);
+  --strok-position: calc(var(--col-width) - calc(var(--col-width) + 60%));
+  --border-radius: 0.25rem;
+
+  display: flex;
+  gap: 6rem;
+  align-items: center;
+  justify-content: space-between;
+  // width: 90%;
+  // align-self: center;
+  /* MAKE THIS WITH GRID */
+
+  .vs {
+    font-size: 2rem;
+    font-weight: 800;
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    &.right {
+      .match {
+        .team {
+          &:first-child {
+            &::after {
+              left: var(--strok-position);
+              border-left: var(--stroke-width) solid $lime-green-clr-500;
+              border-top: var(--stroke-width) solid $lime-green-clr-500;
+              border-radius: var(--border-radius) 0 0 0;
+              border-right: none;
+            }
+          }
+
+          &:last-child {
+            &::after {
+              left: var(--strok-position);
+              border-right: none;
+              border-left: var(--stroke-width) solid $lime-green-clr-500;
+              border-bottom: var(--stroke-width) solid $lime-green-clr-500;
+              border-radius: 0 0 0 var(--border-radius);
+            }
+          }
+        }
+
+        &:first-child {
+          &::before {
+            border-right: none;
+            border-radius: var(--border-radius) 0 0 0;
+            border-left: var(--stroke-width) solid $lime-green-clr-500;
+            left: calc(var(--strok-position) + 100%);
+          }
+
+          &::after {
+            border-right: none;
+            border-radius: 0 0 0 var(--border-radius);
+            border-left: var(--stroke-width) solid $lime-green-clr-500;
+            left: calc(var(--strok-position) + 100%);
+          }
+        }
+        &:last-child {
+          &::before {
+            border-right: none;
+            border-radius: var(--border-radius) 0 0 0;
+            border-left: var(--stroke-width) solid $lime-green-clr-500;
+            left: calc(var(--strok-position) + 100%);
+          }
+
+          &::after {
+            border-right: none;
+            border-radius: 0 0 0 var(--border-radius);
+            border-left: var(--stroke-width) solid $lime-green-clr-500;
+            left: calc(var(--strok-position) + 100%);
+          }
+        }
+      }
+    }
+  }
+
+  .match {
+    display: flex;
+    flex-direction: column;
+    gap: var(--border-radius);
+
+    // EVEN AND ODDS
+
+    // -------
+
+    .team {
+      position: relative;
+      width: fit-content;
+      width: var(--col-width);
+      padding: 0.25rem var(--border-radius);
+      background-color: $white-clr;
+      color: $purple-clr-500;
+      font-weight: 800;
+      border-radius: 0.25rem;
+
+      &:first-child {
+        &::after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          height: 80%;
+          right: var(--strok-position);
+          width: var(--stroke-size);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-top: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 var(--border-radius) 0 0;
+        }
+      }
+
+      &:last-child {
+        &::after {
+          content: "";
+          position: absolute;
+          width: var(--stroke-size);
+          right: var(--strok-position);
+          bottom: 50%;
+          height: 80%;
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-bottom: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 0 var(--border-radius) 0;
+        }
+      }
+    }
+  }
+
+  .quarter-finals {
+    justify-content: space-between;
+    height: 75%;
+    position: relative;
+
+    .match {
+      position: relative;
+
+      &:first-child {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -20%;
+          height: 15%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-top: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 var(--border-radius) 0 0;
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -20%;
+          height: 15%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-bottom: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 0 var(--border-radius) 0;
+        }
+      }
+
+      &:last-child {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -20%;
+          height: 15%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-top: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 var(--border-radius) 0 0;
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -20%;
+          height: 15%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-bottom: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 0 var(--border-radius) 0;
+        }
+      }
+    }
+  }
+
+  .semi-finals {
+    position: relative;
+    .match {
+      position: relative;
+      &:first-child {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -80%;
+          height: 70%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-top: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 var(--border-radius) 0 0;
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -80%;
+          height: 70%;
+          width: calc(var(--stroke-size) + 15%);
+          right: calc(var(--strok-position) + 100%);
+          border-right: var(--stroke-width) solid $lime-green-clr-500;
+          border-bottom: var(--stroke-width) solid $lime-green-clr-500;
+          border-radius: 0 0 var(--border-radius) 0;
+        }
+      }
+    }
+  }
+
+  .finals {
+    .team {
+      position: relative;
+      width: fit-content;
+      width: var(--col-width);
+      padding: 0.25rem var(--border-radius);
+      background-color: $white-clr;
+      color: $purple-clr-500;
+      font-weight: 800;
+      border-radius: 0.25rem;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: -1;
+        width: calc(var(--stroke-size) + 15%);
+        right: calc(var(--strok-position) + 110%);
+        border-right: var(--stroke-width) solid $lime-green-clr-500;
+        border-top: var(--stroke-width) solid $lime-green-clr-500;
+      }
+    }
+    &.right {
+      .team {
+        &::before {
+          left: calc(var(--strok-position) + 110%);
+        }
+      }
+    }
+  }
+}
