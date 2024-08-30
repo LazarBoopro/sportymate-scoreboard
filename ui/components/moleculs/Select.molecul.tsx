@@ -26,7 +26,7 @@ export default function SelectInput({
                 </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                {selectOptions.map((n: any, i: number) => (
+                {selectOptions?.map((n: any, i: number) => (
                     <SelectItem key={i} value={String(n.id)}>
                         {n.name}
                     </SelectItem>

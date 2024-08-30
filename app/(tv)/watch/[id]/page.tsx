@@ -54,8 +54,8 @@ function Group({ name, teams }: { name: string; teams: any[] }) {
                                     {t.player2.firstName[0]}. {t.player2.lastName}
                                 </p>
                             </td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{t.wins}</td>
+                            <td>{t.losses}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -67,6 +67,7 @@ function Group({ name, teams }: { name: string; teams: any[] }) {
 function Graph({ tournament }: { tournament: any }) {
     // @ts-ignore
     function getName(match, type, player) {
+        if (!match) return null;
         return `${match.players?.[type]?.[player]?.firstName[0]}. ${match.players?.[type]?.[player]?.lastName}`;
     }
 
@@ -90,6 +91,56 @@ function Graph({ tournament }: { tournament: any }) {
                 </div>
             ));
         }
+
+        const mecevi = matches
+            .map((group: any, i) => {
+                if (!group.matches) return Array.from({ length: arrLen });
+                return Object.keys(group.matches).map((m) => group.matches?.[m]);
+            })
+            .flat();
+
+        if (mecevi.length < arrLen) {
+            const len = mecevi.length;
+            console.log(arrLen - len, arrLen, len, mecevi);
+            for (let el = 0; el < arrLen - len; el++) {
+                mecevi.push({
+                    matchId: 85,
+                    players: {
+                        guest: {
+                            player1: { firstName: "/", lastName: "/" },
+                            player2: { firstName: "/", lastName: "/" },
+                            teamId: "/",
+                        },
+                        host: {
+                            player1: { firstName: "/", lastName: "/" },
+                            player2: { firstName: "/", lastName: "/" },
+                            teamId: "-/",
+                        },
+                    },
+                    score: { currentSet: [0, 0], sets: [[0, 0]], tiebreak: [0, 0] },
+                    status: { id: 12, status: "idle" },
+                    superTieBreak: true,
+                    title: "dfrfgd - A",
+                    type: 0,
+                });
+            }
+        }
+
+        return mecevi.map((m: any, i: number) => {
+            return (
+                <div key={i} className="match">
+                    <div className="team">
+                        <p>{getName(m, "host", "player1")}</p>
+                        <p>{getName(m, "host", "player2")}</p>
+                    </div>
+
+                    <div className="team">
+                        <p>{getName(m, "guest", "player1")}</p>
+                        <p>{getName(m, "guest", "player2")}</p>
+                    </div>
+                </div>
+            );
+        });
 
         return matches.map((group: any, i) => {
             if (!group.matches)
