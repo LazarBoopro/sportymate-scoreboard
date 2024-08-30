@@ -135,14 +135,9 @@ function Graph({
             host: {
               player1: { firstName: "/", lastName: "/" },
               player2: { firstName: "/", lastName: "/" },
-              teamId: "-/",
+              teamId: "/",
             },
           },
-          score: { currentSet: [0, 0], sets: [[0, 0]], tiebreak: [0, 0] },
-          status: { id: 12, status: "idle" },
-          superTieBreak: true,
-          title: "dfrfgd - A",
-          type: 0,
         });
       }
     }
@@ -152,13 +147,15 @@ function Graph({
         <div key={i} className="match">
           <Link
             href={{
-              pathname: `/match/${m.matchId}`,
-              query: {
-                tournamentId: tournamentId,
-                phase,
-                groupId: m.groupId,
-                watch: true,
-              },
+              pathname: m.matchId ? `/match/${m.matchId}` : "#",
+              query: m.matchId
+                ? {
+                    tournamentId: tournamentId,
+                    phase,
+                    groupId: m.groupId,
+                    watch: true,
+                  }
+                : undefined,
             }}
           >
             <div className="team">
