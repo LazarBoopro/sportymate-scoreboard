@@ -27,17 +27,17 @@ export default function WatchTournament({
         <h1>{tournament?.title}</h1>
       </div>
       <article className="tv-tournament">
-        <Suspense fallback={null}>
-          {Object.values(groups)?.map((n: any, i: number) => (
-            <Group key={i} {...n} />
-          ))}
-        </Suspense>
-        {/* {!t ? (
-        ) : ( */}
-        {/* <Suspense fallback={null}>
-          <Graph tournament={tournament} tournamentId={params.id} />
-        </Suspense> */}
-        {/* )} */}
+        {t ? (
+          <Suspense fallback={null}>
+            {Object.values(groups)?.map((n: any, i: number) => (
+              <Group key={i} {...n} />
+            ))}
+          </Suspense>
+        ) : (
+          <Suspense fallback={null}>
+            <Graph tournament={tournament} tournamentId={params.id} />
+          </Suspense>
+        )}
       </article>
     </>
   );

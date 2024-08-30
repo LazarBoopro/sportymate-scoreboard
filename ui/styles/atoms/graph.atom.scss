@@ -15,7 +15,6 @@
   min-width: 100%;
   display: flex;
   // gap: 6em;
-  background: blue;
   align-items: center;
   justify-content: space-between;
   // max-width: 100vw;
@@ -168,8 +167,10 @@
   }
 
   .quarter-finals {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    height: 72%;
+    height: 70%;
 
     position: relative;
 
@@ -180,8 +181,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -20%;
-          height: 20%;
+          top: -40%;
+          height: 25%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -192,8 +193,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -20%;
-          height: 20%;
+          bottom: -40%;
+          height: 25%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -206,8 +207,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -20%;
-          height: 20%;
+          top: -40%;
+          height: 25%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -218,8 +219,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -20%;
-          height: 20%;
+          bottom: -40%;
+          height: 25%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -240,8 +241,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -120%;
-          height: 110%;
+          top: -110%;
+          height: 100%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -252,8 +253,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -120%;
-          height: 110%;
+          bottom: -110%;
+          height: 100%;
           width: calc(var(--stroke-size) + 0%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
