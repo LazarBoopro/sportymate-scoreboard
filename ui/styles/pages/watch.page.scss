@@ -38,6 +38,10 @@ h1 {
     right: 1rem;
   }
 
+  & > .tournament {
+    outline: none;
+  }
+
   .tournaments.graph {
     height: 100%;
     width: 100%;
