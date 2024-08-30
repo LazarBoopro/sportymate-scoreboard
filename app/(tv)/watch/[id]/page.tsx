@@ -24,7 +24,7 @@ export default function WatchTournament({
         </button>
         <h1>{tournament?.title}</h1>
       </div>
-      <article className="tournament">
+      <article className="watch-tournament">
         {t ? (
           Object.values(groups)?.map((n: any, i: number) => (
             <Group key={i} {...n} />
