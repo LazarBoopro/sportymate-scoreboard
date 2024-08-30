@@ -11,13 +11,14 @@
 
   max-height: 700px;
   height: 100%;
-  width: 100%;
+
+  min-width: 100%;
   display: flex;
   // gap: 6em;
   background: blue;
   align-items: center;
   justify-content: space-between;
-  max-width: 100vw;
+  // max-width: 100vw;
 
   .vs {
     font-size: 2em;
