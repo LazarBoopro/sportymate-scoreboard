@@ -46,6 +46,10 @@ h1 {
       transition: all 0.2s ease;
       height: fit-content;
 
+      &:has(> .graph) {
+        outline: none;
+      }
+
       &:hover,
       &:focus {
         outline: 1px solid $purple-clr-400;
