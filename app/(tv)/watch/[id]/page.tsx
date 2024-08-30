@@ -26,7 +26,7 @@ export default function WatchTournament({
         </button>
         <h1>{tournament?.title}</h1>
       </div>
-      <article className="tournament">
+      <article className="tv-tournament">
         {t ? (
           Object.values(groups)?.map((n: any, i: number) => (
             <Group key={i} {...n} />
@@ -41,7 +41,7 @@ export default function WatchTournament({
 
 function Group({ name, teams }: { name: string; teams: any[] }) {
   return (
-    <article className="tournament__group">
+    <article className="tv-tournament__group">
       <h2>Grupa {name}</h2>
 
       <table>
