@@ -116,7 +116,7 @@ export default function TournamentCard({
                 </Link>
 
                 <Link href={"#"}>
-                    <Button type="danger" onClick={() => deleteTournament(id)}>
+                    <Button type="danger" onClick={() => deleteTournament({ id, tournament })}>
                         <IoTrashOutline />
                     </Button>
                 </Link>

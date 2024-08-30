@@ -19,11 +19,13 @@ export function Team({
     handleChange,
     team,
     status,
+    handleChangeGemPoint,
 }: {
     players?: { player1: PlayerType; player2: PlayerType };
-    handleChange?: CallableFunction;
+    handleChange: CallableFunction;
     team: number;
     status: string;
+    handleChangeGemPoint: CallableFunction;
 }) {
     const { setServing } = useContext(Context);
     const { id } = useParams();
@@ -104,8 +106,10 @@ export function Team({
                 <div className="action">
                     <p>Gem</p>
                     <div className="ctas">
-                        <Button>+</Button>
-                        <Button type="danger">-</Button>
+                        <Button onClick={() => handleChangeGemPoint(team, "plus")}>+</Button>
+                        <Button type="danger" onClick={() => handleChangeGemPoint(team, "minus")}>
+                            -
+                        </Button>
                     </div>
                 </div>
             </div>

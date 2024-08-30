@@ -22,7 +22,8 @@ export const useAddMatch = () => {
 
 export const useDeleteMatch = () => {
     return useMutation({
-        mutationFn: (id: string) => deleteMatch(id),
+        mutationFn: ({ id, tournament }: { id: string; tournament?: any }) =>
+            deleteMatch(id, tournament),
     });
 };
 

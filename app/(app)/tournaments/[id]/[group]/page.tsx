@@ -199,7 +199,8 @@ function GroupRow({ team, index, handleUpdateGroup }: any) {
     );
 }
 
-function Matches({ matches, tournament }: { matches: any[]; tournament: any }) {
+function Matches({ matches, tournament }: { matches: any; tournament: any }) {
+    if (!matches) return null;
     return Object.keys(matches)?.map?.((n, i) => (
         // @ts-ignore
         <TournamentCard key={i} id={n} {...matches[n]} tournament={tournament} />

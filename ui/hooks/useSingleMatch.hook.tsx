@@ -77,6 +77,7 @@ export default function useSingleMatch({
     const { mutate: updateStatus, isSuccess: isSuccessStatus } = useUpdateMatchStatus();
 
     // Functions
+
     function handleUpdateCurrentSetScore({
         team,
         action,
@@ -118,7 +119,7 @@ export default function useSingleMatch({
     }
 
     // GEMS
-    function handleGemPoint(team: number) {
+    function handleGemPoint(team: number, action: "plus" | "minus" = "plus") {
         const sets = match?.score?.sets;
         const updatedTeam = currentSet?.[team];
 
@@ -136,7 +137,14 @@ export default function useSingleMatch({
             id,
             team,
             gem: sets?.length! - 1,
-            score: updatedTeam === undefined ? 0 : updatedTeam + 1,
+            score:
+                updatedTeam === undefined
+                    ? 0
+                    : action === "plus"
+                    ? updatedTeam + 1
+                    : updatedTeam - 1 >= 0
+                    ? updatedTeam - 1
+                    : 0,
             prevScore: sets?.[sets?.length! - 1],
             tournament,
         });
@@ -439,5 +447,5 @@ export default function useSingleMatch({
         };
     }, [id]);
 
-    return { match, tieBreak, handleUpdateCurrentSetScore };
+    return { match, tieBreak, handleUpdateCurrentSetScore, handleGemPoint };
 }

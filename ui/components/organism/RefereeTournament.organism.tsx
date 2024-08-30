@@ -9,10 +9,12 @@ export default function RefereeTournament({
     tournament,
     handleUpdateCurrentSetScore,
     isTie,
+    handleChangeGemPoint,
 }: {
     isTie: boolean;
     tournament: MatchType | null;
     handleUpdateCurrentSetScore: CallableFunction;
+    handleChangeGemPoint: CallableFunction;
 }) {
     return (
         <main className="match">
@@ -22,6 +24,7 @@ export default function RefereeTournament({
                     players={tournament?.players.host}
                     handleChange={handleUpdateCurrentSetScore}
                     status={tournament?.status?.status!}
+                    handleChangeGemPoint={handleChangeGemPoint}
                 />
                 <div className="match__section">
                     <SelectField defaultSelected={tournament?.status?.status ?? ""} />
@@ -37,6 +40,7 @@ export default function RefereeTournament({
                     players={tournament?.players.guest}
                     handleChange={handleUpdateCurrentSetScore}
                     status={tournament?.status?.status!}
+                    handleChangeGemPoint={handleChangeGemPoint}
                 />
             </Suspense>
         </main>

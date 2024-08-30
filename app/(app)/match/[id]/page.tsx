@@ -24,7 +24,7 @@ export default function Match({ params }: { params: { id: string } }) {
     const isWatchMode = searchParams.get("watch");
 
     // const { data, isSuccess, isLoading } = useGetSingleMatch(params.id, );
-    const { tieBreak, match, handleUpdateCurrentSetScore } = useSingleMatch({
+    const { tieBreak, match, handleUpdateCurrentSetScore, handleGemPoint } = useSingleMatch({
         id: params.id,
         tournament: searchParams.get("tournamentId")
             ? {
@@ -55,6 +55,7 @@ export default function Match({ params }: { params: { id: string } }) {
                 isTie={tieBreak}
                 tournament={match}
                 handleUpdateCurrentSetScore={handleUpdateCurrentSetScore}
+                handleChangeGemPoint={handleGemPoint}
             />
         </>
     );
