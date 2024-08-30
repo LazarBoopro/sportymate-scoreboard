@@ -23,6 +23,7 @@ export default function SelectFieldStatus({
       (n) => n.id === Number(value)
     );
 
+    // @ts-ignore
     updateStatus({
       id: String(params.id),
       status: {
