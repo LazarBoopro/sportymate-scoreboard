@@ -7,7 +7,8 @@
   --strok-position: calc(var(--col-width) - calc(var(--col-width) + 60%));
   --border-radius: 0.25rem;
 
-  min-height: 85%;
+  max-height: 700px;
+  height: 100%;
   display: flex;
   gap: 6rem;
   align-items: center;
@@ -155,10 +156,15 @@
       }
     }
   }
+  .sixteen-finals {
+    height: 100%;
+    justify-content: space-between;
+  }
 
   .quarter-finals {
     justify-content: space-between;
-    height: 55%;
+    height: 73%;
+
     position: relative;
 
     .match {
@@ -168,8 +174,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -20%;
-          height: 15%;
+          top: -35%;
+          height: 25%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -180,8 +186,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -20%;
-          height: 15%;
+          bottom: -35%;
+          height: 25%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -194,8 +200,8 @@
         &::before {
           content: "";
           position: absolute;
-          top: -20%;
-          height: 15%;
+          top: -35%;
+          height: 25%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -206,8 +212,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -20%;
-          height: 15%;
+          bottom: -35%;
+          height: 25%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -220,14 +226,16 @@
 
   .semi-finals {
     position: relative;
+    // height: 0%;
+
     .match {
       position: relative;
       &:first-child {
         &::before {
           content: "";
           position: absolute;
-          top: -80%;
-          height: 70%;
+          top: -120%;
+          height: 110%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
@@ -238,8 +246,8 @@
         &::after {
           content: "";
           position: absolute;
-          bottom: -80%;
-          height: 70%;
+          bottom: -120%;
+          height: 110%;
           width: calc(var(--stroke-size) + 15%);
           right: calc(var(--strok-position) + 100%);
           border-right: var(--stroke-width) solid $lime-green-clr-500;
