@@ -46,8 +46,8 @@ h1 {
       transition: all 0.2s ease;
       height: fit-content;
 
-      &:has(> .graph) {
-        outline: none;
+      &:has(.graph) {
+        outline: none !important;
       }
 
       &:hover,
