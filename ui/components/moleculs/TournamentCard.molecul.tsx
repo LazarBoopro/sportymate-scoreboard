@@ -17,7 +17,7 @@ import { scores } from "@/lib/helpers/score";
 
 type TournamentType = MatchTypeService & {
     id: string;
-    tournament: any;
+    tournament?: any;
 };
 
 export default function TournamentCard({
