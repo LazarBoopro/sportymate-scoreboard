@@ -204,7 +204,7 @@ function Graph({ tournament }: { tournament: any }) {
         </div>
       </div>
 
-      <div className="semi-finall right group">
+      <div className="semi-finals right group">
         {getTeams("semi-final", 1, 2, 1)}
       </div>
 
