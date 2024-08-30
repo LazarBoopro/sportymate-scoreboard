@@ -6,7 +6,6 @@ import "@/ui/styles/pages/watchSingle.page.scss";
 import "@/ui/styles/atoms/graph.atom.scss";
 import { useState } from "react";
 import { IoSwapHorizontalOutline } from "react-icons/io5";
-import { match } from "assert";
 
 export default function WatchTournament({
   params,
