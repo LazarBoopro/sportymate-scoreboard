@@ -16,6 +16,82 @@
   }
 }
 
+.tv-overlay {
+  background: transparent;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+
+  .table {
+    // border-radius: 0.25rem;
+    overflow: hidden;
+    min-width: 400px;
+    background: $white-clr;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    outline: 2px solid $purple-clr-500;
+
+    &__team {
+      // padding: 0.5rem;
+      display: flex;
+
+      &:first-child {
+        border-bottom: 2px solid rgb($purple-clr-500, 1);
+      }
+
+      .players {
+        flex: 3;
+        border-right: 2px solid $purple-clr-500;
+        padding: 0.5rem;
+
+        .player {
+          font-weight: 800;
+        }
+      }
+
+      & > .score {
+        display: flex;
+        flex: 2;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        & p {
+          font-size: clamp(1rem, 5vw, 1.25rem);
+          width: 4rem !important;
+          // height: 4rem;
+          display: flex;
+          height: 100%;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+
+          &:not(:last-child) {
+            border-right: 2px solid rgb($purple-clr-500, 1);
+          }
+
+          &.current-set {
+            background: $lime-green-clr-500;
+          }
+
+          &.current-gem {
+            color: $white-clr;
+            background: $purple-clr-400;
+          }
+
+          &.sets {
+            background: $white-clr;
+            // background: rgb($black-clr, 0.2);
+            // color: $white-clr;
+          }
+        }
+      }
+    }
+  }
+}
+
 // --------
 
 .score {
