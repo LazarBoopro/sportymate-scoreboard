@@ -151,25 +151,25 @@ function Graph({
         <div key={i} className="tv-match">
           <Link
             href={{
-              pathname: m.matchId ? `/match/${m.matchId}` : "#",
-              query: m.matchId
+              pathname: m?.matchId ? `/match/${m?.matchId}` : "#",
+              query: m?.matchId
                 ? {
                     tournamentId: tournamentId,
                     phase,
-                    groupId: m.groupId,
+                    groupId: m?.groupId,
                     watch: true,
                   }
                 : undefined,
             }}
           >
             <div className="team">
-              <p>{getName(m, "host", "player1")}</p>
-              <p>{getName(m, "host", "player2")}</p>
+              <p>{getName(m, "host", "player1") ?? "/"}</p>
+              <p>{getName(m, "host", "player2") ?? "/"}</p>
             </div>
 
             <div className="team">
-              <p>{getName(m, "guest", "player1")}</p>
-              <p>{getName(m, "guest", "player2")}</p>
+              <p>{getName(m, "guest", "player1") ?? "/"}</p>
+              <p>{getName(m, "guest", "player2") ?? "/"}</p>
             </div>
           </Link>
         </div>
@@ -218,7 +218,7 @@ function Graph({
       {/* LEFT */}
 
       <div className="sixteen-finals left group">
-        {getTeams("round-of-16", 0, 2, 4)}
+        {getTeams("round-of-16", 0, 2, 2)}
       </div>
 
       <div className="quarter-finals left group">
@@ -253,7 +253,7 @@ function Graph({
       </div>
 
       <div className="sixteen-finals right group">
-        {getTeams("round-of-16", 2, 4, 4)}
+        {getTeams("round-of-16", 2, 2, 4)}
       </div>
     </section>
   );
