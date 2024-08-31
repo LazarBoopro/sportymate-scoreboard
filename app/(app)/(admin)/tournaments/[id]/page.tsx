@@ -1,7 +1,7 @@
 "use client";
 
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
 import { AnimatePresence } from "framer-motion";
@@ -113,165 +113,167 @@ export default function SingleTournament({
   }, [groupButtonRef.current, teamsButtonRef.current, tournament]);
 
   return (
-    <main className="main">
-      <div className="tournaments" id="tournaments">
-        <div className="tournaments__header">
-          <div className="header">
-            <Link href={"/"} className="back">
-              <IoChevronBack />
-            </Link>
-
-            <h1>{tournament?.title}</h1>
-          </div>
-          <div className="screen-switch">
-            <button
-              ref={groupButtonRef}
-              data-type="groups"
-              onClick={handleMouseClick}
-            >
-              Grupe
-            </button>
-            <button
-              ref={teamsButtonRef}
-              data-type="teams"
-              onClick={handleMouseClick}
-            >
-              Timovi
-            </button>
-            <div
-              className="cursor"
-              style={{
-                ...position,
-              }}
-            ></div>
-          </div>
-        </div>
-
-        {screen === "groups" && (
-          <div className="phase-switch">
-            {phases.map((n, i) => (
-              <Link
-                href={{
-                  pathname,
-                  query: {
-                    phase: n.id,
-                  },
-                }}
-                key={i}
-                className={
-                  n.id === queryParams.get("phase") ? "link active" : "link"
-                }
-              >
-                {n.label}
+    <Suspense>
+      <main className="main">
+        <div className="tournaments" id="tournaments">
+          <div className="tournaments__header">
+            <div className="header">
+              <Link href={"/"} className="back">
+                <IoChevronBack />
               </Link>
-            ))}
+
+              <h1>{tournament?.title}</h1>
+            </div>
+            <div className="screen-switch">
+              <button
+                ref={groupButtonRef}
+                data-type="groups"
+                onClick={handleMouseClick}
+              >
+                Grupe
+              </button>
+              <button
+                ref={teamsButtonRef}
+                data-type="teams"
+                onClick={handleMouseClick}
+              >
+                Timovi
+              </button>
+              <div
+                className="cursor"
+                style={{
+                  ...position,
+                }}
+              ></div>
+            </div>
           </div>
-        )}
 
-        <div className="tournaments__list">
-          <AnimatePresence>
-            {screen === "groups" ? (
-              <GroupList
-                tournamentId={params.id}
-                //@ts-ignore
-                groups={groups}
-                //@ts-ignore
-                handleDelete={(id) =>
-                  deleteGroup({
-                    tournamentId: params.id,
-                    groupId: id,
-                    phase:
-                      (queryParams.get("phase") as GroupPhaseEnum) ??
-                      GroupPhaseEnum.GROUPS,
-                  })
-                }
-              />
-            ) : (
-              <TeamList
-                teams={teams}
-                deleteTeam={handleDeleteTeam}
-                handleEdit={handleUpdateTeam}
-              />
-            )}
-          </AnimatePresence>
+          {screen === "groups" && (
+            <div className="phase-switch">
+              {phases.map((n, i) => (
+                <Link
+                  href={{
+                    pathname,
+                    query: {
+                      phase: n.id,
+                    },
+                  }}
+                  key={i}
+                  className={
+                    n.id === queryParams.get("phase") ? "link active" : "link"
+                  }
+                >
+                  {n.label}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          <div className="tournaments__list">
+            <AnimatePresence>
+              {screen === "groups" ? (
+                <GroupList
+                  tournamentId={params.id}
+                  //@ts-ignore
+                  groups={groups}
+                  //@ts-ignore
+                  handleDelete={(id) =>
+                    deleteGroup({
+                      tournamentId: params.id,
+                      groupId: id,
+                      phase:
+                        (queryParams.get("phase") as GroupPhaseEnum) ??
+                        GroupPhaseEnum.GROUPS,
+                    })
+                  }
+                />
+              ) : (
+                <TeamList
+                  teams={teams}
+                  deleteTeam={handleDeleteTeam}
+                  handleEdit={handleUpdateTeam}
+                />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
 
-      {screen === "groups" ? (
-        <CreateGroup tournamentId={params.id} />
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="tournament-form__form"
-          style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
-        >
-          <section
-            style={{
-              maxWidth: "100%",
-              height: "100%",
-              padding: "0",
-            }}
+        {screen === "groups" ? (
+          <CreateGroup tournamentId={params.id} />
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="tournament-form__form"
+            style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
           >
-            <h2
+            <section
               style={{
-                fontSize: "clamp(1rem, 10vw, 1.25rem)",
-                fontWeight: "800",
+                maxWidth: "100%",
+                height: "100%",
+                padding: "0",
               }}
             >
-              Dodaj novi tim
-            </h2>
-            <p>Igrac 1:</p>
-            <InputField
-              onChange={handleOnChangeTeam}
-              title="Ime"
-              name="player1.firstName"
-              value={team.player1.firstName}
-              placeholder="Ime"
-              required
-            />
-            <InputField
-              onChange={handleOnChangeTeam}
-              title="Prezime"
-              name="player1.lastName"
-              value={team.player1.lastName}
-              placeholder="Prezime"
-              required
-            />
-            <p>Igrac 2:</p>
+              <h2
+                style={{
+                  fontSize: "clamp(1rem, 10vw, 1.25rem)",
+                  fontWeight: "800",
+                }}
+              >
+                Dodaj novi tim
+              </h2>
+              <p>Igrac 1:</p>
+              <InputField
+                onChange={handleOnChangeTeam}
+                title="Ime"
+                name="player1.firstName"
+                value={team.player1.firstName}
+                placeholder="Ime"
+                required
+              />
+              <InputField
+                onChange={handleOnChangeTeam}
+                title="Prezime"
+                name="player1.lastName"
+                value={team.player1.lastName}
+                placeholder="Prezime"
+                required
+              />
+              <p>Igrac 2:</p>
 
-            <InputField
-              onChange={handleOnChangeTeam}
-              title="Ime"
-              name="player2.firstName"
-              value={team.player2.firstName}
-              placeholder="Ime"
-              required
-            />
-            <InputField
-              onChange={handleOnChangeTeam}
-              title="Prezime"
-              name="player2.lastName"
-              value={team.player2.lastName}
-              placeholder="Prezime"
-              required
-            />
+              <InputField
+                onChange={handleOnChangeTeam}
+                title="Ime"
+                name="player2.firstName"
+                value={team.player2.firstName}
+                placeholder="Ime"
+                required
+              />
+              <InputField
+                onChange={handleOnChangeTeam}
+                title="Prezime"
+                name="player2.lastName"
+                value={team.player2.lastName}
+                placeholder="Prezime"
+                required
+              />
 
-            <div
-              className="divider"
-              style={{
-                height: "1px",
-                width: "100%",
-                borderBottom: "1px solid #ccc",
-                marginBottom: "auto",
-              }}
-            ></div>
-            <Button onClick={handleAddTeam}>
-              dodaj tim <IoAddCircleOutline />
-            </Button>
-          </section>
-        </form>
-      )}
-    </main>
+              <div
+                className="divider"
+                style={{
+                  height: "1px",
+                  width: "100%",
+                  borderBottom: "1px solid #ccc",
+                  marginBottom: "auto",
+                }}
+              ></div>
+              <Button onClick={handleAddTeam}>
+                dodaj tim <IoAddCircleOutline />
+              </Button>
+            </section>
+          </form>
+        )}
+      </main>
+    </Suspense>
   );
 }
 

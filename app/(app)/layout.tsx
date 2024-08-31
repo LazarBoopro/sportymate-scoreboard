@@ -24,10 +24,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {showNav && <Navbar />}
-      <Drawer title="Tipovi turnira" />
-      <Suspense fallback={null}></Suspense>
-      {children}
+      <Suspense fallback={null}>
+        {showNav && <Navbar />}
+        <Drawer title="Tipovi turnira" />
+        {children}
+      </Suspense>
     </>
   );
 }

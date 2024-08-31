@@ -6,6 +6,7 @@ import QueryProvider from "@/ui/providers/QueryProvider.provider";
 
 import "./globals.css";
 import { NavbarContextProvider } from "@/ui/providers/NavbarContext.provider";
+import { Suspense } from "react";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
@@ -27,10 +28,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={plusJakartaSans.className}>
         <QueryProvider>
-          <NavbarContextProvider>
-            <Toaster />
-            {children}
-          </NavbarContextProvider>
+          <Suspense fallback={null}>
+            <NavbarContextProvider>
+              <Toaster />
+              {children}
+            </NavbarContextProvider>
+          </Suspense>
         </QueryProvider>
       </body>
     </html>

@@ -20,25 +20,27 @@ export default function WatchTournament({
 
   return (
     <>
-      <div className="heading">
-        <button className="swap" onClick={() => setT((prev) => !prev)}>
-          <IoSwapHorizontalOutline />
-        </button>
-        <h1>{tournament?.title}</h1>
-      </div>
-      <article className="tv-tournament">
-        {!t ? (
-          <Suspense fallback={null}>
-            {Object.values(groups)?.map((n: any, i: number) => (
-              <Group key={i} {...n} />
-            ))}
-          </Suspense>
-        ) : (
-          <Suspense fallback={null}>
-            <Graph tournament={tournament} tournamentId={params.id} />
-          </Suspense>
-        )}
-      </article>
+      <Suspense>
+        <div className="heading">
+          <button className="swap" onClick={() => setT((prev) => !prev)}>
+            <IoSwapHorizontalOutline />
+          </button>
+          <h1>{tournament?.title}</h1>
+        </div>
+        <article className="tv-tournament">
+          {!t ? (
+            <Suspense fallback={null}>
+              {Object.values(groups)?.map((n: any, i: number) => (
+                <Group key={i} {...n} />
+              ))}
+            </Suspense>
+          ) : (
+            <Suspense fallback={null}>
+              <Graph tournament={tournament} tournamentId={params.id} />
+            </Suspense>
+          )}
+        </article>
+      </Suspense>
     </>
   );
 }

@@ -37,5 +37,5 @@ export default function AdminLayout({
     );
   }
 
-  return <>{children}</>;
+  return <Suspense fallback={null}>{children}</Suspense>;
 }
