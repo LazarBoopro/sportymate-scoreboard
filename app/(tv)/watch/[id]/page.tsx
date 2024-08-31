@@ -255,7 +255,7 @@ function Graph({
       </div>
 
       <div className="sixteen-finals right group">
-        {getTeams("round-of-16", 2, 2, 4)}
+        {getTeams("round-of-16", 2, 4, 4)}
       </div>
     </section>
   );
