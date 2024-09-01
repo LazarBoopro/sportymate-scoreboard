@@ -14,8 +14,11 @@ import { useGetSingleMatch } from "@/infrastructure/queries/tournaments";
 
 import useSingleMatch from "@/ui/hooks/useSingleMatch.hook";
 
+import liveLogo from "@/public/img/logo.svg";
+
 import "@/ui/styles/pages/match.page.scss";
 import { scores } from "@/lib/helpers/score";
+import Image from "next/image";
 
 export default function Match({ params }: { params: { id: string } }) {
   const [user] = useAuthState(auth);
@@ -47,6 +50,7 @@ export default function Match({ params }: { params: { id: string } }) {
   if (size) {
     return (
       <section className="tv-overlay">
+        <Image src={liveLogo} alt="S" />
         <div className="table">
           <div className="table__team">
             <div className="players">
