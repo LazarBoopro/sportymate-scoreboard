@@ -1,21 +1,23 @@
 "use client";
 
+import Link from "next/link";
+
+import { usePathname, useSearchParams } from "next/navigation";
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
 import { Suspense, useEffect, useRef, useState } from "react";
+
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
+
 import { AnimatePresence } from "framer-motion";
 import { IoAddCircleOutline, IoChevronBack } from "react-icons/io5";
+
 import Button from "@/ui/components/atoms/Button.atom";
-import SelectInput from "@/ui/components/moleculs/Select.molecul";
-import Link from "next/link";
 import InputField from "@/ui/components/atoms/InputField.atom";
 import { TeamList } from "@/ui/components/organism/Teams.organism";
 import { GroupList } from "@/ui/components/organism/Groups.organism";
-import Tabs from "@/ui/components/moleculs/Tabs.molecul";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { GroupPhaseEnum } from "@/interfaces/tournaments";
 import CreateGroup from "@/ui/components/organism/CreateGroup.organism";
+import { GroupPhaseEnum } from "@/interfaces/enums";
 
 const phases = [
   {
@@ -48,17 +50,13 @@ export default function SingleTournament({
   const {
     tournament,
     deleteGroup,
-    handleAddGroup,
-    group,
-    setGroup,
     groups,
     handleAddTeam,
     handleOnChangeTeam,
     team,
     teams,
-    deleteTeam,
+    handleDeleteTeam,
     handleUpdateTeam,
-    phase,
   } = useSingleTournament({ id: params.id });
 
   const teamsButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -68,12 +66,6 @@ export default function SingleTournament({
   const [position, setPosition] = useState({
     left: 0,
     width: 0,
-  });
-
-  const [settings, setSettings] = useState({
-    double: true,
-    type: 0,
-    superTieBreak: true,
   });
 
   const pathname = usePathname();
@@ -87,15 +79,6 @@ export default function SingleTournament({
         teamsButtonRef?.current?.getBoundingClientRect().width,
     });
     setScreen(e.target.dataset.type);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    // TODO: Save changes to the tournament
-  };
-
-  const handleDeleteTeam = (teamId: string) => {
-    deleteTeam({ tournamentId: params.id, teamId });
   };
 
   useEffect(() => {
@@ -202,7 +185,7 @@ export default function SingleTournament({
           <CreateGroup tournamentId={params.id} />
         ) : (
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleAddTeam}
             className="tournament-form__form"
             style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
           >
@@ -276,8 +259,3 @@ export default function SingleTournament({
     </Suspense>
   );
 }
-
-// ------------------------
-const alphabet = Array.from({ length: 26 }, (_, i) =>
-  String.fromCharCode(i + 65)
-);

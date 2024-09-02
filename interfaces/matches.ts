@@ -1,3 +1,5 @@
+import { MatchTypeEnum } from "./enums";
+
 export type MatchType = {
   id?: string;
   userId?: string;
@@ -7,7 +9,7 @@ export type MatchType = {
     id: number;
     status: string;
   };
-  type: number;
+  type: MatchTypeEnum;
   superTieBreak: boolean;
   goldenPoint: boolean;
   startTime: {

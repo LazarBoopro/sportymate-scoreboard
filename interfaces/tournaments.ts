@@ -1,60 +1,55 @@
-import { MatchType } from "./matches";
+import { MatchTypeEnum } from "./enums";
+import { MatchType, PlayerType } from "./matches";
 
-export enum GroupPhaseEnum {
-    GROUPS = "groups",
-    ROUND16 = "round-of-16",
-    QUARTER = "quater-finals",
-    SEMIFINAL = "semi-final",
-    FINAL = "final",
-    //"groups" | "round-of-16" | "quarter-finals" | "semi-final" | "final"
-}
-
-export type TournamentType = {
-    id?: string;
-    userId?: string;
-    title: string;
-
-    teams: {
-        [key: string]: { firstName: string; lastName: string }[];
-    };
-
-    matches: {
-        faza: {
-            [key: string]: {
-                matches: MatchType[];
-                teams: {
-                    [key: string]: {
-                        firstName: string;
-                        lastName: string;
-                        wins: number;
-                        teamId: string;
-                    }[];
-                };
-            };
-        };
-        // osmina:{}
-        // cetvrtina: {}
-        // polufinale: {}
-        // finale:{}
-    };
-
-    // groups: {
-    //     [key: string]: {
-    //         matches: MatchType[];
-    //         teams: {
-    //             [key: string]: {
-    //                 firstName: string;
-    //                 lastName: string;
-    //                 wins: number;
-    //                 teamId: string;
-    //             }[];
-    //         };
-    //     };
-    // };
+export type TournamentQueryParams = {
+  tournamentId: string;
+  groupId: string;
+  phase: string;
 };
 
-export type PlayerType = {
-    firstName: string;
-    lastName: string;
-    serving?: boolean;
+export type TeamType = {
+  losses?: number;
+  wuns?: number;
+  teamId?: string;
+  player1: PlayerType;
+  player2: PlayerType;
+};
+
+export type GroupType = {
+  double: boolean;
+  goldenPoint: boolean;
+  name: string;
+  superTieBreak: boolean;
+  type: MatchTypeEnum;
+  teams: TeamType[];
+  matches: {
+    [matchId: string]: MatchType;
+  };
+};
+
+export type TournamentType = {
+  title: string;
+  matches: {
+    groups: {
+      [groupId: string]: GroupType;
+    };
+    "quarter-finals": {
+      [groupId: string]: GroupType;
+    };
+    "round-of-16": {
+      [groupId: string]: GroupType;
+    };
+    "semi-final": {
+      [groupId: string]: GroupType;
+    };
+    final: {
+      [groupId: string]: GroupType;
+    };
+  };
+  teams: {
+    [teamId: string]: {
+      firstName: string;
+      lastName: string;
+    };
+  };
 };

@@ -1,23 +1,17 @@
 "use client";
 
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useAddMatch } from "@/infrastructure/mutations/matches";
+
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
-import { AnimatePresence } from "framer-motion";
-import { IoAddCircleOutline, IoChevronBack } from "react-icons/io5";
+
+import { IoAddCircleOutline } from "react-icons/io5";
 import Button from "@/ui/components/atoms/Button.atom";
 import SelectInput from "@/ui/components/moleculs/Select.molecul";
-import Link from "next/link";
 import InputField from "@/ui/components/atoms/InputField.atom";
-import { TeamList } from "@/ui/components/organism/Teams.organism";
-import { GroupList } from "@/ui/components/organism/Groups.organism";
 import Tabs from "@/ui/components/moleculs/Tabs.molecul";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { GroupPhaseEnum } from "@/interfaces/tournaments";
-import { isNull } from "util";
-import { useAddMatch } from "@/infrastructure/mutations/matches";
-import { getRSCModuleInformation } from "next/dist/build/analysis/get-page-static-info";
 
 const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
   const { handleAddGroup, group, setGroup, teams, phase, groups, tournament } =
