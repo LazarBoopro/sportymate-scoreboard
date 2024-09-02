@@ -1,12 +1,12 @@
-image: node: 18.15.0
+image:node: 18.15.0
 
 definitions:
   caches:
-    npm: /.npm
+    npm: ~/.npm
 
   steps:
-    - step: &Pull-Request
-        name: 'Node Build'
+    - step: &Build
+        name: "Node Build"
         caches:
           - npm
         script:
@@ -15,5 +15,5 @@ definitions:
 
 pipelines:
   pull-requests:
-    '**':
-      - step: *Pull-Request
+    "**":
+      - step: *Build
