@@ -9,7 +9,7 @@ export type TournamentQueryParams = {
 
 export type TeamType = {
   losses?: number;
-  wuns?: number;
+  wins?: number;
   teamId?: string;
   player1: PlayerType;
   player2: PlayerType;
@@ -22,7 +22,7 @@ export type GroupType = {
   superTieBreak: boolean;
   type: MatchTypeEnum;
   teams: TeamType[];
-  matches: {
+  matches?: {
     [matchId: string]: MatchType;
   };
 };
@@ -47,9 +47,6 @@ export type TournamentType = {
     };
   };
   teams: {
-    [teamId: string]: {
-      firstName: string;
-      lastName: string;
-    };
+    [teamId: string]: TeamType;
   };
 };

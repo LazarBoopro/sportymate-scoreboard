@@ -1,6 +1,6 @@
 "use client";
 
-import { GroupPhaseEnum } from "@/interfaces/tournaments";
+import { GroupPhaseEnum } from "@/interfaces/enums";
 import Button from "@/ui/components/atoms/Button.atom";
 import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
 import useMatches from "@/ui/hooks/useMatches";

@@ -13,6 +13,9 @@ import SelectInput from "@/ui/components/moleculs/Select.molecul";
 import InputField from "@/ui/components/atoms/InputField.atom";
 import Tabs from "@/ui/components/moleculs/Tabs.molecul";
 
+import { MatchTypeEnum } from "@/interfaces/enums";
+import { TeamType } from "@/interfaces/tournaments";
+
 const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
   const { handleAddGroup, group, setGroup, teams, phase, groups, tournament } =
     useSingleTournament({
@@ -21,7 +24,14 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
 
   const [type, setType] = useState("group");
 
-  const [match, setMatch] = useState({
+  const [match, setMatch] = useState<{
+    guest: null | TeamType;
+    host: null | TeamType;
+    goldenPoint: boolean;
+    group: string;
+    superTieBreak: boolean;
+    type: MatchTypeEnum;
+  }>({
     guest: null,
     host: null,
     goldenPoint: false,
@@ -39,7 +49,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
     const payload = {
       matchId: Math.floor(Math.random() * 100),
 
-      title: `${tournament.title} - ${match.group}`,
+      title: `${tournament?.title} - ${match.group}`,
       startTime: new Date(),
       status: {
         id: 12,
@@ -113,27 +123,32 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
             <div className="input-field">
               <label className="input-field__title">Tim 1</label>
               <SelectInput
-                selectOptions={Object.keys?.(teams)?.map?.((el) => ({
-                  id: el,
+                selectOptions={
+                  teams
+                    ? Object.keys?.(teams)?.map?.((el) => ({
+                        id: el,
 
-                  name:
-                    teams[el].player1.firstName +
-                    " " +
-                    teams[el].player1.lastName +
-                    ", " +
-                    teams[el].player2.firstName +
-                    " " +
-                    teams[el].player2.lastName,
-                }))}
+                        name:
+                          teams[el].player1.firstName +
+                          " " +
+                          teams[el].player1.lastName +
+                          ", " +
+                          teams[el].player2.firstName +
+                          " " +
+                          teams[el].player2.lastName,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   const tmpTeams = [...group.teams];
-                  tmpTeams[0] = {
-                    player1: teams[val]?.player1,
-                    player2: teams[val]?.player2,
-                    wins: 0,
-                    losses: 0,
-                    teamId: val,
-                  };
+                  if (teams?.[val]?.player1 && teams?.[val]?.player2)
+                    tmpTeams[0] = {
+                      player1: teams?.[val]?.player1,
+                      player2: teams?.[val]?.player2,
+                      wins: 0,
+                      losses: 0,
+                      teamId: val,
+                    };
 
                   setGroup({
                     ...group,
@@ -151,27 +166,32 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <label className="input-field__title">Tim 2</label>
 
               <SelectInput
-                selectOptions={Object.keys(teams).map((el) => ({
-                  id: el,
+                selectOptions={
+                  teams
+                    ? Object.keys(teams).map((el) => ({
+                        id: el,
 
-                  name:
-                    teams[el].player1.firstName +
-                    " " +
-                    teams[el].player1.lastName +
-                    ", " +
-                    teams[el].player2.firstName +
-                    " " +
-                    teams[el].player2.lastName,
-                }))}
+                        name:
+                          teams[el].player1.firstName +
+                          " " +
+                          teams[el].player1.lastName +
+                          ", " +
+                          teams[el].player2.firstName +
+                          " " +
+                          teams[el].player2.lastName,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   const tmpTeams = [...group.teams];
-                  tmpTeams[1] = {
-                    player1: teams[val]?.player1,
-                    player2: teams[val]?.player2,
-                    wins: 0,
-                    losses: 0,
-                    teamId: val,
-                  };
+                  if (teams?.[val]?.player1 && teams?.[val]?.player2)
+                    tmpTeams[1] = {
+                      player1: teams?.[val]?.player1,
+                      player2: teams?.[val]?.player2,
+                      wins: 0,
+                      losses: 0,
+                      teamId: val,
+                    };
 
                   setGroup({
                     ...group,
@@ -189,27 +209,32 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <label className="input-field__title">Tim 3</label>
 
               <SelectInput
-                selectOptions={Object.keys(teams).map((el) => ({
-                  id: el,
+                selectOptions={
+                  teams
+                    ? Object.keys(teams).map((el) => ({
+                        id: el,
 
-                  name:
-                    teams[el].player1.firstName +
-                    " " +
-                    teams[el].player1.lastName +
-                    ", " +
-                    teams[el].player2.firstName +
-                    " " +
-                    teams[el].player2.lastName,
-                }))}
+                        name:
+                          teams[el].player1.firstName +
+                          " " +
+                          teams[el].player1.lastName +
+                          ", " +
+                          teams[el].player2.firstName +
+                          " " +
+                          teams[el].player2.lastName,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   const tmpTeams = [...group.teams];
-                  tmpTeams[2] = {
-                    player1: teams[val]?.player1,
-                    player2: teams[val]?.player2,
-                    wins: 0,
-                    losses: 0,
-                    teamId: val,
-                  };
+                  if (teams?.[val]?.player1 && teams?.[val]?.player2)
+                    tmpTeams[2] = {
+                      player1: teams?.[val]?.player1,
+                      player2: teams?.[val]?.player2,
+                      wins: 0,
+                      losses: 0,
+                      teamId: val,
+                    };
 
                   setGroup({
                     ...group,
@@ -227,27 +252,32 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <label className="input-field__title">Tim 4</label>
 
               <SelectInput
-                selectOptions={Object.keys(teams).map((el) => ({
-                  id: el,
+                selectOptions={
+                  teams
+                    ? Object.keys(teams).map((el) => ({
+                        id: el,
 
-                  name:
-                    teams[el].player1.firstName +
-                    " " +
-                    teams[el].player1.lastName +
-                    ", " +
-                    teams[el].player2.firstName +
-                    " " +
-                    teams[el].player2.lastName,
-                }))}
+                        name:
+                          teams[el].player1.firstName +
+                          " " +
+                          teams[el].player1.lastName +
+                          ", " +
+                          teams[el].player2.firstName +
+                          " " +
+                          teams[el].player2.lastName,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   const tmpTeams = [...group.teams];
-                  tmpTeams[3] = {
-                    player1: teams[val]?.player1,
-                    player2: teams[val]?.player2,
-                    wins: 0,
-                    losses: 0,
-                    teamId: val,
-                  };
+                  if (teams?.[val]?.player1 && teams?.[val]?.player2)
+                    tmpTeams[3] = {
+                      player1: teams?.[val]?.player1,
+                      player2: teams?.[val]?.player2,
+                      wins: 0,
+                      losses: 0,
+                      teamId: val,
+                    };
 
                   setGroup({
                     ...group,
@@ -266,27 +296,32 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <label className="input-field__title">Tim 5</label>
 
               <SelectInput
-                selectOptions={Object.keys(teams).map((el) => ({
-                  id: el,
+                selectOptions={
+                  teams
+                    ? Object.keys(teams).map((el) => ({
+                        id: el,
 
-                  name:
-                    teams[el].player1.firstName +
-                    " " +
-                    teams[el].player1.lastName +
-                    ", " +
-                    teams[el].player2.firstName +
-                    " " +
-                    teams[el].player2.lastName,
-                }))}
+                        name:
+                          teams[el].player1.firstName +
+                          " " +
+                          teams[el].player1.lastName +
+                          ", " +
+                          teams[el].player2.firstName +
+                          " " +
+                          teams[el].player2.lastName,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   const tmpTeams = [...group.teams];
-                  tmpTeams[4] = {
-                    player1: teams[val]?.player1,
-                    player2: teams[val]?.player2,
-                    wins: 0,
-                    losses: 0,
-                    teamId: val,
-                  };
+                  if (teams?.[val]?.player1 && teams?.[val]?.player2)
+                    tmpTeams[4] = {
+                      player1: teams?.[val]?.player1,
+                      player2: teams?.[val]?.player2,
+                      wins: 0,
+                      losses: 0,
+                      teamId: val,
+                    };
 
                   setGroup({
                     ...group,
@@ -397,16 +432,20 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
             <div className="input-field">
               <label className="input-field__title">Izaberite grupu</label>
               <SelectInput
-                selectOptions={Object.keys?.(groups)?.map?.((el, i) => ({
-                  id: el,
-                  name: el,
-                }))}
+                selectOptions={
+                  groups
+                    ? Object.keys?.(groups)?.map?.((el, i) => ({
+                        id: el,
+                        name: el,
+                      }))
+                    : []
+                }
                 handleChange={(val: string) => {
                   setMatch({
                     ...match,
                     group: val,
-                    superTieBreak: groups[val].superTieBreak ?? true,
-                    type: groups[val].type ?? 0,
+                    superTieBreak: groups?.[val].superTieBreak ?? true,
+                    type: groups?.[val].type ?? 0,
                   });
                 }}
                 defaultSelected={match.group ? match.group : "Izaberite grupu"}
@@ -418,7 +457,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <SelectInput
                 selectOptions={
                   match.group
-                    ? groups[match.group]?.teams?.map?.((el: any) => ({
+                    ? groups?.[match.group]?.teams?.map?.((el: any) => ({
                         id: el.teamId,
 
                         name:
@@ -430,7 +469,8 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                           " " +
                           el?.player2.lastName,
                       }))
-                    : Object.keys?.(teams)?.map?.((el) => ({
+                    : teams
+                    ? Object.keys?.(teams)?.map?.((el) => ({
                         id: el,
 
                         name:
@@ -442,22 +482,24 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                           " " +
                           teams[el].player2.lastName,
                       }))
+                    : []
                 }
                 handleChange={(val: string) => {
-                  setMatch({
-                    ...match,
-                    //@ts-ignore
-                    host: {
-                      teamId: val,
-                      player1: teams[val]?.player1,
-                      player2: teams[val]?.player2,
-                    },
-                  });
+                  if (teams?.[val]?.player1 && teams[val]?.player2) {
+                    setMatch({
+                      ...match,
+
+                      host: {
+                        teamId: val,
+                        player1: teams[val].player1,
+                        player2: teams[val].player2,
+                      },
+                    });
+                  }
                 }}
                 defaultSelected={
                   match?.host
-                    ? //@ts-ignore
-                      `${match.host.player1.firstName} ${match.host.player1.lastName} ${match.host.player2.firstName} ${match.host.player2.lastName}`
+                    ? `${match.host.player1.firstName} ${match.host.player1.lastName} ${match.host.player2.firstName} ${match.host.player2.lastName}`
                     : "Izaberite igraca"
                 }
               />
@@ -468,7 +510,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
               <SelectInput
                 selectOptions={
                   match.group
-                    ? groups[match.group]?.teams?.map?.((el: any) => ({
+                    ? groups?.[match.group]?.teams?.map?.((el: any) => ({
                         id: el.teamId,
 
                         name:
@@ -480,7 +522,8 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                           " " +
                           el?.player2.lastName,
                       }))
-                    : Object.keys?.(teams)?.map?.((el) => ({
+                    : teams
+                    ? Object.keys?.(teams)?.map?.((el) => ({
                         id: el,
 
                         name:
@@ -492,24 +535,24 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
                           " " +
                           teams[el].player2.lastName,
                       }))
+                    : []
                 }
                 handleChange={(val: string) => {
-                  setMatch({
-                    ...match,
-                    //@ts-ignore
+                  if (teams?.[val]?.player1 && teams[val]?.player2) {
+                    setMatch({
+                      ...match,
 
-                    guest: {
-                      teamId: val,
-                      player1: teams[val]?.player1,
-                      player2: teams[val]?.player2,
-                    },
-                  });
+                      host: {
+                        teamId: val,
+                        player1: teams[val].player1,
+                        player2: teams[val].player2,
+                      },
+                    });
+                  }
                 }}
                 defaultSelected={
                   match.guest
-                    ? //@ts-ignore
-
-                      `${match.guest.player1.firstName} ${match.guest.player1.lastName} ${match.guest.player2.firstName} ${match.guest.player2.lastName}`
+                    ? `${match.guest.player1.firstName} ${match.guest.player1.lastName} ${match.guest.player2.firstName} ${match.guest.player2.lastName}`
                     : "Izaberite igraca"
                 }
               />

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { usePathname, useSearchParams } from "next/navigation";
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState, MouseEvent } from "react";
 
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
@@ -14,33 +14,10 @@ import { IoAddCircleOutline, IoChevronBack } from "react-icons/io5";
 
 import Button from "@/ui/components/atoms/Button.atom";
 import InputField from "@/ui/components/atoms/InputField.atom";
-import { TeamList } from "@/ui/components/organism/Teams.organism";
+import { TeamList } from "@/ui/components/organism/TeamList.organism";
 import { GroupList } from "@/ui/components/organism/Groups.organism";
 import CreateGroup from "@/ui/components/organism/CreateGroup.organism";
-import { GroupPhaseEnum } from "@/interfaces/enums";
-
-const phases = [
-  {
-    id: "groups",
-    label: "Grupe",
-  },
-  {
-    id: "round-of-16",
-    label: "Osmina finala",
-  },
-  {
-    id: "quarter-finals",
-    label: "Cetvrtina finala",
-  },
-  {
-    id: "semi-final",
-    label: "Polovina finala",
-  },
-  {
-    id: "final",
-    label: "Finale",
-  },
-];
+import { phases } from "@/helpers/helpers";
 
 export default function SingleTournament({
   params,
@@ -49,7 +26,6 @@ export default function SingleTournament({
 }) {
   const {
     tournament,
-    deleteGroup,
     groups,
     handleAddTeam,
     handleOnChangeTeam,
@@ -57,6 +33,7 @@ export default function SingleTournament({
     teams,
     handleDeleteTeam,
     handleUpdateTeam,
+    handleDeleteGroup,
   } = useSingleTournament({ id: params.id });
 
   const teamsButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -157,18 +134,8 @@ export default function SingleTournament({
               {screen === "groups" ? (
                 <GroupList
                   tournamentId={params.id}
-                  //@ts-ignore
                   groups={groups}
-                  //@ts-ignore
-                  handleDelete={(id) =>
-                    deleteGroup({
-                      tournamentId: params.id,
-                      groupId: id,
-                      phase:
-                        (queryParams.get("phase") as GroupPhaseEnum) ??
-                        GroupPhaseEnum.GROUPS,
-                    })
-                  }
+                  handleDelete={handleDeleteGroup}
                 />
               ) : (
                 <TeamList

@@ -8,37 +8,6 @@ import Button from "@/ui/components/atoms/Button.atom";
 
 import InputField from "@/ui/components/atoms/InputField.atom";
 
-export function TeamList({
-  teams,
-  handleEdit,
-  deleteTeam,
-}: {
-  teams: any[];
-  deleteTeam: (teamId: string) => void;
-  handleEdit: (
-    teamId: string,
-    data: {
-      player1: { firstName: string; lastName: string };
-      player2: { firstName: string; lastName: string };
-    }
-  ) => void;
-}) {
-  if (!teams) return <div>Nema timova</div>;
-  return Object.keys(teams).map((key, i) => (
-    // @ts-ignore
-    <Team
-      key={i}
-      id={key}
-      // @ts-ignore
-      player1={teams[key].player1}
-      // @ts-ignore
-      player2={teams[key].player2}
-      deleteTeam={deleteTeam}
-      handleEdit={handleEdit}
-    />
-  ));
-}
-
 export function Team({
   id,
   player1,
@@ -84,10 +53,6 @@ export function Team({
     tmpTeam[player][name] = e.target.value;
 
     setInfo(tmpTeam);
-    // setInfo({
-    //     ...info,
-    //     [e.target.name]: e.target.value,
-    // });
   };
 
   return (

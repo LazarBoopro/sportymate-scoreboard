@@ -15,8 +15,8 @@ export function GroupList({
   handleDelete,
 }: {
   tournamentId: string;
-  groups: any[];
-  handleDelete: any;
+  groups: { [key: string]: GroupType } | null;
+  handleDelete: (id: string) => void;
 }) {
   const queryParams = useSearchParams();
 

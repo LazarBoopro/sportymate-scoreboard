@@ -30,9 +30,10 @@ export default function WatchTournament({
         <article className="tv-tournament">
           {!t ? (
             <Suspense fallback={null}>
-              {Object.values(groups)?.map((n: any, i: number) => (
-                <Group key={i} {...n} />
-              ))}
+              {groups &&
+                Object.values(groups)?.map((n: any, i: number) => (
+                  <Group key={i} {...n} />
+                ))}
             </Suspense>
           ) : (
             <Suspense fallback={null}>

@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AnimatePresence } from "framer-motion";
 import Image from "next/image";
 

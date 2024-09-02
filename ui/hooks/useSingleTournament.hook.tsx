@@ -1,6 +1,9 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import {
   useAddGroup,
   useDeleteGroup,
@@ -11,14 +14,14 @@ import {
   useDeleteTeam,
   useUpdateTeam,
 } from "@/infrastructure/mutations/teams";
-import { GroupPhaseEnum } from "@/interfaces/enums";
-import { PlayerType } from "@/interfaces/matches";
+
+import { GroupPhaseEnum, MatchTypeEnum } from "@/interfaces/enums";
+import { MatchType, PlayerType } from "@/interfaces/matches";
 import { TeamType, TournamentType } from "@/interfaces/tournaments";
+
 import { database } from "@/lib/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { onValue, ref } from "firebase/database";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const alphabet = Array.from({ length: 26 }, (_, i) =>
   String.fromCharCode(i + 65)
@@ -33,7 +36,14 @@ export default function useSingleTournament({
 }) {
   // states
   const [tournament, setTournament] = useState<TournamentType | null>(null);
-  const [group, setGroup] = useState<any>({
+  const [group, setGroup] = useState<{
+    teams: TeamType[];
+    double: boolean;
+    superTieBreak: boolean;
+    goldenPoint: boolean;
+    type: MatchTypeEnum;
+    //  matches: { [matchId: string]: MatchType; }
+  }>({
     teams: [],
     double: true,
     superTieBreak: true,
@@ -101,7 +111,7 @@ export default function useSingleTournament({
 
     addGroup({
       data: {
-        matches: [],
+        // matches: [],
         name: alphabet[groupLen],
         ...group,
       },
@@ -115,9 +125,24 @@ export default function useSingleTournament({
     deleteTeam({ tournamentId: id, teamId });
   };
 
+  function handleDeleteGroup(id: string) {
+    deleteGroup({
+      tournamentId: id,
+      groupId: id,
+      phase:
+        (queryParams.get("phase") as GroupPhaseEnum) ?? GroupPhaseEnum.GROUPS,
+    });
+  }
+
   useEffect(() => {
     if (isAddGroupSuccess) {
-      setGroup({ teams: [], double: true, superTieBreak: true, type: 0 });
+      setGroup({
+        teams: [],
+        double: true,
+        superTieBreak: true,
+        goldenPoint: false,
+        type: 0,
+      });
     }
     if (isAddTeamSuccess) {
       setTeam({
@@ -160,18 +185,19 @@ export default function useSingleTournament({
     handleAddGroup,
     group,
     setGroup,
-    groups: phaseInfo ?? [],
+    groups: phaseInfo ?? null,
     deleteGroup,
     handleAddTeam,
     handleOnChangeTeam,
     team,
-    teams: tournament?.teams ?? [],
+    teams: tournament?.teams ?? null,
     deleteTeam,
     handleUpdateTeam,
     singleGroup: groupId ? phaseInfo?.[groupId.toUpperCase()] : null,
     updateGroup,
     phase,
-    matches: groupId ? phaseInfo?.[groupId.toUpperCase()]?.matches : [],
+    matches: groupId ? phaseInfo?.[groupId.toUpperCase()]?.matches : null,
     handleDeleteTeam,
+    handleDeleteGroup,
   };
 }
