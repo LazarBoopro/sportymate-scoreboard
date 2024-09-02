@@ -9,13 +9,10 @@ definitions:
         name: 'Node Build'
         caches:
           - npm
-        
         script:
           - npm install
           - npm run build
-      
 
-  
 pipelines:
   pull-requests:
     '**':
