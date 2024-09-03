@@ -221,7 +221,7 @@ export default function SingleTournament({
                   marginBottom: "auto",
                 }}
               ></div>
-              <Button onClick={handleAddTeam}>
+              <Button>
                 dodaj tim <IoAddCircleOutline />
               </Button>
             </section>

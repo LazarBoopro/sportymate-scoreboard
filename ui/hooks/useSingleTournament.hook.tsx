@@ -2,7 +2,7 @@
 
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   useAddGroup,
@@ -93,7 +93,8 @@ export default function useSingleTournament({
     setTeam(tmpTeam);
   }
 
-  function handleAddTeam() {
+  function handleAddTeam(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
     addTeam({ tournamentId: id, data: team });
   }
 
