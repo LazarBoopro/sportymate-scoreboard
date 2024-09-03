@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 import Context from "@/ui/providers/NavbarContext.provider";
 
@@ -38,7 +38,6 @@ export default function useSingleMatch({
 
   const { toast } = useToast();
   const router = useRouter();
-  const queryParams = useSearchParams();
 
   // States
   const [params, setParams] = useState<null | number>(null);
@@ -65,10 +64,6 @@ export default function useSingleMatch({
   const tieBreakScore = match?.score?.tiebreak;
   const isGoldenPoint = match?.goldenPoint;
 
-  const prefix = tournament
-    ? `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`
-    : "";
-
   // Queries and Mutations
   const { mutate: updateMatchScore, isSuccess: isSuccessCurrentMatchScore } =
     useUpdateCurrentSet();
@@ -77,8 +72,7 @@ export default function useSingleMatch({
   const { mutate: updateTieScore, isSuccess: isSuccessCurrentTieBreakScore } =
     useUpdateTieScore();
   const { mutate: updateMatchWinner } = useUpdateMatchWinner();
-  const { mutate: updateStatus, isSuccess: isSuccessStatus } =
-    useUpdateMatchStatus();
+  const { mutate: updateStatus } = useUpdateMatchStatus();
 
   // Functions
 

@@ -2,12 +2,12 @@
 
 import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
 
-import useMatches from "@/ui/hooks/useMatches";
+import { useMatches } from "@/ui/hooks/useMatches";
 
 import "@/ui/styles/organism/tournaments.organism.scss";
 
 export function MatchList() {
-  const { tournaments } = useMatches();
+  const { matches } = useMatches();
 
-  return tournaments?.map((n, i) => <TournamentCard key={i} {...n} />);
+  return matches?.map((n, i) => <TournamentCard key={i} {...n} />);
 }

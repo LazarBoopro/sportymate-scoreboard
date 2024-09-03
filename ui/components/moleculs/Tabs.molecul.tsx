@@ -14,7 +14,7 @@ export default function Tabs({
   selected,
 }: {
   selected: number;
-  onChange: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onChange: (e: any) => void;
   title: string;
   name: string;
   type: string;

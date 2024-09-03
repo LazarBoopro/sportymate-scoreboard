@@ -192,41 +192,39 @@ function Graph({
     Object.keys(tournament.matches.final).map((finalGroupKeys) => {
       return (
         tournament.matches.final[finalGroupKeys]?.matches &&
-        Object.keys(tournament.matches.final[finalGroupKeys]?.matches).map(
-          (finalMatchKey: string) => {
-            const finalMatch =
-              tournament.matches.final[finalGroupKeys]?.matches?.[
-                finalMatchKey
-              ];
-            if (finalMatch)
-              return {
-                players: {
-                  host: {
-                    player1:
-                      finalMatch.players?.host.player1.firstName[0] +
+        Object.keys(
+          tournament.matches.final[finalGroupKeys]?.matches ?? {}
+        ).map((finalMatchKey: string) => {
+          const finalMatch =
+            tournament.matches.final[finalGroupKeys]?.matches?.[finalMatchKey];
+          if (finalMatch)
+            return {
+              players: {
+                host: {
+                  player1:
+                    finalMatch.players?.host.player1.firstName[0] +
+                    ". " +
+                    finalMatch.players?.host.player1.lastName,
+                  player2: finalMatch.players?.host.player2
+                    ? finalMatch.players?.host.player2.firstName[0] +
                       ". " +
-                      finalMatch.players?.host.player1.lastName,
-                    player2: finalMatch.players?.host.player2
-                      ? finalMatch.players?.host.player2.firstName[0] +
-                        ". " +
-                        finalMatch.players?.host.player2.lastName
-                      : undefined,
-                  },
-                  guest: {
-                    player1:
-                      finalMatch.players?.guest.player1.firstName[0] +
-                      ". " +
-                      finalMatch.players?.guest.player1.lastName,
-                    player2: finalMatch.players?.guest.player2
-                      ? finalMatch.players?.guest.player2.firstName[0] +
-                        ". " +
-                        finalMatch.players?.guest.player2.lastName
-                      : undefined,
-                  },
+                      finalMatch.players?.host.player2.lastName
+                    : undefined,
                 },
-              };
-          }
-        )?.[0]
+                guest: {
+                  player1:
+                    finalMatch.players?.guest.player1.firstName[0] +
+                    ". " +
+                    finalMatch.players?.guest.player1.lastName,
+                  player2: finalMatch.players?.guest.player2
+                    ? finalMatch.players?.guest.player2.firstName[0] +
+                      ". " +
+                      finalMatch.players?.guest.player2.lastName
+                    : undefined,
+                },
+              },
+            };
+        })?.[0]
       );
     })?.[0];
 

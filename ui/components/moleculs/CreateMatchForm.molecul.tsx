@@ -79,18 +79,17 @@ const CreateMatchForm = ({
           <label className="input-field__title">Tim 1</label>
           <SelectInput
             selectOptions={
-              match.group
-                ? groups?.[match.group]?.teams?.map?.((el: TeamType) => ({
-                    id: el.teamId,
-
+              match.group && groups?.[match.group]?.teams
+                ? groups?.[match.group]?.teams?.map((el: TeamType) => ({
+                    id: el.teamId ?? "",
                     name:
-                      el?.player1.firstName +
+                      el.player1.firstName +
                       " " +
-                      el?.player1.lastName +
+                      el.player1.lastName +
                       ", " +
-                      el?.player2?.firstName +
+                      el.player2?.firstName +
                       " " +
-                      el?.player2?.lastName,
+                      el.player2?.lastName,
                   }))
                 : teams
                 ? Object.keys?.(teams)?.map?.((el) => ({
@@ -133,9 +132,9 @@ const CreateMatchForm = ({
 
           <SelectInput
             selectOptions={
-              match.group
+              match.group && groups?.[match.group]?.teams
                 ? groups?.[match.group]?.teams?.map?.((el: TeamType) => ({
-                    id: el.teamId,
+                    id: el.teamId ?? "",
 
                     name:
                       el?.player1.firstName +

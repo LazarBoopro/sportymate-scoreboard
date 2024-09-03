@@ -8,7 +8,7 @@ import Button from "@/ui/components/atoms/Button.atom";
 import { MatchList } from "./MatchesList.organism";
 import { TournamentsList } from "./TorinamentList.organism";
 
-import useMatches from "@/ui/hooks/useMatches";
+import { useMatches } from "@/ui/hooks/useMatches";
 
 import { IoChevronForwardOutline } from "react-icons/io5";
 
@@ -17,7 +17,7 @@ import Context from "@/ui/providers/NavbarContext.provider";
 import "@/ui/styles/organism/tournaments.organism.scss";
 
 export default function Tournamets() {
-  const { tournaments } = useMatches();
+  const { matches } = useMatches();
   const { screen, setScreen } = useContext(Context);
 
   const ref = useRef<HTMLDivElement | null>(null);
@@ -64,9 +64,9 @@ export default function Tournamets() {
         width: tournamentButtonRef?.current?.getBoundingClientRect().width || 0,
       });
     }
-  }, [tournamentButtonRef.current, tournaments]);
+  }, [tournamentButtonRef.current, matches]);
 
-  if (!tournaments?.length && screen === "matches") {
+  if (!matches?.length && screen === "matches") {
     return (
       <div ref={ref} className="tournaments" id="tournaments">
         <div className="tournaments__header">
@@ -92,13 +92,6 @@ export default function Tournamets() {
               }}
             ></div>
           </div>
-          {/* <h2 className="title">
-            Nema mečeva
-            <Image alt="" src={tennisBallImage} />
-          </h2>
-          <Button onClick={handleClick} className="cta-slide" type="fade">
-            Dodaj meč <IoChevronForwardOutline />
-          </Button> */}
         </div>
       </div>
     );

@@ -11,24 +11,22 @@ import { useRouter } from "next/navigation";
 import { MATCH_DEFAULT_OPTIONS } from "@/lib/constants/match";
 import { useAddMatch } from "@/infrastructure/mutations/matches";
 
-type TournamentTypeExtended = MatchType & {
+type MatchTypeExtended = MatchType & {
   id: string;
 };
 
-export default function useMatches() {
+export function useMatches() {
   const router = useRouter();
 
   const [user] = useAuthState(auth);
 
   const {
-    mutate: addTournament,
+    mutate: addMatch,
     isSuccess,
-    isPending: isAddingTournament,
+    isPending: isAddingMatch,
   } = useAddMatch();
 
-  const [tournaments, setTournaments] = useState<
-    TournamentTypeExtended[] | null
-  >(null);
+  const [matches, setMatches] = useState<MatchTypeExtended[] | null>(null);
   const [isDouble, setIsDouble] = useState(true);
   const [isSuperTieBreak, setIsSuperTieBreak] = useState(
     MATCH_DEFAULT_OPTIONS.superTieBreak
@@ -69,7 +67,7 @@ export default function useMatches() {
       winner: null,
     };
 
-    addTournament(payload);
+    addMatch(payload);
   };
 
   const handleOnChange = (
@@ -82,16 +80,6 @@ export default function useMatches() {
     if (subField !== undefined && index !== undefined) {
       // @ts-ignore
       data.players[field][index][subField] = value;
-      // return setData((prevData) => ({
-      //     ...prevData,
-      //     players: {
-      //         ...prevData.players,
-      //         [field]: prevData.players[field as keyof typeof prevData.players].map(
-      //             (n: PlayerType, i: number) =>
-      //                 i === Number(index) ? { ...n, [subField]: value } : n
-      //         ),
-      //     },
-      // }));
     }
 
     if (index !== undefined) {
@@ -116,24 +104,25 @@ export default function useMatches() {
       return router.replace("/login");
     }
 
-    const tournamentsRef = ref(database, "matches");
-    const tournamentQuery = query(
-      tournamentsRef,
+    const matchesRef = ref(database, "matches");
+
+    const matchQuery = query(
+      matchesRef,
       orderByChild("userId"),
       equalTo(user?.uid)
     );
 
-    const unsubscribe = onValue(tournamentQuery, (snapshot) => {
+    const unsubscribe = onValue(matchQuery, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
-        const tournamentsData = Object.keys(data).map((key) => ({
+        const matchesData = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
         }));
-        setTournaments(tournamentsData);
+        setMatches(matchesData);
       } else {
-        setTournaments([]);
+        setMatches([]);
       }
     });
 
@@ -147,10 +136,10 @@ export default function useMatches() {
   }, [isSuccess]);
 
   return {
-    tournaments,
+    matches,
     data,
     isDouble,
-    isAddingTournament,
+    isAddingMatch,
     resetForm,
     handleSubmit,
     setIsDouble,
