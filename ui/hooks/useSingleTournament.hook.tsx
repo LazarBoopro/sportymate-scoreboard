@@ -17,7 +17,11 @@ import {
 
 import { GroupPhaseEnum, MatchTypeEnum } from "@/interfaces/enums";
 import { MatchType, PlayerType } from "@/interfaces/matches";
-import { TeamType, TournamentType } from "@/interfaces/tournaments";
+import {
+  CreateGroupType,
+  TeamType,
+  TournamentType,
+} from "@/interfaces/tournaments";
 
 import { database } from "@/lib/firebaseConfig";
 import { FirebaseError } from "firebase/app";
@@ -36,14 +40,7 @@ export default function useSingleTournament({
 }) {
   // states
   const [tournament, setTournament] = useState<TournamentType | null>(null);
-  const [group, setGroup] = useState<{
-    teams: TeamType[];
-    double: boolean;
-    superTieBreak: boolean;
-    goldenPoint: boolean;
-    type: MatchTypeEnum;
-    //  matches: { [matchId: string]: MatchType; }
-  }>({
+  const [group, setGroup] = useState<CreateGroupType>({
     teams: [],
     double: true,
     superTieBreak: true,
@@ -104,7 +101,7 @@ export default function useSingleTournament({
     updateTeam({ tournamentId: id, teamId, data });
   }
 
-  function handleAddGroup(ev: any) {
+  function handleAddGroup(ev: React.SyntheticEvent<HTMLFormElement>) {
     ev.preventDefault();
 
     const groupLen = phaseInfo ? Object.keys(phaseInfo)?.length : 0;

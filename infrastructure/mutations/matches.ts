@@ -12,6 +12,7 @@ import {
   updateTieScore,
 } from "../services/matches";
 import { TournamentQueryParams } from "@/interfaces/tournaments";
+import { MatchScoreType } from "@/interfaces/matches";
 
 export const useAddMatch = () => {
   return useMutation({
@@ -42,7 +43,7 @@ export const useUpdateCurrentSet = () => {
     }: {
       id: string;
       team: string;
-      score: any; // number[]
+      score: number;
       tournament?: TournamentQueryParams;
     }) => updateCurrentSetScore({ team, id, score, tournament }),
   });
@@ -62,7 +63,7 @@ export const useUpdateGemScore = () => {
       gem: number;
       team: string;
       score: number;
-      prevScore: any;
+      prevScore?: number[];
       tournament?: TournamentQueryParams;
     }) => updateGemScore({ id, gem, team, score, prevScore, tournament }),
   });

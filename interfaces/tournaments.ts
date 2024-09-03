@@ -12,7 +12,19 @@ export type TeamType = {
   wins?: number;
   teamId?: string;
   player1: PlayerType;
-  player2: PlayerType;
+  player2?: PlayerType;
+};
+
+export type ObjectType<T> = {
+  [key: string]: T;
+};
+
+export type CreateGroupType = {
+  teams: TeamType[];
+  double: boolean;
+  superTieBreak: boolean;
+  goldenPoint: boolean;
+  type: MatchTypeEnum;
 };
 
 export type GroupType = {

@@ -33,7 +33,10 @@ export const checkFailureMessage = (message?: string | undefined): string => {
   }
 };
 
-export const checkStatusMessage = (message: string) => {
+export const checkStatusMessage = (message: string | undefined) => {
+  if (!message) {
+    return "U pripremi";
+  }
   const statusMessage = message.toLowerCase().replace(" ", "");
 
   switch (statusMessage) {

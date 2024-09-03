@@ -2,7 +2,7 @@ import { TournamentType } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
 import { child, get, push, ref, remove, set, update } from "firebase/database";
 
-export const addTournament = (data: { name: string }) => {
+export const addTournament = (data: { title: string }) => {
   const tournametsRef = ref(database, "tournaments");
 
   return push(tournametsRef, data);

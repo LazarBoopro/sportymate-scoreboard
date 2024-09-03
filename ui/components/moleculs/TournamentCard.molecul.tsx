@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import Button from "@/ui/components/atoms/Button.atom";
 
-import { MatchTypeService } from "@/interfaces/matches";
+import { MatchType } from "@/interfaces/matches";
 
 import { useDeleteMatch } from "@/infrastructure/mutations/matches";
 
@@ -20,7 +20,7 @@ import { MATCH_TYPES } from "@/lib/constants/match";
 import { scores } from "@/lib/helpers/score";
 import { TournamentQueryParams } from "@/interfaces/tournaments";
 
-type TournamentType = MatchTypeService & {
+type TournamentType = MatchType & {
   id: string;
   tournament?: TournamentQueryParams;
 };
@@ -62,19 +62,15 @@ export default function TournamentCard({
 
       <div className="tournament__body">
         <div className="team">
-          {/* {players?.host?.map?.((n, i) => (
-                        <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
-                    ))} */}
-
           <p>{` ${players.host.player1?.firstName?.[0]}. ${players.host.player1?.lastName}`}</p>
           <p>{` ${players.host.player2?.firstName?.[0]}. ${players.host.player2?.lastName}`}</p>
         </div>
 
         <div className="scores">
           <div className="scores__top">
-            <p>{scores[score.currentSet[0]]}</p>
+            <p>{score?.currentSet[0] ? scores[score.currentSet[0]] : 0}</p>
             <p>:</p>
-            <p>{scores[score.currentSet[1]]}</p>
+            <p>{score?.currentSet[1] ? scores[score.currentSet[1]] : 0}</p>
           </div>
           <div className="scores__bottom">
             {score?.sets?.map?.((set, i) => (
@@ -88,10 +84,6 @@ export default function TournamentCard({
         </div>
 
         <div className="team">
-          {/* {players.guest.map((n, i) => (
-                        <p key={i}>{` ${n.firstName?.[0]}. ${n.lastName}`}</p>
-                    ))} */}
-
           <p>{` ${players.guest.player1?.firstName?.[0]}. ${players.guest.player1?.lastName}`}</p>
           <p>{` ${players.guest.player2?.firstName?.[0]}. ${players.guest.player2?.lastName}`}</p>
         </div>

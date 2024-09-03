@@ -7,6 +7,7 @@ import { IoPencilSharp, IoSaveOutline, IoTrashOutline } from "react-icons/io5";
 import Button from "@/ui/components/atoms/Button.atom";
 
 import InputField from "@/ui/components/atoms/InputField.atom";
+import { TeamType } from "@/interfaces/tournaments";
 
 export function Team({
   id,
@@ -17,15 +18,9 @@ export function Team({
 }: {
   id: string;
   player1: { firstName: string; lastName: string };
-  player2: { firstName: string; lastName: string };
+  player2?: { firstName: string; lastName: string };
   deleteTeam: (teamId: string) => void;
-  handleEdit: (
-    teamId: string,
-    data: {
-      player1: { firstName: string; lastName: string };
-      player2: { firstName: string; lastName: string };
-    }
-  ) => void;
+  handleEdit: (teamId: string, data: TeamType) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [info, setInfo] = useState({
@@ -77,20 +72,20 @@ export function Team({
             />
           </>
         )}
-        {!editing ? (
+        {!editing && player2 ? (
           <p>{player2.firstName + " " + player2.lastName}</p>
         ) : (
           <>
             <InputField
               name="player2.firstName"
               onChange={handleChange}
-              value={info.player2.firstName}
+              value={info.player2?.firstName ?? ""}
               placeholder="Ime"
             />
             <InputField
               name="player2.lastName"
               onChange={handleChange}
-              value={info.player2.lastName}
+              value={info.player2?.lastName ?? ""}
               placeholder="Prezime"
             />
           </>

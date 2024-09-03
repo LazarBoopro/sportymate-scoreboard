@@ -4,11 +4,13 @@ import {
   deleteTournament,
   updateTournament,
 } from "../services/tournaments";
+import { TournamentType } from "@/interfaces/tournaments";
 
 export const useAddTournament = () => {
   return useMutation({
     // @ts-ignore
-    mutationFn: (data: any) => addTournament(data),
+    mutationFn: (data: { title: string; tournamentId: string }) =>
+      addTournament(data),
   });
 };
 
@@ -28,7 +30,7 @@ export const useUpdateTournament = () => {
     }: {
       team: string;
       id: string;
-      data: any;
+      data: TournamentType;
       path: string;
     }) => updateTournament({ id, data, path }),
   });

@@ -1,10 +1,10 @@
-import { MatchTypeService } from "@/interfaces/matches";
+import { MatchType } from "@/interfaces/matches";
 import { TournamentQueryParams } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
 import { get, push, ref, remove, update } from "firebase/database";
 
 export const addMatch = (
-  data: MatchTypeService & { tournament?: TournamentQueryParams }
+  data: MatchType & { tournament?: TournamentQueryParams }
   // tournament?: TournamentQueryParams
 ) => {
   let prefix = "";
@@ -49,13 +49,12 @@ export const getSingleMatch = async (
 export const updateCurrentSetScore = async ({
   team,
   id,
-
   score,
   tournament,
 }: {
   id: string;
   team: string;
-  score: any; // number[]
+  score: number;
   tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";
@@ -84,7 +83,7 @@ export const updateGemScore = async ({
   gem: number;
   team: string;
   score: number;
-  prevScore: any;
+  prevScore?: number[];
   tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";

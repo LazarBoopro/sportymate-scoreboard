@@ -5,13 +5,13 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { auth, database } from "@/lib/firebaseConfig";
 
 import { equalTo, onValue, orderByChild, query, ref } from "firebase/database";
-import { PlayerType, MatchType, MatchTypeService } from "@/interfaces/matches";
+import { MatchType, CreateMatchType } from "@/interfaces/matches";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { MATCH_DEFAULT_OPTIONS } from "@/lib/constants/match";
 import { useAddMatch } from "@/infrastructure/mutations/matches";
 
-type TournamentTypeExtended = MatchTypeService & {
+type TournamentTypeExtended = MatchType & {
   id: string;
 };
 
@@ -36,7 +36,7 @@ export default function useMatches() {
   const [isGoldenPoint, setIsGoldenPoint] = useState(
     MATCH_DEFAULT_OPTIONS.goldenPoint
   );
-  const [data, setData] = useState<MatchType>({
+  const [data, setData] = useState<CreateMatchType>({
     ...MATCH_DEFAULT_OPTIONS,
   });
 
@@ -48,8 +48,8 @@ export default function useMatches() {
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
-    const payload: MatchTypeService = {
-      matchId: Math.floor(Math.random() * 100),
+    const payload: MatchType = {
+      matchId: `${Math.floor(Math.random() * 100)}`,
       userId: user?.uid!,
       title: data.title,
       startTime: `${data.date} ${data.startTime?.hour}:${data.startTime?.minute}`,
@@ -63,12 +63,7 @@ export default function useMatches() {
       players: data.players,
       score: {
         currentSet: [0, 0],
-        sets: [
-          {
-            [0]: 0,
-            [1]: 0,
-          },
-        ],
+        sets: [[0, 0]],
         tiebreak: [0, 0],
       },
       winner: null,

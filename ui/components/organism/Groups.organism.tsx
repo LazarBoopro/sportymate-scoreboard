@@ -7,7 +7,7 @@ import { IoTrashOutline } from "react-icons/io5";
 
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
-import { GroupType } from "@/interfaces/tournaments";
+import { GroupType, TeamType } from "@/interfaces/tournaments";
 
 export function GroupList({
   tournamentId,
@@ -44,11 +44,13 @@ export function GroupList({
           >
             <div className="group__list">
               {groups[key as keyof typeof groups]?.teams?.map(
-                (team: any, i: any) => (
+                (team: TeamType, i: number) => (
                   <div className="team" key={i}>
                     <span>{i + 1}</span>
                     <p className="team__player">{`${team.player1.firstName[0]}. ${team.player1.lastName}`}</p>
-                    <p className="team__player">{`${team.player2.firstName[0]}. ${team.player2.lastName}`}</p>
+                    {team.player2 && (
+                      <p className="team__player">{`${team.player2.firstName[0]}. ${team.player2.lastName}`}</p>
+                    )}
                   </div>
                 )
               )}

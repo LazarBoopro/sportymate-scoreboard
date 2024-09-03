@@ -48,14 +48,19 @@ export default function SingleTournament({
   const pathname = usePathname();
   const queryParams = useSearchParams();
 
-  const handleMouseClick = (e: any) => {
+  const handleMouseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!(e.target instanceof HTMLButtonElement)) {
+      return;
+    }
+
     setPosition({
-      left: e?.target?.offsetLeft || teamsButtonRef?.current?.offsetLeft,
+      left: (e?.target?.offsetLeft || teamsButtonRef?.current?.offsetLeft) ?? 0,
       width:
-        e?.target?.getBoundingClientRect().width ||
-        teamsButtonRef?.current?.getBoundingClientRect().width,
+        (e?.target?.getBoundingClientRect().width ||
+          teamsButtonRef?.current?.getBoundingClientRect().width) ??
+        0,
     });
-    setScreen(e.target.dataset.type);
+    setScreen(e.target.dataset.type as typeof screen);
   };
 
   useEffect(() => {
@@ -194,7 +199,7 @@ export default function SingleTournament({
                 onChange={handleOnChangeTeam}
                 title="Ime"
                 name="player2.firstName"
-                value={team.player2.firstName}
+                value={team.player2?.firstName ?? ""}
                 placeholder="Ime"
                 required
               />
@@ -202,7 +207,7 @@ export default function SingleTournament({
                 onChange={handleOnChangeTeam}
                 title="Prezime"
                 name="player2.lastName"
-                value={team.player2.lastName}
+                value={team.player2?.lastName ?? ""}
                 placeholder="Prezime"
                 required
               />

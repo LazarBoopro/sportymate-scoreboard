@@ -185,7 +185,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Ime"
                     name="host.player2.firstName"
-                    value={data?.players.host?.player2.firstName ?? ""}
+                    value={data?.players.host?.player2?.firstName ?? ""}
                     placeholder="Ime"
                     required
                   />
@@ -193,7 +193,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Prezime"
                     name="host.player2.lastName"
-                    value={data?.players.host?.player2.lastName ?? ""}
+                    value={data?.players.host?.player2?.lastName ?? ""}
                     placeholder="Prezime"
                     required
                   />
@@ -236,7 +236,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Ime"
                     name="guest.player2.firstName"
-                    value={data?.players.guest?.player2.firstName ?? ""}
+                    value={data?.players.guest?.player2?.firstName ?? ""}
                     placeholder="Ime"
                     required
                   />
@@ -244,7 +244,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Prezime"
                     name="guest.player2.lastName"
-                    value={data?.players.guest?.player2.lastName ?? ""}
+                    value={data?.players.guest?.player2?.lastName ?? ""}
                     placeholder="Prezime"
                     required
                   />
