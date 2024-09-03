@@ -72,7 +72,9 @@ export default function useMatches() {
     addTournament(payload);
   };
 
-  const handleOnChange = (e: any) => {
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
 
     const [field, index, subField] = name.split(".");

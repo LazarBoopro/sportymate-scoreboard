@@ -16,7 +16,7 @@ export default function SelectInput({
 }: {
   defaultSelected: string;
   handleChange: CallableFunction;
-  selectOptions: any;
+  selectOptions: { id: string; name: string }[];
   required?: boolean;
 }) {
   return (
@@ -28,7 +28,7 @@ export default function SelectInput({
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {selectOptions?.map((n: any, i: number) => (
+        {selectOptions?.map((n: { id: string; name: string }, i: number) => (
           <SelectItem key={i} value={String(n.id)}>
             {n.name}
           </SelectItem>

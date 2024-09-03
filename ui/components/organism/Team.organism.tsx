@@ -40,7 +40,7 @@ export function Team({
     setEditing(true);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [player, name] = e.target.name.split(".");
     const tmpTeam = { ...info };
 

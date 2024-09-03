@@ -82,7 +82,7 @@ export default function useSingleTournament({
     });
   }
 
-  function handleOnChangeTeam(e: any) {
+  function handleOnChangeTeam(e: React.ChangeEvent<HTMLInputElement>) {
     const [player, name] = e.target.name.split(".");
     const tmpTeam = { ...team };
 

@@ -8,6 +8,9 @@ import { Suspense, useState } from "react";
 import { IoSwapHorizontalOutline } from "react-icons/io5";
 import Link from "next/link";
 import { watch } from "fs";
+import { GroupType, TeamType, TournamentType } from "@/interfaces/tournaments";
+import { GroupPhaseEnum } from "@/interfaces/enums";
+import { MatchType } from "@/interfaces/matches";
 
 export default function WatchTournament({
   params,
@@ -31,13 +34,15 @@ export default function WatchTournament({
           {!t ? (
             <Suspense fallback={null}>
               {groups &&
-                Object.values(groups)?.map((n: any, i: number) => (
+                Object.values(groups)?.map((n: GroupType, i: number) => (
                   <Group key={i} {...n} />
                 ))}
             </Suspense>
           ) : (
             <Suspense fallback={null}>
-              <Graph tournament={tournament} tournamentId={params.id} />
+              {tournament && (
+                <Graph tournament={tournament} tournamentId={params.id} />
+              )}
             </Suspense>
           )}
         </article>
@@ -46,7 +51,7 @@ export default function WatchTournament({
   );
 }
 
-function Group({ name, teams }: { name: string; teams: any[] }) {
+function Group({ name, teams }: { name: string; teams: TeamType[] }) {
   return (
     <article className="tv-tournament__group">
       <h2>Grupa {name}</h2>
@@ -58,15 +63,17 @@ function Group({ name, teams }: { name: string; teams: any[] }) {
           <td className="small">L</td>
         </thead>
         <tbody className="teams">
-          {teams.map((t: any, i: number) => (
+          {teams.map((t: TeamType, i: number) => (
             <tr className="team" key={i}>
               <td key={i}>
                 <p className="player">
                   {t.player1.firstName[0]}. {t.player1.lastName}
                 </p>
-                <p className="player">
-                  {t.player2.firstName[0]}. {t.player2.lastName}
-                </p>
+                {t.player2 && (
+                  <p className="player">
+                    {t.player2.firstName[0]}. {t.player2.lastName}
+                  </p>
+                )}
               </td>
               <td>{t.wins}</td>
               <td>{t.losses}</td>
@@ -82,7 +89,7 @@ function Graph({
   tournament,
   tournamentId,
 }: {
-  tournament: any;
+  tournament: TournamentType;
   tournamentId: string;
 }) {
   // @ts-ignore
@@ -92,7 +99,7 @@ function Graph({
   }
 
   function getTeams(
-    phase: string,
+    phase: GroupPhaseEnum,
     slice1: number,
     slice2: number,
     arrLen: number
@@ -118,7 +125,7 @@ function Graph({
     }
 
     const mecevi = matches
-      .map((group: any, i) => {
+      .map((group: GroupType, i) => {
         if (!group.matches) return Array.from({ length: arrLen });
         return Object.keys(group.matches).map((m) => ({
           ...group.matches?.[m],
@@ -183,36 +190,44 @@ function Graph({
   const finals =
     tournament?.matches?.final &&
     Object.keys(tournament.matches.final).map((finalGroupKeys) => {
-      return Object.keys(tournament.matches.final[finalGroupKeys]?.matches).map(
-        (finalMatchKey: any) => {
-          const finalMatch =
-            tournament.matches.final[finalGroupKeys]?.matches[finalMatchKey];
-          return {
-            players: {
-              host: {
-                player1:
-                  finalMatch.players?.host.player1.firstName[0] +
-                  ". " +
-                  finalMatch.players?.host.player1.lastName,
-                player2:
-                  finalMatch.players?.host.player2.firstName[0] +
-                  ". " +
-                  finalMatch.players?.host.player2.lastName,
-              },
-              guest: {
-                player1:
-                  finalMatch.players?.guest.player1.firstName[0] +
-                  ". " +
-                  finalMatch.players?.guest.player1.lastName,
-                player2:
-                  finalMatch.players?.guest.player2.firstName[0] +
-                  ". " +
-                  finalMatch.players?.guest.player2.lastName,
-              },
-            },
-          };
-        }
-      )?.[0];
+      return (
+        tournament.matches.final[finalGroupKeys]?.matches &&
+        Object.keys(tournament.matches.final[finalGroupKeys]?.matches).map(
+          (finalMatchKey: string) => {
+            const finalMatch =
+              tournament.matches.final[finalGroupKeys]?.matches?.[
+                finalMatchKey
+              ];
+            if (finalMatch)
+              return {
+                players: {
+                  host: {
+                    player1:
+                      finalMatch.players?.host.player1.firstName[0] +
+                      ". " +
+                      finalMatch.players?.host.player1.lastName,
+                    player2: finalMatch.players?.host.player2
+                      ? finalMatch.players?.host.player2.firstName[0] +
+                        ". " +
+                        finalMatch.players?.host.player2.lastName
+                      : undefined,
+                  },
+                  guest: {
+                    player1:
+                      finalMatch.players?.guest.player1.firstName[0] +
+                      ". " +
+                      finalMatch.players?.guest.player1.lastName,
+                    player2: finalMatch.players?.guest.player2
+                      ? finalMatch.players?.guest.player2.firstName[0] +
+                        ". " +
+                        finalMatch.players?.guest.player2.lastName
+                      : undefined,
+                  },
+                },
+              };
+          }
+        )?.[0]
+      );
     })?.[0];
 
   if (!tournament) return null;
@@ -221,15 +236,15 @@ function Graph({
       {/* LEFT */}
 
       <div className="sixteen-finals left group">
-        {getTeams("round-of-16", 0, 2, 2)}
+        {getTeams(GroupPhaseEnum.ROUND16, 0, 2, 2)}
       </div>
 
       <div className="quarter-finals left group">
-        {getTeams("quarter-finals", 0, 1, 2)}
+        {getTeams(GroupPhaseEnum.QUARTER, 0, 1, 2)}
       </div>
 
       <div className="semi-finals left group">
-        {getTeams("semi-final", 0, 1, 1)}
+        {getTeams(GroupPhaseEnum.SEMIFINAL, 0, 1, 1)}
       </div>
 
       <div className="finals left group">
@@ -248,15 +263,15 @@ function Graph({
       </div>
 
       <div className="semi-finals right group">
-        {getTeams("semi-final", 1, 2, 1)}
+        {getTeams(GroupPhaseEnum.SEMIFINAL, 1, 2, 1)}
       </div>
 
       <div className="quarter-finals right group">
-        {getTeams("quarter-finals", 1, 2, 2)}
+        {getTeams(GroupPhaseEnum.QUARTER, 1, 2, 2)}
       </div>
 
       <div className="sixteen-finals right group">
-        {getTeams("round-of-16", 2, 4, 4)}
+        {getTeams(GroupPhaseEnum.ROUND16, 2, 4, 4)}
       </div>
     </section>
   );

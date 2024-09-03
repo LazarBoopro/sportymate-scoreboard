@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
 
@@ -21,7 +21,7 @@ type InputType = {
     | "select";
   required?: boolean;
   className?: string;
-  onChange?: React.Dispatch<React.SetStateAction<any>>;
+  onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function InputField({
@@ -47,7 +47,7 @@ export default function InputField({
           <Switch
             name={name}
             value={value as string}
-            onClick={onChange}
+            onClick={onChange as unknown as MouseEventHandler}
             defaultChecked={value as boolean}
           />
         );
