@@ -1,56 +1,13 @@
 "use client";
 
-import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
-import { AnimatePresence } from "framer-motion";
-import {
-  IoAddCircleOutline,
-  IoChevronBack,
-  IoChevronBackCircleOutline,
-  IoChevronUpCircleOutline,
-  IoPencilSharp,
-  IoSaveOutline,
-  IoTrashBinOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
+import { IoPencilSharp, IoSaveOutline, IoTrashOutline } from "react-icons/io5";
 import Button from "@/ui/components/atoms/Button.atom";
-import SelectInput from "@/ui/components/moleculs/Select.molecul";
-import Link from "next/link";
-import InputField from "@/ui/components/atoms/InputField.atom";
-import { deleteTeam } from "@/infrastructure/services/tournaments";
 
-export function TeamList({
-  teams,
-  handleEdit,
-  deleteTeam,
-}: {
-  teams: any[];
-  deleteTeam: (teamId: string) => void;
-  handleEdit: (
-    teamId: string,
-    data: {
-      player1: { firstName: string; lastName: string };
-      player2: { firstName: string; lastName: string };
-    }
-  ) => void;
-}) {
-  if (!teams) return <div>Nema timova</div>;
-  return Object.keys(teams).map((key, i) => (
-    // @ts-ignore
-    <Team
-      key={i}
-      id={key}
-      // @ts-ignore
-      player1={teams[key].player1}
-      // @ts-ignore
-      player2={teams[key].player2}
-      deleteTeam={deleteTeam}
-      handleEdit={handleEdit}
-    />
-  ));
-}
+import InputField from "@/ui/components/atoms/InputField.atom";
+import { TeamType } from "@/interfaces/tournaments";
 
 export function Team({
   id,
@@ -61,15 +18,9 @@ export function Team({
 }: {
   id: string;
   player1: { firstName: string; lastName: string };
-  player2: { firstName: string; lastName: string };
+  player2?: { firstName: string; lastName: string };
   deleteTeam: (teamId: string) => void;
-  handleEdit: (
-    teamId: string,
-    data: {
-      player1: { firstName: string; lastName: string };
-      player2: { firstName: string; lastName: string };
-    }
-  ) => void;
+  handleEdit: (teamId: string, data: TeamType) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [info, setInfo] = useState({
@@ -89,7 +40,7 @@ export function Team({
     setEditing(true);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [player, name] = e.target.name.split(".");
     const tmpTeam = { ...info };
 
@@ -97,10 +48,6 @@ export function Team({
     tmpTeam[player][name] = e.target.value;
 
     setInfo(tmpTeam);
-    // setInfo({
-    //     ...info,
-    //     [e.target.name]: e.target.value,
-    // });
   };
 
   return (
@@ -125,20 +72,20 @@ export function Team({
             />
           </>
         )}
-        {!editing ? (
+        {!editing && player2 ? (
           <p>{player2.firstName + " " + player2.lastName}</p>
         ) : (
           <>
             <InputField
               name="player2.firstName"
               onChange={handleChange}
-              value={info.player2.firstName}
+              value={info.player2?.firstName ?? ""}
               placeholder="Ime"
             />
             <InputField
               name="player2.lastName"
               onChange={handleChange}
-              value={info.player2.lastName}
+              value={info.player2?.lastName ?? ""}
               placeholder="Prezime"
             />
           </>

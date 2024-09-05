@@ -1,19 +1,20 @@
 "use client";
 
-import { GroupPhaseEnum } from "@/interfaces/tournaments";
-import Button from "@/ui/components/atoms/Button.atom";
-import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
-import useMatches from "@/ui/hooks/useMatches";
-import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import "@/ui/styles/pages/group.page.scss";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
-import {
-  IoChevronBack,
-  IoCloseSharp,
-  IoPencilSharp,
-  IoSave,
-} from "react-icons/io5";
+import { Suspense } from "react";
+
+import { GroupPhaseEnum } from "@/interfaces/enums";
+import { TeamType, TournamentQueryParams } from "@/interfaces/tournaments";
+
+import { GroupRow } from "@/ui/components/moleculs/GroupRow.molecul";
+import TournamentCard from "@/ui/components/moleculs/TournamentCard.molecul";
+
+import { IoChevronBack } from "react-icons/io5";
+
+import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
+
+import "@/ui/styles/pages/group.page.scss";
+import { MatchType } from "@/interfaces/matches";
 
 export default function TournamentGroup({
   params,
@@ -90,7 +91,7 @@ export default function TournamentGroup({
               </tr>
             </thead>
             <tbody>
-              {singleGroup.teams?.map((team: any, i: number) => (
+              {singleGroup.teams?.map((team: TeamType, i: number) => (
                 <GroupRow
                   key={i}
                   team={team}
@@ -123,136 +124,21 @@ export default function TournamentGroup({
   );
 }
 
-function GroupRow({ team, index, handleUpdateGroup }: any) {
-  const [info, setInfo] = useState({
-    wins: team?.wins ?? 0,
-    losses: team?.losses ?? 0,
-  });
-
-  const [editing, setEditing] = useState(false);
-
-  const handleClick = () => {
-    setEditing(false);
-
-    if (editing) {
-      setEditing(false);
-
-      const originalInfo = JSON.stringify({
-        wins: +team?.wins,
-        losses: +team?.losses,
-      });
-      const updatedInfo = JSON.stringify({
-        wins: +info.wins,
-        losses: +info.losses,
-      });
-
-      if (originalInfo === updatedInfo) {
-        // alert("Podaci su isti!");
-      } else {
-        handleUpdateGroup(index, info);
+function Matches({
+  matches,
+  tournament,
+}: {
+  matches:
+    | {
+        [matchId: string]: MatchType;
       }
-      return;
-    }
-
-    setEditing(true);
-  };
-
-  const handleCancelClick = () => {
-    setEditing(false);
-    setInfo({
-      wins: +team?.wins,
-      losses: +team?.losses,
-    });
-  };
-
-  const handleChange = (e: any) => {
-    setInfo({
-      ...info,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  return (
-    <tr>
-      <td>{index}</td>
-      <td>
-        {team?.player1.firstName + " " + team?.player1.lastName},{" "}
-        {team?.player2.firstName + " " + team?.player2.lastName}
-      </td>
-      <td>
-        {editing ? (
-          <input
-            type="number"
-            name="wins"
-            onChange={handleChange}
-            value={info?.wins}
-          />
-        ) : (
-          team?.wins
-        )}
-      </td>
-      <td>
-        {editing ? (
-          <input
-            type="number"
-            name="losses"
-            onChange={handleChange}
-            value={info?.losses}
-          />
-        ) : (
-          team?.losses
-        )}
-      </td>
-      <td className={editing ? "ctas" : ""}>
-        <Button onClick={handleClick} type={editing ? "primary" : "action"}>
-          {editing ? <IoSave /> : <IoPencilSharp />}
-        </Button>
-        {editing && (
-          <Button type="danger" onClick={handleCancelClick}>
-            <IoCloseSharp />
-          </Button>
-        )}
-      </td>
-    </tr>
-  );
-}
-
-function Matches({ matches, tournament }: { matches: any; tournament: any }) {
+    | null
+    | undefined;
+  tournament: TournamentQueryParams;
+}) {
+  console.log(matches);
   if (!matches) return null;
   return Object.keys(matches)?.map?.((n, i) => (
-    // @ts-ignore
     <TournamentCard key={i} id={n} {...matches[n]} tournament={tournament} />
   ));
 }
-
-// ----------------------------------------------------------------
-const group = [
-  {
-    teamId: 0,
-    first: "Ime Prezime",
-    second: "Ime Prezime",
-    wins: 1,
-    losses: 2,
-  },
-  {
-    teamId: 1,
-    first: "Ime Prezime",
-    second: "Ime Prezime",
-    wins: 3,
-    losses: 2,
-  },
-  {
-    teamId: 2,
-    first: "Ime Prezime",
-    second: "Ime Prezime",
-    wins: 1,
-    losses: 5,
-  },
-  {
-    teamId: 3,
-    first: "Ime Prezime",
-    second: "Ime Prezime",
-    wins: 5,
-    losses: 2,
-  },
-];

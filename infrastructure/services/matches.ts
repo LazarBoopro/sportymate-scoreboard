@@ -1,10 +1,11 @@
-import { MatchTypeService } from "@/interfaces/matches";
+import { MatchType } from "@/interfaces/matches";
+import { TournamentQueryParams } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
 import { get, push, ref, remove, update } from "firebase/database";
 
 export const addMatch = (
-  data: any
-  // tournament?: { tournamentId: string; groupId: string; phase: string }
+  data: MatchType & { tournament?: TournamentQueryParams }
+  // tournament?: TournamentQueryParams
 ) => {
   let prefix = "";
   const tournament = data.tournament;
@@ -17,10 +18,7 @@ export const addMatch = (
   return push(tournamentsRef, data);
 };
 
-export const deleteMatch = (
-  id: string,
-  tournament?: { tournamentId: string; groupId: string; phase: string }
-) => {
+export const deleteMatch = (id: string, tournament?: TournamentQueryParams) => {
   let prefix = "";
   if (tournament) {
     prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
@@ -32,7 +30,7 @@ export const deleteMatch = (
 
 export const getSingleMatch = async (
   id: string,
-  tournament?: { tournamentId: string; groupId: string; phase: string }
+  tournament?: TournamentQueryParams
 ) => {
   let prefix = "";
   if (tournament) {
@@ -51,10 +49,14 @@ export const getSingleMatch = async (
 export const updateCurrentSetScore = async ({
   team,
   id,
-  path,
   score,
   tournament,
-}: any) => {
+}: {
+  id: string;
+  team: string;
+  score: number;
+  tournament?: TournamentQueryParams;
+}) => {
   let prefix = "";
   if (tournament) {
     prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
@@ -81,8 +83,8 @@ export const updateGemScore = async ({
   gem: number;
   team: string;
   score: number;
-  prevScore: any;
-  tournament?: { tournamentId: string; groupId: string; phase: string };
+  prevScore?: number[];
+  tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";
   if (tournament) {
@@ -109,7 +111,7 @@ export const updateTieScore = async ({
   prevScore: number[];
   team: number;
   score: number;
-  tournament?: { tournamentId: string; groupId: string; phase: string };
+  tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";
   if (tournament) {
@@ -132,7 +134,7 @@ export const updateMatchStatus = async ({
 }: {
   id: string;
   status: { id: number; status: string };
-  tournament?: { tournamentId: string; groupId: string; phase: string };
+  tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";
   if (tournament) {
@@ -153,7 +155,13 @@ export const updateServingPlayer = async ({
   playerId,
   isServing,
   tournament,
-}: any) => {
+}: {
+  gameId: string;
+  team: string;
+  playerId: string;
+  isServing: boolean;
+  tournament?: TournamentQueryParams;
+}) => {
   let prefix = "";
   if (tournament) {
     prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
@@ -175,7 +183,7 @@ export const updateMatchWinner = async ({
 }: {
   gameId: string;
   winner: string;
-  tournament?: { tournamentId: string; groupId: string; phase: string };
+  tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";
   if (tournament) {

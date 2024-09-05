@@ -1,44 +1,23 @@
 "use client";
 
+import Link from "next/link";
+
+import { usePathname, useSearchParams } from "next/navigation";
 import useSingleTournament from "@/ui/hooks/useSingleTournament.hook";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState, MouseEvent } from "react";
+
 import "@/ui/styles/pages/profile.page.scss";
 import "@/ui/styles/pages/tournament.page.scss";
+
 import { AnimatePresence } from "framer-motion";
 import { IoAddCircleOutline, IoChevronBack } from "react-icons/io5";
-import Button from "@/ui/components/atoms/Button.atom";
-import SelectInput from "@/ui/components/moleculs/Select.molecul";
-import Link from "next/link";
-import InputField from "@/ui/components/atoms/InputField.atom";
-import { TeamList } from "@/ui/components/organism/Teams.organism";
-import { GroupList } from "@/ui/components/organism/Groups.organism";
-import Tabs from "@/ui/components/moleculs/Tabs.molecul";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { GroupPhaseEnum } from "@/interfaces/tournaments";
-import CreateGroup from "@/ui/components/organism/CreateGroup.organism";
 
-const phases = [
-  {
-    id: "groups",
-    label: "Grupe",
-  },
-  {
-    id: "round-of-16",
-    label: "Osmina finala",
-  },
-  {
-    id: "quarter-finals",
-    label: "Cetvrtina finala",
-  },
-  {
-    id: "semi-final",
-    label: "Polovina finala",
-  },
-  {
-    id: "final",
-    label: "Finale",
-  },
-];
+import Button from "@/ui/components/atoms/Button.atom";
+import InputField from "@/ui/components/atoms/InputField.atom";
+import { TeamList } from "@/ui/components/organism/TeamList.organism";
+import { GroupList } from "@/ui/components/organism/Groups.organism";
+import CreateGroup from "@/ui/components/organism/CreateGroup.organism";
+import { phases } from "@/helpers/helpers";
 
 export default function SingleTournament({
   params,
@@ -47,18 +26,14 @@ export default function SingleTournament({
 }) {
   const {
     tournament,
-    deleteGroup,
-    handleAddGroup,
-    group,
-    setGroup,
     groups,
     handleAddTeam,
     handleOnChangeTeam,
     team,
     teams,
-    deleteTeam,
+    handleDeleteTeam,
     handleUpdateTeam,
-    phase,
+    handleDeleteGroup,
   } = useSingleTournament({ id: params.id });
 
   const teamsButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -70,32 +45,22 @@ export default function SingleTournament({
     width: 0,
   });
 
-  const [settings, setSettings] = useState({
-    double: true,
-    type: 0,
-    superTieBreak: true,
-  });
-
   const pathname = usePathname();
   const queryParams = useSearchParams();
 
-  const handleMouseClick = (e: any) => {
+  const handleMouseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!(e.target instanceof HTMLButtonElement)) {
+      return;
+    }
+
     setPosition({
-      left: e?.target?.offsetLeft || teamsButtonRef?.current?.offsetLeft,
+      left: (e?.target?.offsetLeft || teamsButtonRef?.current?.offsetLeft) ?? 0,
       width:
-        e?.target?.getBoundingClientRect().width ||
-        teamsButtonRef?.current?.getBoundingClientRect().width,
+        (e?.target?.getBoundingClientRect().width ||
+          teamsButtonRef?.current?.getBoundingClientRect().width) ??
+        0,
     });
-    setScreen(e.target.dataset.type);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    // TODO: Save changes to the tournament
-  };
-
-  const handleDeleteTeam = (teamId: string) => {
-    deleteTeam({ tournamentId: params.id, teamId });
+    setScreen(e.target.dataset.type as typeof screen);
   };
 
   useEffect(() => {
@@ -174,18 +139,8 @@ export default function SingleTournament({
               {screen === "groups" ? (
                 <GroupList
                   tournamentId={params.id}
-                  //@ts-ignore
                   groups={groups}
-                  //@ts-ignore
-                  handleDelete={(id) =>
-                    deleteGroup({
-                      tournamentId: params.id,
-                      groupId: id,
-                      phase:
-                        (queryParams.get("phase") as GroupPhaseEnum) ??
-                        GroupPhaseEnum.GROUPS,
-                    })
-                  }
+                  handleDelete={handleDeleteGroup}
                 />
               ) : (
                 <TeamList
@@ -202,7 +157,7 @@ export default function SingleTournament({
           <CreateGroup tournamentId={params.id} />
         ) : (
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleAddTeam}
             className="tournament-form__form"
             style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
           >
@@ -244,7 +199,7 @@ export default function SingleTournament({
                 onChange={handleOnChangeTeam}
                 title="Ime"
                 name="player2.firstName"
-                value={team.player2.firstName}
+                value={team.player2?.firstName ?? ""}
                 placeholder="Ime"
                 required
               />
@@ -252,7 +207,7 @@ export default function SingleTournament({
                 onChange={handleOnChangeTeam}
                 title="Prezime"
                 name="player2.lastName"
-                value={team.player2.lastName}
+                value={team.player2?.lastName ?? ""}
                 placeholder="Prezime"
                 required
               />
@@ -266,7 +221,7 @@ export default function SingleTournament({
                   marginBottom: "auto",
                 }}
               ></div>
-              <Button onClick={handleAddTeam}>
+              <Button>
                 dodaj tim <IoAddCircleOutline />
               </Button>
             </section>
@@ -276,8 +231,3 @@ export default function SingleTournament({
     </Suspense>
   );
 }
-
-// ------------------------
-const alphabet = Array.from({ length: 26 }, (_, i) =>
-  String.fromCharCode(i + 65)
-);

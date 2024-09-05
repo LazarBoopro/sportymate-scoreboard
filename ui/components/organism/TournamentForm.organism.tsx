@@ -9,7 +9,7 @@ import Button from "@/ui/components/atoms/Button.atom";
 import { IoChevronBack } from "react-icons/io5";
 
 import Tabs from "../moleculs/Tabs.molecul";
-import useTournaments from "@/ui/hooks/useMatches";
+import { useMatches } from "@/ui/hooks/useMatches";
 
 import "@/ui/styles/organism/tournamentForm.organism.scss";
 import { Switch } from "@/components/ui/switch";
@@ -49,10 +49,10 @@ function MatchForm() {
     handleOnChange,
     isSuperTieBreak,
     setIsSuperTieBreak,
-    isAddingTournament,
+    isAddingMatch,
     setIsGoldenPoint,
     isGoldenPoint,
-  } = useTournaments();
+  } = useMatches();
 
   return (
     <form onSubmit={handleSubmit} className="tournament-form__form">
@@ -121,7 +121,7 @@ function MatchForm() {
         />
 
         <InputField
-          onChange={() => setIsGoldenPoint((prev) => !prev)}
+          onChange={() => setIsGoldenPoint((prev: boolean) => !prev)}
           title="Zlatni poen"
           value={isGoldenPoint}
           name="isGoldenPoint"
@@ -130,7 +130,7 @@ function MatchForm() {
         />
 
         <InputField
-          onChange={() => setIsSuperTieBreak((prev) => !prev)}
+          onChange={() => setIsSuperTieBreak((prev: boolean) => !prev)}
           title="Super Tie Break"
           value={isSuperTieBreak}
           name="isSuperTieBreak"
@@ -139,7 +139,7 @@ function MatchForm() {
         />
 
         <InputField
-          onChange={() => setIsDouble((prev) => !prev)}
+          onChange={() => setIsDouble((prev: boolean) => !prev)}
           title="Dabl"
           value={isDouble}
           name="isDouble"
@@ -185,7 +185,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Ime"
                     name="host.player2.firstName"
-                    value={data?.players.host?.player2.firstName ?? ""}
+                    value={data?.players.host?.player2?.firstName ?? ""}
                     placeholder="Ime"
                     required
                   />
@@ -193,7 +193,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Prezime"
                     name="host.player2.lastName"
-                    value={data?.players.host?.player2.lastName ?? ""}
+                    value={data?.players.host?.player2?.lastName ?? ""}
                     placeholder="Prezime"
                     required
                   />
@@ -236,7 +236,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Ime"
                     name="guest.player2.firstName"
-                    value={data?.players.guest?.player2.firstName ?? ""}
+                    value={data?.players.guest?.player2?.firstName ?? ""}
                     placeholder="Ime"
                     required
                   />
@@ -244,7 +244,7 @@ function MatchForm() {
                     onChange={handleOnChange}
                     title="Prezime"
                     name="guest.player2.lastName"
-                    value={data?.players.guest?.player2.lastName ?? ""}
+                    value={data?.players.guest?.player2?.lastName ?? ""}
                     placeholder="Prezime"
                     required
                   />
@@ -256,7 +256,7 @@ function MatchForm() {
       </section>
       <div className="divider"></div>
 
-      <Button className={`submit ${isAddingTournament ? "pending" : ""}`}>
+      <Button className={`submit ${isAddingMatch ? "pending" : ""}`}>
         Dodaj turnir
       </Button>
     </form>

@@ -1,3 +1,5 @@
+import { CreateMatchType } from "@/interfaces/matches";
+
 export const MATCH_TYPES = [
   {
     id: 0,
@@ -31,7 +33,7 @@ const formatDateToInputValue = () => {
   return `${year}-${month}-${day}`;
 };
 
-export const MATCH_DEFAULT_OPTIONS = {
+export const MATCH_DEFAULT_OPTIONS: CreateMatchType = {
   title: "",
   date: formatDateToInputValue(),
   startTime: {
