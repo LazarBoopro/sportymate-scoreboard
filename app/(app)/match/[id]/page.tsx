@@ -58,13 +58,19 @@ export default function Match({ params }: { params: { id: string } }) {
               <p className="player">{`${match?.players?.host?.player2?.firstName?.[0]}. ${match?.players?.host?.player2?.lastName}`}</p>
             </div>
             <div className="score">
-              <p className="sets">{match?.score?.sets.map((n) => n[0])}</p>
               <p className="current-set">
                 {match?.score?.sets?.[match?.score?.sets?.length - 1][0]}
               </p>
-              <p className="current-gem">
+              {/* <p className="current-gem">
                 {scores[match?.score?.currentSet?.[0]!]}
-              </p>
+              </p> */}
+              <div className="sets">
+                {match?.score?.sets.map((n, i) => (
+                  <p key={i} className="set">
+                    {n[0]}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
           <div className="table__team">
@@ -73,13 +79,19 @@ export default function Match({ params }: { params: { id: string } }) {
               <p className="player">{`${match?.players?.guest?.player2?.firstName?.[0]}. ${match?.players?.guest?.player2?.lastName}`}</p>
             </div>
             <div className="score">
-              <p className="sets">{match?.score?.sets.map((n) => n[1])}</p>
               <p className="current-set">
                 {match?.score?.sets?.[match?.score?.sets?.length - 1][1]}
               </p>
-              <p className="current-gem">
+              {/* <p className="current-gem">
                 {scores[match?.score?.currentSet?.[1]!]}
-              </p>
+              </p> */}
+              <div className="sets">
+                {match?.score?.sets.map((n, i) => (
+                  <p key={i} className="set">
+                    {n[1]}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </div>
