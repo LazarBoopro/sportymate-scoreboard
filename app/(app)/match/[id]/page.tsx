@@ -65,8 +65,10 @@ export default function Match({ params }: { params: { id: string } }) {
                 {scores[match?.score?.currentSet?.[0]!]}
               </p> */}
               <div className="sets">
-                {match?.score?.sets.map((n) => (
-                  <p className="set">{n[0]}</p>
+                {match?.score?.sets.map((n, i) => (
+                  <p key={i} className="set">
+                    {n[0]}
+                  </p>
                 ))}
               </div>
             </div>
@@ -85,7 +87,9 @@ export default function Match({ params }: { params: { id: string } }) {
               </p> */}
               <div className="sets">
                 {match?.score?.sets.map((n) => (
-                  <p className="set">{n[1]}</p>
+                  <p key={i} className="set">
+                    {n[1]}
+                  </p>
                 ))}
               </div>
             </div>
