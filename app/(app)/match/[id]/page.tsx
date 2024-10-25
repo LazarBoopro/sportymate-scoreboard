@@ -86,7 +86,7 @@ export default function Match({ params }: { params: { id: string } }) {
                 {scores[match?.score?.currentSet?.[1]!]}
               </p> */}
               <div className="sets">
-                {match?.score?.sets.map((n) => (
+                {match?.score?.sets.map((n, i) => (
                   <p key={i} className="set">
                     {n[1]}
                   </p>
