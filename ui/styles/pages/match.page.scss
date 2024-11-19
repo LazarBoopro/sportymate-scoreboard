@@ -30,26 +30,30 @@
   }
 
   .table {
-    overflow: hidden;
-    min-width: 400px;
     background: $white-clr;
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    outline: 2px solid $purple-clr-500;
+    outline: 2px solid black;
+    width: fit-content;
+    background: linear-gradient(to right, #242424, #333333);
+    color: $white-clr;
+    border-radius: 0.15rem;
 
     &__team {
       // padding: 0.5rem;
       display: flex;
+      width: fit-content;
 
       &:first-child {
-        border-bottom: 2px solid rgb($purple-clr-500, 1);
+        border-bottom: 2px solid black;
       }
 
       .players {
-        flex: 3;
+        padding-block: 0.5rem;
+        padding-inline: 0.5rem;
+        min-width: 200px;
         border-right: 2px solid $purple-clr-500;
-        padding: 0.5rem;
 
         .player {
           font-weight: 800;
@@ -58,14 +62,27 @@
 
       & > .score {
         display: flex;
-        flex: 2;
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        width: fit-content;
+
+        .sets {
+          height: 100%;
+          display: flex;
+          background: linear-gradient(to right, #242424, #333333);
+          color: $white-clr;
+          // background: red;
+
+          & > * {
+            height: 100%;
+          }
+        }
 
         & p {
           font-size: clamp(1rem, 5vw, 1.25rem);
-          width: 4rem !important;
+          width: 2rem !important;
+          // aspect-ratio: 1;
           // height: 4rem;
           display: flex;
           height: 100%;
@@ -75,11 +92,17 @@
           height: 100%;
 
           &:not(:last-child) {
-            border-right: 2px solid rgb($purple-clr-500, 1);
+            border-right: 2px solid black;
           }
 
           &.current-set {
-            background: $lime-green-clr-500;
+            color: black;
+            font-weight: bold;
+            background: linear-gradient(45deg, #daed29, #b1c500);
+            width: 3rem !important;
+            aspect-ratio: 1;
+
+            // background: $lime-green-clr-500;
           }
 
           &.current-gem {
@@ -89,6 +112,7 @@
 
           &.sets {
             background: $white-clr;
+            background: linear-gradient(to right, #000000, #333333);
             // background: rgb($black-clr, 0.2);
             // color: $white-clr;
           }
