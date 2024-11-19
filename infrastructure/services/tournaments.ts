@@ -1,39 +1,87 @@
+import { MatchTypeEnum } from "@/interfaces/enums";
 import { TournamentType } from "@/interfaces/tournaments";
 import { database } from "@/lib/firebaseConfig";
-import { child, get, push, ref, remove, set, update } from "firebase/database";
+import { get, push, ref, remove, update } from "firebase/database";
 
 export const addTournament = (data: { title: string }) => {
-  const tournametsRef = ref(database, "tournaments");
+    const tournament: TournamentType = {
+        title: data.title,
+        matches: {
+            groups: {},
+            "quarter-finals": {
+                A: {
+                    double: true,
+                    goldenPoint: false,
+                    name: "A",
+                    superTieBreak: true,
+                    type: MatchTypeEnum.STANDARD,
+                    teams: [],
+                },
+            },
+            "round-of-16": {
+                A: {
+                    double: true,
+                    goldenPoint: false,
+                    name: "A",
+                    superTieBreak: true,
+                    type: MatchTypeEnum.STANDARD,
+                    teams: [],
+                },
+            },
+            "semi-final": {
+                A: {
+                    double: true,
+                    goldenPoint: false,
+                    name: "A",
+                    superTieBreak: true,
+                    type: MatchTypeEnum.STANDARD,
+                    teams: [],
+                },
+            },
+            final: {
+                A: {
+                    double: true,
+                    goldenPoint: false,
+                    name: "A",
+                    superTieBreak: true,
+                    type: MatchTypeEnum.STANDARD,
+                    teams: [],
+                },
+            },
+        },
+        teams: {},
+    };
 
-  return push(tournametsRef, data);
+    const tournametsRef = ref(database, "tournaments");
+
+    return push(tournametsRef, tournament);
 };
 
 export const deleteTournament = (id: string) => {
-  const tournamentsRef = ref(database, `tournaments/${id}`);
+    const tournamentsRef = ref(database, `tournaments/${id}`);
 
-  return remove(tournamentsRef);
+    return remove(tournamentsRef);
 };
 
 export const getSingleTournament = async (id: string) => {
-  const tournamentsRef = ref(database, `tournaments/${id}`);
+    const tournamentsRef = ref(database, `tournaments/${id}`);
 
-  const snapshot = await get(tournamentsRef);
-  if (snapshot.exists()) {
-    return snapshot.val();
-  } else {
-    throw new Error("Game not found");
-  }
+    const snapshot = await get(tournamentsRef);
+    if (snapshot.exists()) {
+        return snapshot.val();
+    } else {
+        throw new Error("Game not found");
+    }
 };
 
 export const updateTournament = async ({
-  id,
-  data,
-  path,
+    id,
+    data,
+    path,
 }: {
-  id: string;
-  data: TournamentType;
-  path: string;
+    id: string;
+    data: TournamentType;
+    path: string;
 }) => {
-  console.log("UPDATE TOURNAMENT");
-  update(ref(database, `tournaments/${id}${path}`), data);
+    update(ref(database, `tournaments/${id}${path}`), data);
 };
