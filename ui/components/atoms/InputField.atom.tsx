@@ -48,7 +48,8 @@ export default function InputField({
             name={name}
             value={value as string}
             onClick={onChange as unknown as MouseEventHandler}
-            defaultChecked={value as boolean}
+            // defaultChecked={value as boolean}
+            checked={value as boolean}
           />
         );
 

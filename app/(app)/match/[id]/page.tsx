@@ -26,17 +26,23 @@ export default function Match({ params }: { params: { id: string } }) {
 
   const isWatchMode = searchParams.get("watch");
 
-  const { tieBreak, match, handleUpdateCurrentSetScore, handleGemPoint } =
-    useSingleMatch({
-      id: params.id,
-      tournament: searchParams.get("tournamentId")
-        ? {
-            tournamentId: searchParams.get("tournamentId") ?? "",
-            groupId: searchParams.get("groupId") ?? "",
-            phase: searchParams.get("phase") ?? "",
-          }
-        : undefined,
-    });
+  const {
+    tieBreak,
+    match,
+    handleUpdateCurrentSetScore,
+    handleGemPoint,
+    setSelectedSet,
+    selectedSet,
+  } = useSingleMatch({
+    id: params.id,
+    tournament: searchParams.get("tournamentId")
+      ? {
+          tournamentId: searchParams.get("tournamentId") ?? "",
+          groupId: searchParams.get("groupId") ?? "",
+          phase: searchParams.get("phase") ?? "",
+        }
+      : undefined,
+  });
 
   useEffect(() => {
     if (!user) {
@@ -113,6 +119,8 @@ export default function Match({ params }: { params: { id: string } }) {
         tournament={match}
         handleUpdateCurrentSetScore={handleUpdateCurrentSetScore}
         handleChangeGemPoint={handleGemPoint}
+        setSelectedSet={setSelectedSet}
+        selectedSet={selectedSet}
       />
     </>
   );

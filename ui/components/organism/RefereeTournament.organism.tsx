@@ -10,11 +10,15 @@ export default function RefereeTournament({
   handleUpdateCurrentSetScore,
   isTie,
   handleChangeGemPoint,
+  setSelectedSet,
+  selectedSet,
 }: {
   isTie: boolean;
   tournament: MatchType | null;
   handleUpdateCurrentSetScore: CallableFunction;
   handleChangeGemPoint: CallableFunction;
+  setSelectedSet: (set: number) => void;
+  selectedSet: number;
 }) {
   return (
     <main className="match">
@@ -33,6 +37,8 @@ export default function RefereeTournament({
             superTieBreak={tournament?.superTieBreak ?? false}
             score={tournament?.score ?? null}
             matchType={MATCH_TYPES?.[tournament?.type || 0].title}
+            setSelectedSet={setSelectedSet}
+            selectedSet={selectedSet}
           />
         </div>
         <Team

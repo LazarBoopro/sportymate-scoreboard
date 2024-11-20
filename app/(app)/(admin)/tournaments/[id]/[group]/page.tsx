@@ -136,7 +136,6 @@ function Matches({
     | undefined;
   tournament: TournamentQueryParams;
 }) {
-  console.log(matches);
   if (!matches) return null;
   return Object.keys(matches)?.map?.((n, i) => (
     <TournamentCard key={i} id={n} {...matches[n]} tournament={tournament} />

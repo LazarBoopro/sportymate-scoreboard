@@ -19,6 +19,8 @@ import { onValue, ref } from "firebase/database";
 import { MatchType } from "@/interfaces/matches";
 import { useToast } from "@/components/ui/use-toast";
 
+let isWinner = false;
+
 export default function useSingleMatch({
   id,
   tournament,
@@ -47,16 +49,29 @@ export default function useSingleMatch({
     tieBreakDuration: 7,
   });
   const [tieBreak, setTieBreak] = useState(false);
+  // ovo total nema potrebe da bude state jer ne renderujemo nista u zavisnosti od njega, bitan nam je samo a racun
   const [total, setTotal] = useState({
     player1: 0,
     player2: 0,
     total: 0,
   });
 
+  // ne znam jel ce da radi sve kako treba
+  // let total = {
+  //   player1: 0,
+  //   player2: 0,
+  //   total: 0,
+  // };
+
+  const [selectedSet, setSelectedSet] = useState(
+    (match?.score?.sets?.length ?? 1) - 1
+  );
+
   // Constants
   const currentGem = match?.score?.currentSet;
   const setsLength = match?.score?.sets?.length;
   const currentSet = match?.score?.sets[setsLength! - 1];
+
   const playerWonGem =
     currentGem?.[params!]! > 3 &&
     currentGem?.reduce((a, b) => Math.abs(a - b), 0)! > 1;
@@ -108,7 +123,6 @@ export default function useSingleMatch({
       updateMatchScore({
         id,
         team: team.toString(),
-
         score: match?.score?.currentSet[team]! + 1,
         tournament,
       });
@@ -118,17 +132,59 @@ export default function useSingleMatch({
   }
 
   // GEMS
-  function handleGemPoint(team: number, action: "plus" | "minus" = "plus") {
+  function handleGemPoint(team: number, action?: "plus" | "minus") {
+    setParams(team);
+
     const sets = match?.score?.sets;
     const updatedTeam = currentSet?.[team];
+
+    if (tieBreak && action) {
+      return;
+    }
+
+    if (!action) action = "plus";
+
+    if (selectedSet != sets?.length! - 1) {
+      const oldResult = sets?.[selectedSet]?.[team];
+
+      let newScore = action == "plus" ? oldResult! + 1 : oldResult! - 1;
+
+      if (newScore < 0) return;
+      if (newScore > matchType.gemDuration) return;
+
+      updateGemScore({
+        id,
+        team: team.toString(),
+        gem: selectedSet,
+        score: newScore,
+        prevScore: sets?.[selectedSet],
+        tournament,
+      });
+
+      return;
+    }
 
     if (
       (type === 0 || type === 1) &&
       currentSet?.[team]! >= matchType.gemDuration - 1 &&
       !tieBreak
     ) {
-      addNewSet();
+      // igra se na 2 razlike ako je 1 razlika onda moramo update gem score
+      if (
+        currentSet?.[team]! == matchType.gemDuration - 1 &&
+        Math.abs(currentSet?.[0]! - currentSet?.[1]!) === 1
+      ) {
+        updateGemScore({
+          id,
+          team: team.toString(),
+          gem: sets?.length! - 1,
+          score: updatedTeam === undefined ? 0 : updatedTeam + 1,
+          prevScore: sets?.[sets?.length! - 1],
+          tournament,
+        });
+      }
 
+      addNewSet();
       return;
     }
 
@@ -262,14 +318,38 @@ export default function useSingleMatch({
     if (setsLength! >= matchType.setDuration) {
       return;
     }
+    if (match.winner) return;
 
     const team = params === 0 ? "player1" : "player2";
 
-    setTotal((prev) => ({
-      ...prev,
-      [team]: prev?.[team] + 1,
-      total: prev?.total + 1,
-    }));
+    const newTotal = {
+      ...total,
+      [team]: total?.[team] + 1,
+      total: total?.total + 1,
+    };
+    setTotal(newTotal);
+    // total = newTotal;
+
+    setSelectedSet(setsLength ?? 0);
+
+    if (newTotal.total >= 2) {
+      if (type === 0 || type === 1) {
+        if (newTotal?.player1 > newTotal.player2) {
+          handleWinner("host");
+          return;
+        }
+
+        if (newTotal?.player2 > newTotal.player1) {
+          handleWinner("guest");
+          return;
+        }
+      }
+
+      if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
+        handleWinner(params === 0 ? "host" : "guest");
+        return;
+      }
+    }
 
     Array.from({ length: 2 }).forEach((_, i) =>
       updateGemScore({
@@ -284,26 +364,29 @@ export default function useSingleMatch({
   }
 
   function checkWinner() {
+    // TODO: nesto ne radi kako treba ???
     if (type === 0 || type === 1) {
       if (total.total < 2) {
-        return;
+        return false;
       }
 
       if (total?.player1 > total.player2) {
         handleWinner("host");
-        return;
+        return true;
       }
 
       if (total?.player2 > total.player1) {
         handleWinner("guest");
-        return;
+        return true;
       }
     }
 
     if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
       handleWinner(params === 0 ? "host" : "guest");
-      return;
+      return true;
     }
+
+    return false;
   }
 
   function handleWinner(winner: "host" | "guest") {
@@ -321,6 +404,7 @@ export default function useSingleMatch({
       tournament,
     });
 
+    // alert("WINNER : " + winner);
     //TODO: UPDATE GROUP TEAM WIN AND LOSS COUNT
   }
 
@@ -402,6 +486,8 @@ export default function useSingleMatch({
           ...prev,
           player1: prev.player1 + 1,
         }));
+
+        // total.player1++;
       }
 
       if (p2 >= dur && p2 > p1) {
@@ -409,12 +495,17 @@ export default function useSingleMatch({
           ...prev,
           player2: prev.player2 + 1,
         }));
+
+        // total.player2++;
       }
 
       setTotal((prev) => ({
         ...prev,
         total: prev.player1 + prev.player2,
       }));
+
+      // total.total = total.player1 + total.player2;
+
       index++;
     }
   }, [match?.type]);
@@ -453,8 +544,20 @@ export default function useSingleMatch({
         player2: 0,
         total: 0,
       });
+      // total = {
+      //   player1: 0,
+      //   player2: 0,
+      //   total: 0,
+      // };
     };
   }, [id]);
 
-  return { match, tieBreak, handleUpdateCurrentSetScore, handleGemPoint };
+  return {
+    match,
+    tieBreak,
+    handleUpdateCurrentSetScore,
+    handleGemPoint,
+    setSelectedSet,
+    selectedSet,
+  };
 }
