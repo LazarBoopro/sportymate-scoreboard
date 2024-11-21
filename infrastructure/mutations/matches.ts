@@ -128,7 +128,7 @@ export const useUpdateMatchWinner = () => {
       tournament,
     }: {
       gameId: string;
-      winner: string;
+      winner: string | null;
       tournament?: TournamentQueryParams;
     }) => updateMatchWinner({ gameId, winner, tournament }),
   });

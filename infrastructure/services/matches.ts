@@ -182,7 +182,7 @@ export const updateMatchWinner = async ({
   tournament,
 }: {
   gameId: string;
-  winner: string;
+  winner: string | null;
   tournament?: TournamentQueryParams;
 }) => {
   let prefix = "";

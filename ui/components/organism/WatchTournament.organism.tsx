@@ -12,6 +12,7 @@ import { checkStatusMessage } from "@/lib/helpers/messages";
 
 import logo from "@/public/img/logoGreen.svg";
 import { IoTennisball } from "react-icons/io5";
+import { match } from "assert";
 
 export default function WatchTournament({
   tournament,
@@ -23,6 +24,8 @@ export default function WatchTournament({
   tournament: MatchType | null;
 }) {
   const status = tournament?.status?.status.toLowerCase().replaceAll(" ", "");
+
+  console.log(status);
 
   const printScore = ({ team }: { team: number }) => {
     if (isTie) {
@@ -92,14 +95,13 @@ export default function WatchTournament({
                 key={i}
                 style={{ opacity: winner && winner !== "host" ? 0.25 : 1 }}
               >
-                {/* @ts-ignore */}
+                {/* @ts-expect-error */}
                 {`${tournament?.players.host[`player${n}`].firstName}  ${
-                  // @ts-ignore
+                  //  @ts-expect-error
                   tournament?.players.host[`player${n}`].lastName
                 }`}
                 <AnimatePresence>
-                  {/* @ts-ignore */}
-
+                  {/* @ts-expect-error */}
                   {tournament?.players.host[`player${n}`].serving && (
                     <motion.span
                       initial={{
@@ -145,18 +147,13 @@ export default function WatchTournament({
                         delay: i * 0.025,
                       }}
                       key={i}
-                      style={{
-                        color:
-                          i !== (tournament?.score?.sets.length ?? 1) - 1
-                            ? n?.[1] < n?.[0]
-                              ? "red"
-                              : "gray"
-                            : undefined,
-                        // backgroundColor:
-                        //   i === (tournament?.score?.sets.length ?? 1) - 1
-                        //     ? "red"
-                        //     : undefined,
-                      }}
+                      className={`${
+                        (i !== (tournament?.score?.sets.length ?? 1) - 1 ||
+                          status === "completed") &&
+                        n?.[0] > n?.[1]
+                          ? "active"
+                          : ""
+                      }`}
                     >
                       {n?.[0]}
                     </motion.p>
@@ -231,14 +228,13 @@ export default function WatchTournament({
                         delay: i * 0.025,
                       }}
                       key={i}
-                      style={{
-                        color:
-                          i !== (tournament?.score?.sets.length ?? 1) - 1
-                            ? n?.[1] > n?.[0]
-                              ? "red"
-                              : "gray"
-                            : undefined,
-                      }}
+                      className={`${
+                        (i !== (tournament?.score?.sets.length ?? 1) - 1 ||
+                          status === "completed") &&
+                        n?.[0] < n?.[1]
+                          ? "active"
+                          : ""
+                      }`}
                     >
                       {n?.[1]}
                     </motion.p>

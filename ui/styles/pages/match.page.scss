@@ -4,7 +4,7 @@
   isolation: isolate;
   padding: 1rem;
   display: grid;
-  grid-template-rows: 1fr 250px 1fr;
+  grid-template-rows: 1fr clamp(1fr, 10vw, 250px) 1fr;
   grid-template-columns: 1fr;
   gap: 1rem;
 }
@@ -30,96 +30,192 @@
   }
 
   .table {
-    background: $white-clr;
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    outline: 2px solid black;
-    width: fit-content;
-    background: linear-gradient(to right, #242424, #333333);
     color: $white-clr;
-    border-radius: 0.15rem;
+    background: $purple-clr-500;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    border: 1px solid rgb($purple-clr-100, 1);
 
     &__team {
-      // padding: 0.5rem;
       display: flex;
-      width: fit-content;
+      gap: 1rem;
 
       &:first-child {
-        border-bottom: 2px solid black;
+        border-bottom: 1px solid rgb($purple-clr-100, 1);
       }
 
       .players {
-        padding-block: 0.5rem;
-        padding-inline: 0.5rem;
-        min-width: 200px;
-        border-right: 2px solid $purple-clr-500;
+        padding: 0.5rem;
+        padding-left: 2rem;
 
         .player {
-          font-weight: 800;
+          position: relative;
+          min-width: 160px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.5rem;
+
+          & > span {
+            max-width: 12ch;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: inline-block;
+          }
+
+          .ball_icon {
+            position: absolute;
+            left: -15%;
+            top: 50%;
+            transform: translate(0, -50%);
+            color: $lime-green-clr-500;
+          }
         }
       }
 
-      & > .score {
+      .score {
         display: flex;
-        flex-direction: row;
-        align-items: center;
         justify-content: center;
-        width: fit-content;
+        flex-direction: row;
+        font-size: 1.5rem;
 
-        .sets {
-          height: 100%;
+        .current-set {
+          padding: 0.5rem;
+          color: $purple-clr-900;
+          background: $white-clr;
+
           display: flex;
-          background: linear-gradient(to right, #242424, #333333);
-          color: $white-clr;
-          // background: red;
-
-          & > * {
-            height: 100%;
-          }
-        }
-
-        & p {
-          font-size: clamp(1rem, 5vw, 1.25rem);
-          width: 2rem !important;
-          // aspect-ratio: 1;
-          // height: 4rem;
-          display: flex;
-          height: 100%;
           align-items: center;
           justify-content: center;
-          width: 100%;
-          height: 100%;
+          width: 60px;
+          aspect-ratio: 3/1;
+        }
 
-          &:not(:last-child) {
-            border-right: 2px solid black;
-          }
+        .sets {
+          display: flex;
+          gap: 0.15rem;
+          align-items: center;
+          justify-content: center;
+          // margin-right: 0.5rem;
 
-          &.current-set {
-            color: black;
-            font-weight: bold;
-            background: linear-gradient(45deg, #daed29, #b1c500);
-            width: 3rem !important;
-            aspect-ratio: 1;
-
-            // background: $lime-green-clr-500;
-          }
-
-          &.current-gem {
+          & > * {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            //
+            width: 40px;
+            aspect-ratio: 3/1;
+            height: 100%;
+            background: $purple-clr-500;
             color: $white-clr;
-            background: $purple-clr-400;
-          }
 
-          &.sets {
-            background: $white-clr;
-            background: linear-gradient(to right, #000000, #333333);
-            // background: rgb($black-clr, 0.2);
-            // color: $white-clr;
+            &.active {
+              background: $lime-green-clr-500;
+              color: $purple-clr-500;
+            }
           }
         }
       }
     }
   }
+
+  // .table {
+  //   background: $white-clr;
+  //   position: absolute;
+  //   bottom: 1rem;
+  //   left: 1rem;
+  //   outline: 2px solid black;
+  //   width: fit-content;
+  //   background: linear-gradient(to right, #242424, #333333);
+  //   color: $white-clr;
+  //   border-radius: 0.15rem;
+
+  //   &__team {
+  //     // padding: 0.5rem;
+  //     display: flex;
+  //     width: fit-content;
+
+  //     &:first-child {
+  //       border-bottom: 2px solid black;
+  //     }
+
+  //     .players {
+  //       padding-block: 0.5rem;
+  //       padding-inline: 0.5rem;
+  //       min-width: 200px;
+  //       border-right: 2px solid $purple-clr-500;
+
+  //       .player {
+  //         font-weight: 800;
+  //       }
+  //     }
+
+  //     & > .score {
+  //       display: flex;
+  //       flex-direction: row;
+  //       align-items: center;
+  //       justify-content: center;
+  //       width: fit-content;
+
+  //       .sets {
+  //         height: 100%;
+  //         display: flex;
+  //         background: linear-gradient(to right, #242424, #333333);
+  //         color: $white-clr;
+  //         // background: red;
+
+  //         & > * {
+  //           height: 100%;
+  //         }
+  //       }
+
+  //       & p {
+  //         font-size: clamp(1rem, 5vw, 1.25rem);
+  //         // width: 2rem !important;
+  //         aspect-ratio: 1;
+  //         // height: 4rem;
+  //         display: flex;
+  //         height: 100%;
+  //         align-items: center;
+  //         justify-content: center;
+  //         width: 100%;
+  //         height: 100%;
+
+  //         &:not(:last-child) {
+  //           border-right: 2px solid black;
+  //         }
+
+  //         &.current-set {
+  //           color: black;
+  //           font-weight: bold;
+  //           background: linear-gradient(45deg, #daed29, #b1c500);
+  //           width: 3rem !important;
+  //           aspect-ratio: 1;
+
+  //           // background: $lime-green-clr-500;
+  //         }
+
+  //         &.current-gem {
+  //           color: $white-clr;
+  //           background: $purple-clr-400;
+  //         }
+
+  //         &.sets {
+  //           background: $white-clr;
+  //           background: linear-gradient(to right, #000000, #333333);
+  //           // background: rgb($black-clr, 0.2);
+  //           // color: $white-clr;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 // --------
@@ -256,6 +352,10 @@
           & > p {
             text-align: center;
             width: var(--width-div);
+
+            &:not(.active) {
+              opacity: 0.3 !important;
+            }
           }
         }
 
