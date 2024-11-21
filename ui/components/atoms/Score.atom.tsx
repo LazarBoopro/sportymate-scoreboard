@@ -2,6 +2,7 @@ import { scores } from "@/lib/helpers/score";
 import { Fragment, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { match } from "assert";
+import Button from "./Button.atom";
 
 type ScoreType = {
   currentSet: number[];
@@ -14,11 +15,15 @@ export function Score({
   isTie,
   superTieBreak,
   matchType,
+  setSelectedSet,
+  selectedSet,
 }: {
   score: ScoreType | null;
   superTieBreak: boolean;
   isTie: boolean;
   matchType: string;
+  setSelectedSet: (set: number) => void;
+  selectedSet: number;
 }) {
   return (
     <div className="match__score">
@@ -90,10 +95,24 @@ export function Score({
       <div className="sets">
         {score?.sets?.map?.((n, i) => (
           <Fragment key={i}>
-            <p key={i}>
-              {n?.[0]} : {n?.[1]}
-            </p>
-
+            <Button
+              onClick={() => {
+                setSelectedSet(i);
+              }}
+              type={i === selectedSet ? "primary" : "transparent"}
+              className="single"
+            >
+              {/* <div
+              onClick={() => {
+                setSelectedSet(i);
+              }}
+              className={`single ${i === selectedSet && "active"}`}
+            > */}
+              <p key={i}>
+                {n?.[0]} : {n?.[1]}
+              </p>
+              {/* </div> */}
+            </Button>
             <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
           </Fragment>
         ))}

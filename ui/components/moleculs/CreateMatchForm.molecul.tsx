@@ -18,247 +18,248 @@ import { GroupType, ObjectType, TeamType } from "@/interfaces/tournaments";
 import { CreateGroupMatchType } from "@/interfaces/matches";
 
 const CreateMatchForm = ({
-    match,
-    setMatch,
-    handleAddMatch,
-    groups,
-    teams,
+  match,
+  setMatch,
+  handleAddMatch,
+  groups,
+  teams,
 }: {
-    match: CreateGroupMatchType;
-    setMatch: Dispatch<SetStateAction<CreateGroupMatchType>>;
-    handleAddMatch: (e: React.SyntheticEvent<HTMLFormElement>) => void;
-    teams: ObjectType<TeamType> | null;
-    groups: ObjectType<GroupType> | null;
+  match: CreateGroupMatchType;
+  setMatch: Dispatch<SetStateAction<CreateGroupMatchType>>;
+  handleAddMatch: (e: React.SyntheticEvent<HTMLFormElement>) => void;
+  teams: ObjectType<TeamType> | null;
+  groups: ObjectType<GroupType> | null;
 }) => {
-    return (
-        <form
-            onSubmit={handleAddMatch}
-            className="tournament-form__form"
-            style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
+  return (
+    <form
+      onSubmit={handleAddMatch}
+      className="tournament-form__form"
+      style={{ height: "100%0", padding: "1rem", overflow: "hidden" }}
+    >
+      <section
+        style={{
+          maxWidth: "100%",
+          height: "100%",
+          padding: "0",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "clamp(1rem, 10vw, 1.25rem)",
+            fontWeight: "800",
+          }}
         >
-            <section
-                style={{
-                    maxWidth: "100%",
-                    height: "100%",
-                    padding: "0",
-                }}
-            >
-                <h2
-                    style={{
-                        fontSize: "clamp(1rem, 10vw, 1.25rem)",
-                        fontWeight: "800",
-                    }}
-                >
-                    Dodaj mec
-                </h2>
-                <div className="input-field">
-                    <label className="input-field__title">Izaberite grupu</label>
-                    <SelectInput
-                        selectOptions={
-                            groups
-                                ? Object.keys?.(groups)?.map?.((el, i) => ({
-                                      id: el,
-                                      name: el,
-                                  }))
-                                : []
-                        }
-                        handleChange={(val: string) => {
-                            setMatch({
-                                ...match,
-                                group: val,
-                                superTieBreak: groups?.[val].superTieBreak ?? true,
-                                type: groups?.[val].type ?? 0,
-                            });
-                        }}
-                        defaultSelected={match.group ? match.group : "Izaberite grupu"}
-                        required
-                        value={match.group ?? ""}
-                    />
-                </div>
+          Dodaj mec
+        </h2>
+        <div className="input-field">
+          <label className="input-field__title">Izaberite grupu</label>
+          <SelectInput
+            selectOptions={
+              groups
+                ? Object.keys?.(groups)?.map?.((el, i) => ({
+                    id: el,
+                    name: el,
+                  }))
+                : []
+            }
+            handleChange={(val: string) => {
+              setMatch({
+                ...match,
+                group: val,
+                superTieBreak: groups?.[val].superTieBreak ?? true,
+                type: groups?.[val].type ?? 0,
+                goldenPoint: groups?.[val].goldenPoint ?? false,
+              });
+            }}
+            defaultSelected={match.group ? match.group : "Izaberite grupu"}
+            required
+            value={match.group ?? ""}
+          />
+        </div>
 
-                <div className="input-field">
-                    <label className="input-field__title">Tim 1</label>
-                    <SelectInput
-                        selectOptions={
-                            match.group && groups?.[match.group]?.teams
-                                ? groups?.[match.group]?.teams?.map((el: TeamType) => ({
-                                      id: el.teamId ?? "",
-                                      name:
-                                          el.player1.firstName +
-                                          " " +
-                                          el.player1.lastName +
-                                          ", " +
-                                          el.player2?.firstName +
-                                          " " +
-                                          el.player2?.lastName,
-                                  }))
-                                : teams
-                                ? Object.keys?.(teams)?.map?.((el) => ({
-                                      id: el,
+        <div className="input-field">
+          <label className="input-field__title">Tim 1</label>
+          <SelectInput
+            selectOptions={
+              match.group && groups?.[match.group]?.teams
+                ? groups?.[match.group]?.teams?.map((el: TeamType) => ({
+                    id: el.teamId ?? "",
+                    name:
+                      el.player1.firstName +
+                      " " +
+                      el.player1.lastName +
+                      ", " +
+                      el.player2?.firstName +
+                      " " +
+                      el.player2?.lastName,
+                  }))
+                : teams
+                ? Object.keys?.(teams)?.map?.((el) => ({
+                    id: el,
 
-                                      name:
-                                          teams[el].player1.firstName +
-                                          " " +
-                                          teams[el].player1.lastName +
-                                          ", " +
-                                          teams[el].player2?.firstName +
-                                          " " +
-                                          teams[el].player2?.lastName,
-                                  }))
-                                : []
-                        }
-                        handleChange={(val: string) => {
-                            if (teams?.[val]?.player1 && teams[val]?.player2) {
-                                setMatch({
-                                    ...match,
+                    name:
+                      teams[el].player1.firstName +
+                      " " +
+                      teams[el].player1.lastName +
+                      ", " +
+                      teams[el].player2?.firstName +
+                      " " +
+                      teams[el].player2?.lastName,
+                  }))
+                : []
+            }
+            handleChange={(val: string) => {
+              if (teams?.[val]?.player1 && teams[val]?.player2) {
+                setMatch({
+                  ...match,
 
-                                    host: {
-                                        teamId: val,
-                                        player1: teams[val].player1,
-                                        player2: teams[val].player2,
-                                    },
-                                });
-                            }
-                        }}
-                        defaultSelected={
-                            match?.host
-                                ? `${match.host.player1.firstName} ${match.host.player1.lastName} ${match.host.player2?.firstName} ${match.host.player2?.lastName}`
-                                : "Izaberite igraca"
-                        }
-                        required
-                        value={match?.host?.teamId ?? ""}
-                    />
-                </div>
-                <div className="input-field">
-                    <label className="input-field__title">Tim 2</label>
+                  host: {
+                    teamId: val,
+                    player1: teams[val].player1,
+                    player2: teams[val].player2,
+                  },
+                });
+              }
+            }}
+            defaultSelected={
+              match?.host
+                ? `${match.host.player1.firstName} ${match.host.player1.lastName} ${match.host.player2?.firstName} ${match.host.player2?.lastName}`
+                : "Izaberite igraca"
+            }
+            required
+            value={match?.host?.teamId ?? ""}
+          />
+        </div>
+        <div className="input-field">
+          <label className="input-field__title">Tim 2</label>
 
-                    <SelectInput
-                        selectOptions={
-                            match.group && groups?.[match.group]?.teams
-                                ? groups?.[match.group]?.teams?.map?.((el: TeamType) => ({
-                                      id: el.teamId ?? "",
+          <SelectInput
+            selectOptions={
+              match.group && groups?.[match.group]?.teams
+                ? groups?.[match.group]?.teams?.map?.((el: TeamType) => ({
+                    id: el.teamId ?? "",
 
-                                      name:
-                                          el?.player1.firstName +
-                                          " " +
-                                          el?.player1.lastName +
-                                          ", " +
-                                          el?.player2?.firstName +
-                                          " " +
-                                          el?.player2?.lastName,
-                                  }))
-                                : teams
-                                ? Object.keys?.(teams)?.map?.((el) => ({
-                                      id: el,
+                    name:
+                      el?.player1.firstName +
+                      " " +
+                      el?.player1.lastName +
+                      ", " +
+                      el?.player2?.firstName +
+                      " " +
+                      el?.player2?.lastName,
+                  }))
+                : teams
+                ? Object.keys?.(teams)?.map?.((el) => ({
+                    id: el,
 
-                                      name:
-                                          teams[el].player1.firstName +
-                                          " " +
-                                          teams[el].player1.lastName +
-                                          ", " +
-                                          teams[el].player2?.firstName +
-                                          " " +
-                                          teams[el].player2?.lastName,
-                                  }))
-                                : []
-                        }
-                        handleChange={(val: string) => {
-                            if (teams?.[val]?.player1 && teams[val]?.player2) {
-                                setMatch({
-                                    ...match,
+                    name:
+                      teams[el].player1.firstName +
+                      " " +
+                      teams[el].player1.lastName +
+                      ", " +
+                      teams[el].player2?.firstName +
+                      " " +
+                      teams[el].player2?.lastName,
+                  }))
+                : []
+            }
+            handleChange={(val: string) => {
+              if (teams?.[val]?.player1 && teams[val]?.player2) {
+                setMatch({
+                  ...match,
 
-                                    guest: {
-                                        teamId: val,
-                                        player1: teams[val].player1,
-                                        player2: teams[val].player2,
-                                    },
-                                });
-                            }
-                        }}
-                        defaultSelected={
-                            match.guest
-                                ? `${match.guest.player1.firstName} ${match.guest.player1.lastName} ${match.guest.player2?.firstName} ${match.guest.player2?.lastName}`
-                                : "Izaberite igraca"
-                        }
-                        required
-                        value={match?.guest?.teamId ?? ""}
-                    />
-                </div>
+                  guest: {
+                    teamId: val,
+                    player1: teams[val].player1,
+                    player2: teams[val].player2,
+                  },
+                });
+              }
+            }}
+            defaultSelected={
+              match.guest
+                ? `${match.guest.player1.firstName} ${match.guest.player1.lastName} ${match.guest.player2?.firstName} ${match.guest.player2?.lastName}`
+                : "Izaberite igraca"
+            }
+            required
+            value={match?.guest?.teamId ?? ""}
+          />
+        </div>
 
-                <div
-                    className="divider"
-                    style={{
-                        height: "1px",
-                        width: "100%",
-                        borderBottom: "1px solid #ccc",
-                    }}
-                ></div>
+        <div
+          className="divider"
+          style={{
+            height: "1px",
+            width: "100%",
+            borderBottom: "1px solid #ccc",
+          }}
+        ></div>
 
-                <section
-                    style={{
-                        display: "flex",
-                        gap: "1rem",
-                        flexDirection: "column",
-                    }}
-                >
-                    <Tabs
-                        onChange={(e) =>
-                            setMatch((prev: CreateGroupMatchType) => ({
-                                ...prev,
-                                type: +e.target.value,
-                            }))
-                        }
-                        title="Izaberi tip turnira"
-                        name="type"
-                        type="select"
-                        selected={match?.type}
-                    />
+        <section
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexDirection: "column",
+          }}
+        >
+          <Tabs
+            onChange={(e) =>
+              setMatch((prev: CreateGroupMatchType) => ({
+                ...prev,
+                type: +e.target.value,
+              }))
+            }
+            title="Izaberi tip turnira"
+            name="type"
+            type="select"
+            selected={match?.type}
+          />
 
-                    <InputField
-                        onChange={() =>
-                            setMatch((prev: CreateGroupMatchType) => ({
-                                ...prev,
-                                superTieBreak: !prev.superTieBreak,
-                            }))
-                        }
-                        title="Super Tie Break"
-                        value={match.superTieBreak}
-                        name="isSuperTieBreak"
-                        className={"row"}
-                        type="switch"
-                    />
+          <InputField
+            onChange={() =>
+              setMatch((prev: CreateGroupMatchType) => ({
+                ...prev,
+                superTieBreak: !prev.superTieBreak,
+              }))
+            }
+            title="Super Tie Break"
+            value={match.superTieBreak}
+            name="isSuperTieBreak"
+            className={"row"}
+            type="switch"
+          />
 
-                    <InputField
-                        onChange={() =>
-                            setMatch((prev: CreateGroupMatchType) => ({
-                                ...prev,
-                                goldenPoint: !prev.goldenPoint,
-                            }))
-                        }
-                        title="Zlatni poen"
-                        value={match?.goldenPoint}
-                        name="isGoldenPoint"
-                        className={"row"}
-                        type="switch"
-                    />
-                </section>
+          <InputField
+            onChange={() =>
+              setMatch((prev: CreateGroupMatchType) => ({
+                ...prev,
+                goldenPoint: !prev.goldenPoint,
+              }))
+            }
+            title="Zlatni poen"
+            value={match.goldenPoint}
+            name="isGoldenPoint"
+            className={"row"}
+            type="switch"
+          />
+        </section>
 
-                <div
-                    className="divider"
-                    style={{
-                        height: "1px",
-                        width: "100%",
-                        borderBottom: "1px solid #ccc",
-                        marginBottom: "auto",
-                    }}
-                ></div>
+        <div
+          className="divider"
+          style={{
+            height: "1px",
+            width: "100%",
+            borderBottom: "1px solid #ccc",
+            marginBottom: "auto",
+          }}
+        ></div>
 
-                <Button>
-                    Dodaj mec <IoAddCircleOutline />
-                </Button>
-            </section>
-        </form>
-    );
+        <Button>
+          Dodaj mec <IoAddCircleOutline />
+        </Button>
+      </section>
+    </form>
+  );
 };
 
 export default CreateMatchForm;

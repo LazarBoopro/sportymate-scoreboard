@@ -24,6 +24,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
         });
 
     const [type, setType] = useState("group");
+    const [phaseTeams, setPhaseTeams] = useState<TeamType[]>([]);
 
     const [match, setMatch] = useState<CreateGroupMatchType>({
         guest: null,
@@ -34,6 +35,7 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
         type: 0,
     });
 
+    const { mutate: updateGroup } = useUpdateGroup(() => {});
     const { mutate: addMatch } = useAddMatch();
 
     function handleAddMatch(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -83,15 +85,28 @@ const CreateGroup = ({ tournamentId }: { tournamentId: string }) => {
         });
     }
 
-    const { mutate: updateGroup } = useUpdateGroup(() => {});
-    const [phaseTeams, setPhaseTeams] = useState<TeamType[]>([]);
     function handleAddTeams(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
         updateGroup({ data: { teams: phaseTeams }, tournamentId, groupId: "A", phase });
     }
 
     useEffect(() => {
-        if (groups?.A?.teams) setPhaseTeams(groups.A.teams);
+        if (groups?.A?.teams) { 
+            
+            setPhaseTeams(groups.A.teams); 
+            
+            if(Object.keys(groups).length === 1)
+            {
+                setMatch({
+                    guest: null,
+                    host: null,
+                    goldenPoint: groups.A.goldenPoint,
+                    group: "A",
+                    superTieBreak: groups.A.superTieBreak,
+                    type: groups.A.type,
+                }) 
+            }
+    }
         else setPhaseTeams([]);
     }, [groups]);
 

@@ -33,7 +33,7 @@ export const useDeleteGroup = (onError: (err: FirebaseError) => void) => {
             groupId: string;
             phase: GroupPhaseEnum;
         }) => {
-            console.log("DELETE GROUP", tournamentId, groupId, phase);
+           
             return deleteGroup(tournamentId, groupId, phase);
         },
         onError: onError,
