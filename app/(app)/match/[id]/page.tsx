@@ -52,7 +52,7 @@ export default function Match({ params }: { params: { id: string } }) {
   // }, [user]);
 
   if (size) {
-    return <WatchTVOverlay match={match} />;
+    return <WatchTVOverlay match={match} isTieBreak={tieBreak} />;
   }
 
   if (isWatchMode || !user?.uid) {
