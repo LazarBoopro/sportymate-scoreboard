@@ -1,8 +1,10 @@
 import { scores } from "@/lib/helpers/score";
-import { Fragment, useEffect } from "react";
+import { Fragment, useContext, Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { match } from "assert";
 import Button from "./Button.atom";
+import Context from "@/ui/providers/NavbarContext.provider";
+import { LucideTrash2 } from "lucide-react";
 
 type ScoreType = {
   currentSet: number[];
@@ -17,14 +19,20 @@ export function Score({
   matchType,
   setSelectedSet,
   selectedSet,
+  handleSetWinner,
+  setTieBreak,
 }: {
+  handleSetWinner: CallableFunction;
   score: ScoreType | null;
   superTieBreak: boolean;
   isTie: boolean;
   matchType: string;
-  setSelectedSet: (set: number) => void;
+  setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
+  setTieBreak: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { match } = useContext(Context);
+
   return (
     <div className="match__score">
       <div className={`score ${isTie ? "tie" : ""}`}>
@@ -118,6 +126,36 @@ export function Score({
         ))}
       </div>
 
+      <div className="tie-break-buttons">
+        <Button
+          type="danger"
+          onClick={() => {
+            setTieBreak(true);
+          }}
+        >
+          TIE BREAK
+        </Button>
+        <Button
+          type="danger"
+          onClick={() => {
+            setTieBreak(false);
+          }}
+        >
+          END TIE BREAK
+        </Button>
+      </div>
+
+      {match?.winner && (
+        <div className="winner">
+          <p className="winner_label">Pobednik</p>
+          <div className="winner__body">
+            <p className="team">{match?.winner}</p>
+            <Button type="danger" onClick={() => handleSetWinner(null, false)}>
+              <LucideTrash2 />
+            </Button>
+          </div>
+        </div>
+      )}
       {/* <div className="tiebreak">
         <p>Tiebreak:</p>
         <p>{score?.tiebreak?.[0]}</p>

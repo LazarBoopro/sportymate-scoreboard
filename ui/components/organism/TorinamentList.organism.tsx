@@ -11,6 +11,8 @@ import useTournaments from "@/ui/hooks/useTournaments";
 import { IoAddCircleOutline, IoChevronForwardOutline } from "react-icons/io5";
 
 import "@/ui/styles/organism/tournaments.organism.scss";
+import { useDeleteTournament } from "@/infrastructure/mutations/tournaments";
+import { LucideTrash2 } from "lucide-react";
 
 export function TournamentsList() {
   const { tournaments, addNewTournament } = useTournaments();
@@ -22,6 +24,8 @@ export function TournamentsList() {
     addNewTournament({ title: tournamentTitle });
     setTournamentTitle("");
   }
+
+  const { mutate: deleteTournament } = useDeleteTournament();
 
   return (
     <section className="t-list">
@@ -43,7 +47,6 @@ export function TournamentsList() {
       {/* ADD NEW TOURNAMENT */}
       {tournaments?.map((tournament, i) => (
         <article key={tournament?.id || i} className="t-list__tournament">
-          <h3 className="title">{tournament?.title}</h3>
           <Link
             href={{
               pathname: `/tournaments/${tournament.id}`,
@@ -52,10 +55,29 @@ export function TournamentsList() {
               },
             }}
           >
-            <Button className="cta-slide" type="primary">
-              Detalji <IoChevronForwardOutline />
-            </Button>
+            <h3 className="title">{tournament?.title}</h3>
           </Link>
+          <div className="ctas">
+            <Button
+              type="danger"
+              onClick={() => deleteTournament(tournament.id)}
+            >
+              {/* Obrisi */}
+              <LucideTrash2 />
+            </Button>
+            <Link
+              href={{
+                pathname: `/tournaments/${tournament.id}`,
+                query: {
+                  phase: "groups",
+                },
+              }}
+            >
+              <Button className="cta-slide" type="primary">
+                Detalji <IoChevronForwardOutline />
+              </Button>
+            </Link>
+          </div>
         </article>
       ))}
     </section>

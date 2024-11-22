@@ -138,13 +138,29 @@ export default function useSingleMatch({
     const sets = match?.score?.sets;
     const updatedTeam = currentSet?.[team];
 
-    if (tieBreak && action) {
+    if (tieBreak && selectedSet == sets?.length! - 1) {
+      if (action == "minus") {
+        setTieBreak(false);
+        updateGemScore({
+          id,
+          team: team.toString(),
+          gem: sets?.length! - 1,
+          score:
+            updatedTeam === undefined
+              ? 0
+              : updatedTeam - 1 >= 0
+              ? updatedTeam - 1
+              : 0,
+          prevScore: sets?.[sets?.length! - 1],
+          tournament,
+        });
+      }
       return;
     }
 
     if (!action) action = "plus";
 
-    if (selectedSet != sets?.length! - 1) {
+    if (selectedSet != sets?.length! - 1 || match?.winner) {
       const oldResult = sets?.[selectedSet]?.[team];
 
       let newScore = action == "plus" ? oldResult! + 1 : oldResult! - 1;
@@ -272,6 +288,8 @@ export default function useSingleMatch({
   }
 
   function checkForTieBreak() {
+    if (selectedSet != (match?.score?.sets?.length ?? 1) - 1) return;
+
     if (match?.winner) {
       setTieBreak(false);
       return;
@@ -363,30 +381,48 @@ export default function useSingleMatch({
     );
   }
 
-  function checkWinner() {
+  function checkWinner(winner: "host" | "guest", finishMatch: boolean) {
     // TODO: nesto ne radi kako treba ???
-    if (type === 0 || type === 1) {
-      if (total.total < 2) {
-        return false;
-      }
+    // if (type === 0 || type === 1) {
+    //   if (total.total < 2) {
+    //     return false;
+    //   }
+    //   if (total?.player1 > total.player2) {
+    //     handleWinner("host");
+    //     return true;
+    //   }
+    //   if (total?.player2 > total.player1) {
+    //     handleWinner("guest");
+    //     return true;
+    //   }
+    // }
+    // if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
+    //   handleWinner(params === 0 ? "host" : "guest");
+    //   return true;
+    // }
+    // return false;
+  }
 
-      if (total?.player1 > total.player2) {
-        handleWinner("host");
-        return true;
-      }
+  function handleSetWinner(
+    winner: "host" | "guest" | null,
+    finishMatch: boolean
+  ) {
+    updateMatchWinner({
+      gameId: id,
+      winner,
+      tournament,
+    });
 
-      if (total?.player2 > total.player1) {
-        handleWinner("guest");
-        return true;
-      }
+    if (finishMatch) {
+      updateStatus({
+        id,
+        status: {
+          status: "completed",
+          id: 0,
+        },
+        tournament,
+      });
     }
-
-    if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
-      handleWinner(params === 0 ? "host" : "guest");
-      return true;
-    }
-
-    return false;
   }
 
   function handleWinner(winner: "host" | "guest") {
@@ -425,7 +461,7 @@ export default function useSingleMatch({
   }, [isSuccessCurrentMatchScore, match?.score?.currentSet]);
 
   useEffect(() => {
-    checkWinner();
+    // checkWinner();
     checkForTieBreak();
   }, [isSuccessCurrentGemScore, match?.score?.sets]);
 
@@ -437,8 +473,12 @@ export default function useSingleMatch({
     if (playerWonTieBreak) {
       resetTieBreakScore(params!);
       handleGemPoint(params!);
-      checkWinner();
-      addNewSet();
+      // checkWinner();
+      if (selectedSet !== (match?.score?.sets?.length ?? 1) - 1) {
+        setSelectedSet((match?.score?.sets?.length ?? 1) - 1);
+      } else {
+        addNewSet();
+      }
     }
   }, [isSuccessCurrentTieBreakScore, match?.score?.tiebreak]);
 
@@ -558,6 +598,8 @@ export default function useSingleMatch({
     handleUpdateCurrentSetScore,
     handleGemPoint,
     setSelectedSet,
+    handleSetWinner,
     selectedSet,
+    setTieBreak,
   };
 }

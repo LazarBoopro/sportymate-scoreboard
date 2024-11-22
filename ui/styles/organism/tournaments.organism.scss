@@ -44,7 +44,7 @@
         left: 0;
       }
 
-      &>button {
+      & > button {
         padding: 0.5rem 1rem;
         min-width: 5rem;
         color: $white-clr;
@@ -113,13 +113,18 @@
         align-items: center;
         outline: 1px solid $gray-clr-300;
 
+        .ctas {
+          display: flex;
+          gap: 0.5rem;
+        }
+
         &.form {
           flex-direction: column;
           gap: 0.5rem;
           background: rgb($gray-clr-100, 0.25);
           position: relative;
 
-          &>* {
+          & > * {
             width: 100%;
           }
         }

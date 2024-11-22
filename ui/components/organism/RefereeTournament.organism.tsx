@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { SetStateAction, Suspense, Dispatch } from "react";
 import { Team } from "../moleculs/Team.molecul";
 import SelectField from "../moleculs/SelectStatus.molecul";
 import { Score } from "../atoms/Score.atom";
@@ -12,13 +12,20 @@ export default function RefereeTournament({
   handleChangeGemPoint,
   setSelectedSet,
   selectedSet,
+  handleSetWinner,
+  setTieBreak,
 }: {
+  handleSetWinner: (
+    winner: "host" | "guest" | null,
+    finishMatch: boolean
+  ) => void;
   isTie: boolean;
   tournament: MatchType | null;
   handleUpdateCurrentSetScore: CallableFunction;
   handleChangeGemPoint: CallableFunction;
-  setSelectedSet: (set: number) => void;
+  setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
+  setTieBreak: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <main className="match">
@@ -29,6 +36,7 @@ export default function RefereeTournament({
           handleChange={handleUpdateCurrentSetScore}
           status={tournament?.status?.status!}
           handleChangeGemPoint={handleChangeGemPoint}
+          handleSetWinner={handleSetWinner}
         />
         <div className="match__section">
           <SelectField defaultSelected={tournament?.status?.status ?? ""} />
@@ -39,6 +47,8 @@ export default function RefereeTournament({
             matchType={MATCH_TYPES?.[tournament?.type || 0].title}
             setSelectedSet={setSelectedSet}
             selectedSet={selectedSet}
+            handleSetWinner={handleSetWinner}
+            setTieBreak={setTieBreak}
           />
         </div>
         <Team
@@ -47,6 +57,7 @@ export default function RefereeTournament({
           handleChange={handleUpdateCurrentSetScore}
           status={tournament?.status?.status!}
           handleChangeGemPoint={handleChangeGemPoint}
+          handleSetWinner={handleSetWinner}
         />
       </Suspense>
     </main>

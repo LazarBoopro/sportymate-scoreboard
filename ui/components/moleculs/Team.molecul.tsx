@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import Button from "@/ui/components/atoms/Button.atom";
 import Context from "@/ui/providers/NavbarContext.provider";
@@ -8,6 +8,9 @@ import { IoTennisball } from "react-icons/io5";
 
 import "@/ui/styles/moleculs/team.molecul.scss";
 import { TeamType } from "@/interfaces/tournaments";
+import { Switch } from "@/components/ui/switch";
+import InputField from "../atoms/InputField.atom";
+import useSingleMatch from "@/ui/hooks/useSingleMatch.hook";
 
 export function Team({
   players,
@@ -15,15 +18,24 @@ export function Team({
   team,
   status,
   handleChangeGemPoint,
+  handleSetWinner,
 }: {
   players?: TeamType;
   handleChange: CallableFunction;
   team: number;
   status: string;
   handleChangeGemPoint: CallableFunction;
+  handleSetWinner: CallableFunction;
 }) {
   const { setServing } = useContext(Context);
   const { id } = useParams();
+
+  const [finish, setFinish] = useState(false);
+
+  const { match } = useContext(Context);
+
+  const host = match?.winner === "host" && team === 0;
+  const guest = match?.winner === "guest" && team === 1;
 
   const s = status?.toLocaleLowerCase();
 
@@ -34,6 +46,16 @@ export function Team({
       team: team === 0 ? "host" : "guest",
     });
   };
+
+  function handleWinner() {
+    if (host || guest) {
+      handleSetWinner(null, false);
+      return;
+    }
+
+    const winner = team === 0 ? "host" : "guest";
+    handleSetWinner(winner, finish);
+  }
 
   return (
     <div className="match__section right">
@@ -113,6 +135,26 @@ export function Team({
               -
             </Button>
           </div>
+        </div>
+      </div>
+      <div className="options">
+        <div className="options__option">
+          <Button
+            // onClick={() =>
+            //   handleSetWinner(team === 0 ? "host" : "guest", finish)
+            // }
+            type="action"
+            onClick={handleWinner}
+          >
+            Oznaci pobednika
+          </Button>
+          <InputField
+            value={finish}
+            onChange={() => setFinish((prev) => !prev)}
+            name="finishMatch"
+            title="Završi meč"
+            type="switch"
+          />
         </div>
       </div>
     </div>
