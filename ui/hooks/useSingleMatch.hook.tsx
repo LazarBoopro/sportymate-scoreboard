@@ -351,24 +351,24 @@ export default function useSingleMatch({
 
     setSelectedSet(setsLength ?? 0);
 
-    if (newTotal.total >= 2) {
-      if (type === 0 || type === 1) {
-        if (newTotal?.player1 > newTotal.player2) {
-          handleWinner("host");
-          return;
-        }
+    // if (newTotal.total >= 2) {
+    //   if (type === 0 || type === 1) {
+    //     if (newTotal?.player1 > newTotal.player2) {
+    //       handleWinner("host");
+    //       return;
+    //     }
 
-        if (newTotal?.player2 > newTotal.player1) {
-          handleWinner("guest");
-          return;
-        }
-      }
+    //     if (newTotal?.player2 > newTotal.player1) {
+    //       handleWinner("guest");
+    //       return;
+    //     }
+    //   }
 
-      if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
-        handleWinner(params === 0 ? "host" : "guest");
-        return;
-      }
-    }
+    //   if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
+    //     handleWinner(params === 0 ? "host" : "guest");
+    //     return;
+    //   }
+    // }
 
     Array.from({ length: 2 }).forEach((_, i) =>
       updateGemScore({
