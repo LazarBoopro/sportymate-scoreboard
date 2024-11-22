@@ -6,11 +6,19 @@ import { IoTennisball } from "react-icons/io5";
 import { useContext } from "react";
 import Context from "@/ui/providers/NavbarContext.provider";
 
-export default function WatchTVOverlay({ match }: { match: MatchType }) {
+export default function WatchTVOverlay({
+  match,
+  isTieBreak,
+}: {
+  match: MatchType;
+  isTieBreak: boolean;
+}) {
   const isPlayersUndefined =
     typeof match?.players?.guest?.player1?.firstName === "undefined";
 
   // const {match} = useContext(Context)
+
+  console.log({ match });
 
   return (
     <section className="tv-overlay">
@@ -51,6 +59,9 @@ export default function WatchTVOverlay({ match }: { match: MatchType }) {
                       className={`set ${
                         i === match.score?.sets?.length! - 1 && !match?.winner
                           ? "active"
+                          : (match.score?.sets?.[i]?.[0] ?? 0) <
+                            (match.score?.sets?.[i]?.[1] ?? 0)
+                          ? "prev"
                           : ""
                       }`}
                     >
@@ -59,7 +70,10 @@ export default function WatchTVOverlay({ match }: { match: MatchType }) {
                   ))}
                 </div>
                 <p className="current-set">
-                  {scores?.[match?.score?.currentSet[0] ?? 0]}
+                  {isTieBreak
+                    ? match?.score?.tiebreak[0] ?? 0
+                    : scores?.[match?.score?.currentSet[0] ?? 0]}
+
                   {/* {match?.score?.sets?.[match?.score?.sets?.length - 1][0]} */}
                 </p>
               </div>
@@ -96,6 +110,9 @@ export default function WatchTVOverlay({ match }: { match: MatchType }) {
                       className={`set ${
                         i === match.score?.sets?.length! - 1 && !match?.winner
                           ? "active"
+                          : (match.score?.sets?.[i]?.[0] ?? 0) >
+                            (match.score?.sets?.[i]?.[1] ?? 0)
+                          ? "prev"
                           : ""
                       }`}
                     >
@@ -104,7 +121,10 @@ export default function WatchTVOverlay({ match }: { match: MatchType }) {
                   ))}
                 </div>
                 <p className={`current-set`}>
-                  {scores?.[match?.score?.currentSet[1] ?? 0]}
+                  {isTieBreak
+                    ? match?.score?.tiebreak[1] ?? 0
+                    : scores?.[match?.score?.currentSet[1] ?? 0]}
+
                   {/* {match?.score?.sets?.[match?.score?.sets?.length - 1][1]} */}
                 </p>
               </div>

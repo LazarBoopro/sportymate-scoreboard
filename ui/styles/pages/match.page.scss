@@ -119,6 +119,10 @@
               background: $lime-green-clr-500;
               color: $purple-clr-500;
             }
+
+            &.prev {
+              opacity: 0.5;
+            }
           }
         }
       }

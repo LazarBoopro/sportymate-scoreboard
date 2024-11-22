@@ -34,6 +34,7 @@ export default function Match({ params }: { params: { id: string } }) {
     selectedSet,
     handleSetWinner,
     setTieBreak,
+    resetTieBreakScore,
     addNewSet,
   } = useSingleMatch({
     id: params.id,
@@ -53,7 +54,7 @@ export default function Match({ params }: { params: { id: string } }) {
   // }, [user]);
 
   if (size) {
-    return <WatchTVOverlay match={match} />;
+    return <WatchTVOverlay match={match} isTieBreak={tieBreak} />;
   }
 
   if (isWatchMode || !user?.uid) {
@@ -77,6 +78,7 @@ export default function Match({ params }: { params: { id: string } }) {
         selectedSet={selectedSet}
         handleSetWinner={handleSetWinner}
         setTieBreak={setTieBreak}
+        resetTieBreakScore={resetTieBreakScore}
         addNewSet={addNewSet}
       />
     </>

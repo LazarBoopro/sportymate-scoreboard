@@ -142,7 +142,8 @@ export default function useSingleMatch({
 
     if (tieBreak && selectedSet == sets?.length! - 1) {
       if (action == "minus") {
-        setTieBreak(false);
+        // setTieBreak(false);
+        resetTieBreakScore(team);
         updateGemScore({
           id,
           team: team.toString(),
@@ -162,7 +163,7 @@ export default function useSingleMatch({
 
     if (!action) action = "plus";
 
-    if (selectedSet != sets?.length! - 1) {
+    if (selectedSet != sets?.length! - 1 || match?.winner) {
       const oldResult = sets?.[selectedSet]?.[team];
 
       let newScore = action == "plus" ? oldResult! + 1 : oldResult! - 1;
@@ -396,6 +397,12 @@ export default function useSingleMatch({
 
     setSelectedSet(setsLength ?? 0);
 
+    // if (newTotal.total >= 2) {
+    //   if (type === 0 || type === 1) {
+    //     if (newTotal?.player1 > newTotal.player2) {
+    //       handleWinner("host");
+    //       return;
+    //     }
     // if (newTotal.total >= 2) {
     //   if (type === 0 || type === 1) {
     //     if (newTotal?.player1 > newTotal.player2) {
@@ -647,6 +654,7 @@ export default function useSingleMatch({
     handleSetWinner,
     selectedSet,
     setTieBreak,
+    resetTieBreakScore,
     addNewSet,
   };
 }
