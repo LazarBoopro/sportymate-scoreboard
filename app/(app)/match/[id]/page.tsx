@@ -35,6 +35,7 @@ export default function Match({ params }: { params: { id: string } }) {
     handleSetWinner,
     setTieBreak,
     resetTieBreakScore,
+    addNewSet,
   } = useSingleMatch({
     id: params.id,
     tournament: searchParams.get("tournamentId")
@@ -78,6 +79,7 @@ export default function Match({ params }: { params: { id: string } }) {
         handleSetWinner={handleSetWinner}
         setTieBreak={setTieBreak}
         resetTieBreakScore={resetTieBreakScore}
+        addNewSet={addNewSet}
       />
     </>
   );

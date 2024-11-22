@@ -9,6 +9,7 @@ import {
   updateMatchStatus,
   updateMatchWinner,
   updateServingPlayer,
+  updateSets,
   updateTieScore,
 } from "../services/matches";
 import { TournamentQueryParams } from "@/interfaces/tournaments";
@@ -131,5 +132,19 @@ export const useUpdateMatchWinner = () => {
       winner: string | null;
       tournament?: TournamentQueryParams;
     }) => updateMatchWinner({ gameId, winner, tournament }),
+  });
+};
+
+export const useUpdateSets = () => {
+  return useMutation({
+    mutationFn: ({
+      id,
+      sets,
+      tournament,
+    }: {
+      id: string;
+      sets: number[][];
+      tournament?: TournamentQueryParams;
+    }) => updateSets({ id, sets, tournament }),
   });
 };

@@ -22,6 +22,7 @@ export function Score({
   handleSetWinner,
   setTieBreak,
   resetTieBreakScore,
+  addNewSet,
 }: {
   handleSetWinner: CallableFunction;
   score: ScoreType | null;
@@ -32,6 +33,7 @@ export function Score({
   selectedSet: number;
   setTieBreak: Dispatch<SetStateAction<boolean>>;
   resetTieBreakScore: CallableFunction;
+  addNewSet: (action?: "add" | "remove") => void;
 }) {
   const { match } = useContext(Context);
 
@@ -112,20 +114,34 @@ export function Score({
               type={i === selectedSet ? "primary" : "transparent"}
               className="single"
             >
-              {/* <div
-              onClick={() => {
-                setSelectedSet(i);
-              }}
-              className={`single ${i === selectedSet && "active"}`}
-            > */}
               <p key={i}>
                 {n?.[0]} : {n?.[1]}
               </p>
-              {/* </div> */}
             </Button>
+
             <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
           </Fragment>
         ))}
+
+        <Button
+          type="danger"
+          className="add-button"
+          onClick={() => {
+            addNewSet("add");
+          }}
+        >
+          +
+        </Button>
+
+        <Button
+          type="danger"
+          className="add-button"
+          onClick={() => {
+            addNewSet("remove");
+          }}
+        >
+          -
+        </Button>
       </div>
 
       <div className="tie-break-buttons">

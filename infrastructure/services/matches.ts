@@ -195,3 +195,24 @@ export const updateMatchWinner = async ({
     winner,
   });
 };
+
+
+export const updateSets = async ({
+  id,
+  sets,
+  tournament,
+}: {
+  id: string;
+  sets: number[][];
+  tournament?: TournamentQueryParams;
+}) => {
+  let prefix = "";
+  if (tournament) {
+    prefix = `tournaments/${tournament.tournamentId}/matches/${tournament.phase}/${tournament.groupId}/`;
+  }
+  const tournamentsRef = ref(database, `${prefix}matches/${id}/score`);
+
+  update(tournamentsRef, {
+    sets: sets,
+  });
+};
