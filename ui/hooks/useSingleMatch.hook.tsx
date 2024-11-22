@@ -10,6 +10,7 @@ import {
   useUpdateGemScore,
   useUpdateMatchStatus,
   useUpdateMatchWinner,
+  useUpdateSets,
   useUpdateTieScore,
 } from "@/infrastructure/mutations/matches";
 
@@ -88,6 +89,7 @@ export default function useSingleMatch({
     useUpdateTieScore();
   const { mutate: updateMatchWinner } = useUpdateMatchWinner();
   const { mutate: updateStatus } = useUpdateMatchStatus();
+  const { mutate: updateSets } = useUpdateSets();
 
   // Functions
 
@@ -177,6 +179,22 @@ export default function useSingleMatch({
         tournament,
       });
 
+      return;
+    }
+
+    if (
+      action === "minus" &&
+      currentSet?.[team]! >= matchType.gemDuration - 1 &&
+      !tieBreak
+    ) {
+      updateGemScore({
+        id,
+        team: team.toString(),
+        gem: sets?.length! - 1,
+        score: updatedTeam === undefined ? 0 : updatedTeam - 1,
+        prevScore: sets?.[sets?.length! - 1],
+        tournament,
+      });
       return;
     }
 
@@ -332,7 +350,35 @@ export default function useSingleMatch({
     });
   }
 
-  function addNewSet() {
+  function addNewSet(action?: "add" | "remove") {
+    if (action === "add") {
+      Array.from({ length: 2 }).forEach((_, i) =>
+        updateGemScore({
+          id,
+          team: i.toString(),
+          gem: setsLength ?? 0,
+          score: 0,
+          prevScore: [0, 0],
+          tournament,
+        })
+      );
+      return;
+    }
+
+    if (action === "remove") {
+      if (match?.score?.sets && match.score.sets.length > 1) {
+        updateSets({
+          id,
+          sets: match.score.sets.filter((set, i) => i !== selectedSet),
+          tournament,
+        });
+        setSelectedSet(
+          match.score.sets.length - 2 > 0 ? match.score.sets.length - 2 : 0
+        );
+      }
+      return;
+    }
+
     if (setsLength! >= matchType.setDuration) {
       return;
     }
@@ -350,24 +396,24 @@ export default function useSingleMatch({
 
     setSelectedSet(setsLength ?? 0);
 
-    if (newTotal.total >= 2) {
-      if (type === 0 || type === 1) {
-        if (newTotal?.player1 > newTotal.player2) {
-          handleWinner("host");
-          return;
-        }
+    // if (newTotal.total >= 2) {
+    //   if (type === 0 || type === 1) {
+    //     if (newTotal?.player1 > newTotal.player2) {
+    //       handleWinner("host");
+    //       return;
+    //     }
 
-        if (newTotal?.player2 > newTotal.player1) {
-          handleWinner("guest");
-          return;
-        }
-      }
+    //     if (newTotal?.player2 > newTotal.player1) {
+    //       handleWinner("guest");
+    //       return;
+    //     }
+    //   }
 
-      if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
-        handleWinner(params === 0 ? "host" : "guest");
-        return;
-      }
-    }
+    //   if (type === 2 && currentSet?.[params!]! >= matchType.gemDuration) {
+    //     handleWinner(params === 0 ? "host" : "guest");
+    //     return;
+    //   }
+    // }
 
     Array.from({ length: 2 }).forEach((_, i) =>
       updateGemScore({
@@ -601,5 +647,6 @@ export default function useSingleMatch({
     handleSetWinner,
     selectedSet,
     setTieBreak,
+    addNewSet,
   };
 }
