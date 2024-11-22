@@ -1,5 +1,5 @@
 import { scores } from "@/lib/helpers/score";
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { match } from "assert";
 import Button from "./Button.atom";
@@ -20,14 +20,16 @@ export function Score({
   setSelectedSet,
   selectedSet,
   handleSetWinner,
+  setTieBreak,
 }: {
   handleSetWinner: CallableFunction;
   score: ScoreType | null;
   superTieBreak: boolean;
   isTie: boolean;
   matchType: string;
-  setSelectedSet: (set: number) => void;
+  setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
+  setTieBreak: Dispatch<SetStateAction<boolean>>;
 }) {
   const { match } = useContext(Context);
 
@@ -122,6 +124,25 @@ export function Score({
             <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
           </Fragment>
         ))}
+      </div>
+
+      <div className="tie-break-buttons">
+        <Button
+          type="danger"
+          onClick={() => {
+            setTieBreak(true);
+          }}
+        >
+          TIE BREAK
+        </Button>
+        <Button
+          type="danger"
+          onClick={() => {
+            setTieBreak(false);
+          }}
+        >
+          END TIE BREAK
+        </Button>
       </div>
 
       {match?.winner && (
