@@ -104,25 +104,8 @@ export function Score({
           )}
         </AnimatePresence>
       </div>
-      <div className="sets">
-        {score?.sets?.map?.((n, i) => (
-          <Fragment key={i}>
-            <Button
-              onClick={() => {
-                setSelectedSet(i);
-              }}
-              type={i === selectedSet ? "primary" : "transparent"}
-              className="single"
-            >
-              <p key={i}>
-                {n?.[0]} : {n?.[1]}
-              </p>
-            </Button>
 
-            <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
-          </Fragment>
-        ))}
-
+      <div className="add-set">
         <Button
           type="danger"
           className="add-button"
@@ -144,10 +127,35 @@ export function Score({
         </Button>
       </div>
 
+      <div className="sets">
+        {score?.sets?.map?.((n, i) => (
+          <Fragment key={i}>
+            <Button
+              onClick={() => {
+                setSelectedSet(i);
+              }}
+              type={i === selectedSet ? "primary" : "transparent"}
+              className="single"
+            >
+              <p key={i}>
+                {n?.[0]} : {n?.[1]}
+              </p>
+            </Button>
+
+            <p className="slash">{score.sets.length - 1 !== i ? "/" : ""}</p>
+          </Fragment>
+        ))}
+      </div>
+
       <div className="tie-break-buttons">
         <Button
           type="danger"
           onClick={() => {
+            if (score?.sets?.[selectedSet]) {
+              if (score.sets[selectedSet][0] !== score.sets[selectedSet][1]) {
+                return;
+              }
+            }
             setTieBreak(true);
           }}
         >
