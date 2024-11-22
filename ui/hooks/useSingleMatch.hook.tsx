@@ -140,7 +140,8 @@ export default function useSingleMatch({
 
     if (tieBreak && selectedSet == sets?.length! - 1) {
       if (action == "minus") {
-        setTieBreak(false);
+        // setTieBreak(false);
+        resetTieBreakScore(team);
         updateGemScore({
           id,
           team: team.toString(),
@@ -601,5 +602,6 @@ export default function useSingleMatch({
     handleSetWinner,
     selectedSet,
     setTieBreak,
+    resetTieBreakScore,
   };
 }

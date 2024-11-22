@@ -21,6 +21,7 @@ export function Score({
   selectedSet,
   handleSetWinner,
   setTieBreak,
+  resetTieBreakScore,
 }: {
   handleSetWinner: CallableFunction;
   score: ScoreType | null;
@@ -30,6 +31,7 @@ export function Score({
   setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
   setTieBreak: Dispatch<SetStateAction<boolean>>;
+  resetTieBreakScore: CallableFunction;
 }) {
   const { match } = useContext(Context);
 
@@ -138,7 +140,7 @@ export function Score({
         <Button
           type="danger"
           onClick={() => {
-            setTieBreak(false);
+            resetTieBreakScore(0);
           }}
         >
           END TIE BREAK

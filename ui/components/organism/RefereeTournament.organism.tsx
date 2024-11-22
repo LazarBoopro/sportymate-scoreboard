@@ -14,6 +14,7 @@ export default function RefereeTournament({
   selectedSet,
   handleSetWinner,
   setTieBreak,
+  resetTieBreakScore,
 }: {
   handleSetWinner: (
     winner: "host" | "guest" | null,
@@ -26,6 +27,7 @@ export default function RefereeTournament({
   setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
   setTieBreak: Dispatch<SetStateAction<boolean>>;
+  resetTieBreakScore: CallableFunction;
 }) {
   return (
     <main className="match">
@@ -49,6 +51,7 @@ export default function RefereeTournament({
             selectedSet={selectedSet}
             handleSetWinner={handleSetWinner}
             setTieBreak={setTieBreak}
+            resetTieBreakScore={resetTieBreakScore}
           />
         </div>
         <Team
