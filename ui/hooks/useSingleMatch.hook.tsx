@@ -144,7 +144,7 @@ export default function useSingleMatch({
 
     if (!action) action = "plus";
 
-    if (selectedSet != sets?.length! - 1) {
+    if (selectedSet != sets?.length! - 1 || match?.winner) {
       const oldResult = sets?.[selectedSet]?.[team];
 
       let newScore = action == "plus" ? oldResult! + 1 : oldResult! - 1;
