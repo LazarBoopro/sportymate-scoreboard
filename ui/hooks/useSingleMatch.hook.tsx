@@ -138,7 +138,23 @@ export default function useSingleMatch({
     const sets = match?.score?.sets;
     const updatedTeam = currentSet?.[team];
 
-    if (tieBreak && action) {
+    if (tieBreak && selectedSet == sets?.length! - 1) {
+      if (action == "minus") {
+        setTieBreak(false);
+        updateGemScore({
+          id,
+          team: team.toString(),
+          gem: sets?.length! - 1,
+          score:
+            updatedTeam === undefined
+              ? 0
+              : updatedTeam - 1 >= 0
+              ? updatedTeam - 1
+              : 0,
+          prevScore: sets?.[sets?.length! - 1],
+          tournament,
+        });
+      }
       return;
     }
 
@@ -272,6 +288,8 @@ export default function useSingleMatch({
   }
 
   function checkForTieBreak() {
+    if (selectedSet != (match?.score?.sets?.length ?? 1) - 1) return;
+
     if (match?.winner) {
       setTieBreak(false);
       return;
@@ -456,7 +474,11 @@ export default function useSingleMatch({
       resetTieBreakScore(params!);
       handleGemPoint(params!);
       // checkWinner();
-      addNewSet();
+      if (selectedSet !== (match?.score?.sets?.length ?? 1) - 1) {
+        setSelectedSet((match?.score?.sets?.length ?? 1) - 1);
+      } else {
+        addNewSet();
+      }
     }
   }, [isSuccessCurrentTieBreakScore, match?.score?.tiebreak]);
 
@@ -578,5 +600,6 @@ export default function useSingleMatch({
     setSelectedSet,
     handleSetWinner,
     selectedSet,
+    setTieBreak,
   };
 }

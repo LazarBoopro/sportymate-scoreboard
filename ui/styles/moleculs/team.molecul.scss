@@ -105,6 +105,18 @@
     .single {
       padding: 0.5rem 0.75rem;
     }
+   
+  }
+
+  .tie-break-buttons{
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    justify-content: center;
+
+    & > button{
+      padding: 0.25rem 0.5rem;
+    }
   }
 
   .winner {

@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { SetStateAction, Suspense, Dispatch } from "react";
 import { Team } from "../moleculs/Team.molecul";
 import SelectField from "../moleculs/SelectStatus.molecul";
 import { Score } from "../atoms/Score.atom";
@@ -13,6 +13,7 @@ export default function RefereeTournament({
   setSelectedSet,
   selectedSet,
   handleSetWinner,
+  setTieBreak,
 }: {
   handleSetWinner: (
     winner: "host" | "guest" | null,
@@ -22,8 +23,9 @@ export default function RefereeTournament({
   tournament: MatchType | null;
   handleUpdateCurrentSetScore: CallableFunction;
   handleChangeGemPoint: CallableFunction;
-  setSelectedSet: (set: number) => void;
+  setSelectedSet: Dispatch<SetStateAction<number>>;
   selectedSet: number;
+  setTieBreak: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <main className="match">
@@ -46,6 +48,7 @@ export default function RefereeTournament({
             setSelectedSet={setSelectedSet}
             selectedSet={selectedSet}
             handleSetWinner={handleSetWinner}
+            setTieBreak={setTieBreak}
           />
         </div>
         <Team
